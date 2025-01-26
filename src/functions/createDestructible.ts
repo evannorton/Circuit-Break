@@ -1,8 +1,10 @@
 import {
+  EntityPosition,
   createEntity,
   createQuadrilateral,
   createSprite,
   getCurrentTime,
+  getEntityPosition,
   getGameWidth,
   removeEntity,
 } from "pixel-pigeon";
@@ -14,9 +16,49 @@ import {
   levelID,
   maxY,
   minY,
+  playerHitboxWidth,
   renderHitboxes,
 } from "../constants";
 import { state } from "../state";
+
+const getDestructibleX = (): number => {
+  if (state.values.playerEntityID === null) {
+    throw new Error(
+      "An attempt was made to get the player's position but the player does not exist",
+    );
+  }
+  const playerPosition: EntityPosition | null = getEntityPosition(
+    state.values.playerEntityID,
+  );
+  const x: number = Math.floor(
+    Math.random() * (getGameWidth() - destructibleHitboxWidth),
+  );
+  const minUnsafeX: number = playerPosition.x - destructibleHitboxWidth;
+  const maxUnsafeX: number = playerPosition.x + playerHitboxWidth;
+  if (x >= minUnsafeX && x <= maxUnsafeX) {
+    return getDestructibleX();
+  }
+  return x;
+};
+const getDestructibleY = (): number => {
+  if (state.values.playerEntityID === null) {
+    throw new Error(
+      "An attempt was made to get the player's position but the player does not exist",
+    );
+  }
+  const playerPosition: EntityPosition | null = getEntityPosition(
+    state.values.playerEntityID,
+  );
+  const minBoxY: number = minY;
+  const maxBoxY: number = maxY - entityHitboxHeight + 1;
+  const y: number = Math.floor(Math.random() * (maxBoxY - minBoxY)) + minBoxY;
+  const minUnsafeY: number = playerPosition.y - entityHitboxHeight;
+  const maxUnsafeY: number = playerPosition.y + entityHitboxHeight;
+  if (y >= minUnsafeY && y <= maxUnsafeY) {
+    return getDestructibleY();
+  }
+  return y;
+};
 
 export const createDestructible = (): void => {
   if (state.values.destructible !== null) {
@@ -25,12 +67,8 @@ export const createDestructible = (): void => {
       destructible: null,
     });
   }
-  const x: number = Math.floor(
-    Math.random() * (getGameWidth() - destructibleHitboxWidth),
-  );
-  const minBoxY: number = minY;
-  const maxBoxY: number = maxY - entityHitboxHeight + 1;
-  const y: number = Math.floor(Math.random() * (maxBoxY - minBoxY)) + minBoxY;
+  const x: number = getDestructibleX();
+  const y: number = getDestructibleY();
   const entityID: string = createEntity({
     height: entityHitboxHeight,
     layerID: "Characters",

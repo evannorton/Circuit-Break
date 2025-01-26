@@ -14,3 +14,5 @@ export const punchHitboxWidth: number = 7;
 export const entityHitboxHeight: number = 4;
 export const damageAnimationDuration: number = 350;
 export const maxPowerLevel: number = 99;
+export const minDestructibleSpawnDistanceX: number = 16;
+export const minDestructibleSpawnDistanceY: number = 8;
