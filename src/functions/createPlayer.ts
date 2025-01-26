@@ -25,10 +25,19 @@ export const createPlayer = (): void => {
         {
           spriteID: createSprite({
             animationID: (): string => {
-              switch (state.values.direction) {
+              const isMoving: boolean =
+                state.values.movingXDirection !== null ||
+                state.values.movingYDirection !== null;
+              switch (state.values.facingDirection) {
                 case XDirection.Left:
+                  if (isMoving) {
+                    return "walk-left";
+                  }
                   return "idle-left";
                 case XDirection.Right:
+                  if (isMoving) {
+                    return "walk-right";
+                  }
                   return "idle-right";
               }
             },
@@ -58,6 +67,32 @@ export const createPlayer = (): void => {
                   },
                 ],
                 id: "idle-right",
+              },
+              {
+                frames: [
+                  {
+                    height: 32,
+                    sourceHeight: 32,
+                    sourceWidth: 18,
+                    sourceX: 0,
+                    sourceY: 64,
+                    width: 18,
+                  },
+                ],
+                id: "walk-left",
+              },
+              {
+                frames: [
+                  {
+                    height: 32,
+                    sourceHeight: 32,
+                    sourceWidth: 18,
+                    sourceX: 0,
+                    sourceY: 96,
+                    width: 18,
+                  },
+                ],
+                id: "walk-right",
               },
             ],
             imagePath: "player",

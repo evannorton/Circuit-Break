@@ -33,12 +33,34 @@ export const tick = (): void => {
         : 0;
   if (xVelocity > 0) {
     state.setValues({
-      direction: XDirection.Right,
+      facingDirection: XDirection.Right,
+      movingXDirection: XDirection.Right,
     });
   }
   if (xVelocity < 0) {
     state.setValues({
-      direction: XDirection.Left,
+      facingDirection: XDirection.Left,
+      movingXDirection: XDirection.Left,
+    });
+  }
+  if (xVelocity === 0) {
+    state.setValues({
+      movingXDirection: null,
+    });
+  }
+  if (yVelocity > 0) {
+    state.setValues({
+      movingYDirection: YDirection.Down,
+    });
+  }
+  if (yVelocity < 0) {
+    state.setValues({
+      movingYDirection: YDirection.Up,
+    });
+  }
+  if (yVelocity === 0) {
+    state.setValues({
+      movingYDirection: null,
     });
   }
   moveEntity(state.values.playerEntityID, {

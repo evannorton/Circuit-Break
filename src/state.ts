@@ -1,12 +1,16 @@
 import { State } from "pixel-pigeon";
-import { XDirection } from "./types/Direction";
+import { XDirection, YDirection } from "./types/Direction";
 
 interface StateSchema {
-  direction: XDirection;
+  facingDirection: XDirection;
+  movingXDirection: XDirection | null;
+  movingYDirection: YDirection | null;
   playerEntityID: string | null;
 }
 
 export const state: State<StateSchema> = new State<StateSchema>({
-  direction: XDirection.Right,
+  facingDirection: XDirection.Right,
+  movingXDirection: null,
+  movingYDirection: null,
   playerEntityID: null,
 });
