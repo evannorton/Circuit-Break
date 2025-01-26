@@ -18,6 +18,7 @@ import { createDestructible } from "./functions/createDestructible";
 import {
   entityHitboxHeight,
   levelID,
+  maxPowerLevel,
   playerHitboxWidth,
   punchHitboxWidth,
   renderHitboxes,
@@ -183,6 +184,9 @@ createInputPressHandler({
                   state.values.destructible.hp--;
                   state.values.destructible.tookDamageAt = getCurrentTime();
                   if (state.values.destructible.hp === 0) {
+                    state.setValues({
+                      power: Math.min(state.values.power + 1, maxPowerLevel),
+                    });
                     createDestructible();
                   }
                   break;
