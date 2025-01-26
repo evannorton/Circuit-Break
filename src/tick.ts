@@ -2,19 +2,25 @@ import {
   EntityPosition,
   getEntityIDs,
   getEntityPosition,
+  removeEntity,
   setEntityZIndex,
 } from "pixel-pigeon";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
 import { levelID } from "./constants";
 import { movePlayer } from "./functions/movePlayer";
+import { state } from "./state";
 
 export const tick = (): void => {
+  if (state.values.punch !== null && state.values.punch.entityID !== null) {
+    removeEntity(state.values.punch.entityID);
+    state.values.punch.entityID = null;
+  }
   if (isPlayerPunching() === false) {
     movePlayer();
   }
   [
     ...getEntityIDs({
-      layerIDs: ["Entities"],
+      layerIDs: ["Characters"],
       levelIDs: [levelID],
     }),
   ]

@@ -3,5 +3,5 @@ import { punchDuration } from "../constants";
 import { state } from "../state";
 
 export const isPlayerPunching = (): boolean =>
-  state.values.punchedAt !== null &&
-  getCurrentTime() - state.values.punchedAt < punchDuration;
+  state.values.punch !== null &&
+  getCurrentTime() - state.values.punch.createdAt < punchDuration;

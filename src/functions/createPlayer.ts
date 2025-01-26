@@ -25,10 +25,10 @@ export const createPlayer = (): void => {
   };
   state.setValues({
     playerEntityID: createEntity({
-      collidableEntityTypes: ["boundary", "box"],
+      collidableEntityTypes: ["boundary", "destructible"],
       collidesWithMap: true,
       height: entityHitboxHeight,
-      layerID: "Entities",
+      layerID: "Characters",
       levelID,
       position,
       quadrilaterals: renderHitboxes
