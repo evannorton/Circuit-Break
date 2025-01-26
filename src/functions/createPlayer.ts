@@ -6,29 +6,27 @@ import {
   getCurrentTime,
 } from "pixel-pigeon";
 import { XDirection } from "../types/Direction";
-import { isPlayerJumping } from "./isPlayerJumping";
 import {
+  entityHitboxHeight,
   jumpDuration,
   levelID,
-  minY,
-  playerHitboxHeight,
   playerHitboxWidth,
   playerSpriteHeight,
   renderHitboxes,
 } from "../constants";
+import { isPlayerJumping } from "./isPlayerJumping";
 import { state } from "../state";
 
 export const createPlayer = (): void => {
-  const y: number = minY;
   const position: EntityPosition = {
     x: 16,
-    y,
+    y: 96,
   };
   state.setValues({
     playerEntityID: createEntity({
       collidableEntityTypes: ["boundary"],
       collidesWithMap: true,
-      height: playerHitboxHeight,
+      height: entityHitboxHeight,
       layerID: "Entities",
       levelID,
       position,
@@ -47,19 +45,19 @@ export const createPlayer = (): void => {
                 height: 1,
                 width: playerHitboxWidth,
               }),
-              y: playerHitboxHeight - 1,
+              y: entityHitboxHeight - 1,
             },
             {
               quadrilateralID: createQuadrilateral({
                 color: "#d59cfc",
-                height: playerHitboxHeight,
+                height: entityHitboxHeight,
                 width: 1,
               }),
             },
             {
               quadrilateralID: createQuadrilateral({
                 color: "#d59cfc",
-                height: playerHitboxHeight,
+                height: entityHitboxHeight,
                 width: 1,
               }),
               x: playerHitboxWidth - 1,
@@ -88,7 +86,7 @@ export const createPlayer = (): void => {
             imagePath: "shadow",
           }),
           x: -2,
-          y: -playerSpriteHeight + playerHitboxHeight + 26,
+          y: -playerSpriteHeight + entityHitboxHeight + 26,
         },
         {
           spriteID: createSprite({
@@ -198,7 +196,7 @@ export const createPlayer = (): void => {
             imagePath: "player",
           }),
           y: (): number => {
-            const baseOffset: number = -playerSpriteHeight + playerHitboxHeight;
+            const baseOffset: number = -playerSpriteHeight + entityHitboxHeight;
             if (isPlayerJumping()) {
               if (state.values.jumpedAt === null) {
                 throw new Error("Player is jumping but jumpedAt is null");

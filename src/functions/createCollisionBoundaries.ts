@@ -1,9 +1,15 @@
 import { createEntity, createQuadrilateral, getGameWidth } from "pixel-pigeon";
-import { levelID, maxY, minY, renderHitboxes } from "../constants";
+import {
+  entityHitboxHeight,
+  levelID,
+  maxY,
+  minY,
+  renderHitboxes,
+} from "../constants";
 
 export const createCollisionBoundaries = (): void => {
   const boundaryWidth: number = getGameWidth();
-  const topBoundaryY: number = minY - 1;
+  const topBoundaryY: number = minY - 1 - entityHitboxHeight;
   const bottomBoundaryY: number = maxY + 1;
   createEntity({
     height: 1,

@@ -1,7 +1,7 @@
 import {
-  boxHitboxHeight,
   boxHitboxWidth,
   boxSpriteHeight,
+  entityHitboxHeight,
   levelID,
   maxY,
   minY,
@@ -20,10 +20,10 @@ export const createBox = (): void => {
     Math.random() * (getGameWidth() - boxHitboxWidth),
   );
   const minBoxY: number = minY;
-  const maxBoxY: number = maxY - boxHitboxHeight + 1;
+  const maxBoxY: number = maxY - entityHitboxHeight + 1;
   const y: number = Math.floor(Math.random() * (maxBoxY - minBoxY)) + minBoxY;
   const boxEntityID: string = createEntity({
-    height: boxHitboxHeight,
+    height: entityHitboxHeight,
     layerID: "Entities",
     levelID,
     position: {
@@ -45,19 +45,19 @@ export const createBox = (): void => {
               height: 1,
               width: boxHitboxWidth,
             }),
-            y: boxHitboxHeight - 1,
+            y: entityHitboxHeight - 1,
           },
           {
             quadrilateralID: createQuadrilateral({
               color: "#d59cfc",
-              height: boxHitboxHeight,
+              height: entityHitboxHeight,
               width: 1,
             }),
           },
           {
             quadrilateralID: createQuadrilateral({
               color: "#d59cfc",
-              height: boxHitboxHeight,
+              height: entityHitboxHeight,
               width: 1,
             }),
             x: boxHitboxWidth - 1,
@@ -85,7 +85,7 @@ export const createBox = (): void => {
           ],
           imagePath: "box",
         }),
-        y: -boxSpriteHeight + boxHitboxHeight,
+        y: -boxSpriteHeight + entityHitboxHeight,
       },
     ],
     width: 16,
