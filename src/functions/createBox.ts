@@ -88,6 +88,7 @@ export const createBox = (): void => {
         y: -boxSpriteHeight + entityHitboxHeight,
       },
     ],
+    type: "box",
     width: 16,
   });
   state.setValues({
