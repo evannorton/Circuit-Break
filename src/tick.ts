@@ -1,10 +1,21 @@
+import {
+  EntityPosition,
+  getEntityIDs,
+  getEntityPosition,
+  getInputTickHandlerGroupID,
+  moveEntity,
+  setEntityZIndex,
+} from "pixel-pigeon";
 import { XDirection, YDirection } from "./types/Direction";
-import { getInputTickHandlerGroupID, moveEntity } from "pixel-pigeon";
+import {
+  levelID,
+  playerMovementXSpeed,
+  playerMovementYSpeed,
+} from "./constants";
 import {
   movementXInputTickHandlerID,
   movementYInputTickHandlerID,
 } from "./input";
-import { playerMovementXSpeed, playerMovementYSpeed } from "./constants";
 import { state } from "./state";
 
 export const tick = (): void => {
@@ -67,4 +78,24 @@ export const tick = (): void => {
     xVelocity,
     yVelocity,
   });
+  [
+    ...getEntityIDs({
+      layerIDs: ["Entities"],
+      levelIDs: [levelID],
+    }),
+  ]
+    .sort((a: string, b: string): number => {
+      const aPosition: EntityPosition = getEntityPosition(a);
+      const bPosition: EntityPosition = getEntityPosition(b);
+      if (aPosition.y < bPosition.y) {
+        return -1;
+      }
+      if (aPosition.y > bPosition.y) {
+        return 1;
+      }
+      return 0;
+    })
+    .forEach((entityID: string, entityIndex: number): void => {
+      setEntityZIndex(entityID, entityIndex);
+    });
 };
