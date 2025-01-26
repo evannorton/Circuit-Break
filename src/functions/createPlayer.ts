@@ -26,6 +26,29 @@ export const createPlayer = (): void => {
       sprites: [
         {
           spriteID: createSprite({
+            animationID: "default",
+            animations: [
+              {
+                frames: [
+                  {
+                    height: 10,
+                    sourceHeight: 10,
+                    sourceWidth: 20,
+                    sourceX: 0,
+                    sourceY: 0,
+                    width: 20,
+                  },
+                ],
+                id: "default",
+              },
+            ],
+            imagePath: "shadow",
+          }),
+          x: -2,
+          y: 26,
+        },
+        {
+          spriteID: createSprite({
             animationID: (): string => {
               const isMoving: boolean =
                 state.values.movingXDirection !== null ||
