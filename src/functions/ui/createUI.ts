@@ -18,7 +18,7 @@ export const createUI = (): void => {
       y,
     },
     height,
-    opacity: 0.75,
+    opacity: 0.8,
     width,
   });
   createLabel({
