@@ -1,18 +1,19 @@
 import {
-  XDirection,
-  YDirection,
-} from "./types/Direction";
-import {
   NumLock,
   createInputCollection,
+  createInputPressHandler,
   createInputTickHandler,
+  getCurrentTime,
 } from "pixel-pigeon";
+import { XDirection, YDirection } from "./types/Direction";
+import { state } from "./state";
+import { jumpDuration } from "./constants";
+import { isPlayerJumping } from "./functions/isPlayerJumping";
 
 const moveLeftInputCollectionID: string = createInputCollection({
   gamepadButtons: [14],
   keyboardButtons: [
     { value: "ArrowLeft" },
-    { value: "KeyA" },
     {
       numLock: NumLock.Without,
       value: "Numpad4",
@@ -24,7 +25,6 @@ const moveRightInputCollectionID: string = createInputCollection({
   gamepadButtons: [15],
   keyboardButtons: [
     { value: "ArrowRight" },
-    { value: "KeyD" },
     {
       numLock: NumLock.Without,
       value: "Numpad6",
@@ -36,7 +36,6 @@ const moveUpInputCollectionID: string = createInputCollection({
   gamepadButtons: [12],
   keyboardButtons: [
     { value: "ArrowUp" },
-    { value: "KeyW" },
     {
       numLock: NumLock.Without,
       value: "Numpad8",
@@ -48,7 +47,6 @@ const moveDownInputCollectionID: string = createInputCollection({
   gamepadButtons: [13],
   keyboardButtons: [
     { value: "ArrowDown" },
-    { value: "KeyS" },
     {
       numLock: NumLock.Without,
       value: "Numpad2",
@@ -83,3 +81,17 @@ export const movementYInputTickHandlerID: string =
       },
     ],
   });
+const jumpInputCollectionID: string = createInputCollection({
+  gamepadButtons: [0, 3],
+  keyboardButtons: [{ value: "KeyZ" }],
+  name: "Jump",
+});
+createInputPressHandler({
+  condition: (): boolean => isPlayerJumping() === false,
+  inputCollectionID: jumpInputCollectionID,
+  onInput: (): void => {
+    state.setValues({
+      jumpedAt: getCurrentTime()
+    })
+  },
+});
