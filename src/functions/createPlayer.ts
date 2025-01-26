@@ -9,7 +9,7 @@ import { levelID, playerHeight } from "../constants";
 import { state } from "../state";
 
 export const createPlayer = (): void => {
-  const startingPosition: EntityPosition = {
+  const position: EntityPosition = {
     x: 16,
     y: getGameHeight() - 48,
   };
@@ -20,7 +20,7 @@ export const createPlayer = (): void => {
       height: playerHeight,
       layerID: "Player",
       levelID,
-      position: startingPosition,
+      position,
       sprites: [
         {
           spriteID: createSprite({
@@ -64,7 +64,7 @@ export const createPlayer = (): void => {
           }),
         },
       ],
-      width: 18,
+      width: 16,
     }),
   });
 };
