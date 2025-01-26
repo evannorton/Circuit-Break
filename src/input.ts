@@ -4,10 +4,12 @@ import {
   createInputPressHandler,
   createInputTickHandler,
   getCurrentTime,
+  moveEntity,
   takeScreenshot,
 } from "pixel-pigeon";
 import { XDirection, YDirection } from "./types/Direction";
 import { isPlayerJumping } from "./functions/isPlayerJumping";
+import { isPlayerPunching } from "./functions/isPlayerPunching";
 import { state } from "./state";
 
 const screenshotInputCollectionID: string = createInputCollection({
@@ -92,16 +94,36 @@ export const movementYInputTickHandlerID: string =
     ],
   });
 const jumpInputCollectionID: string = createInputCollection({
-  gamepadButtons: [0, 3],
+  gamepadButtons: [0],
   keyboardButtons: [{ value: "KeyZ" }],
   name: "Jump",
 });
 createInputPressHandler({
-  condition: (): boolean => isPlayerJumping() === false,
+  condition: (): boolean =>
+    isPlayerJumping() === false && isPlayerPunching() === false,
   inputCollectionID: jumpInputCollectionID,
   onInput: (): void => {
     state.setValues({
       jumpedAt: getCurrentTime(),
+    });
+  },
+});
+const punchInputCollectionID: string = createInputCollection({
+  gamepadButtons: [2],
+  keyboardButtons: [{ value: "KeyX" }],
+  name: "Punch",
+});
+createInputPressHandler({
+  condition: (): boolean =>
+    isPlayerJumping() === false && isPlayerPunching() === false,
+  inputCollectionID: punchInputCollectionID,
+  onInput: (): void => {
+    if (state.values.playerEntityID === null) {
+      throw new Error("An attempt was made to punch with no player entity");
+    }
+    moveEntity(state.values.playerEntityID, {});
+    state.setValues({
+      punchedAt: getCurrentTime(),
     });
   },
 });

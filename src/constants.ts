@@ -6,6 +6,7 @@ export const levelID: string = "Level_0";
 export const playerSpriteHeight: number = 32;
 export const playerHitboxWidth: number = 16;
 export const jumpDuration: number = 750;
+export const punchDuration: number = 500;
 export const renderHitboxes: boolean = true;
 export const boxHitboxWidth: number = 16;
 export const boxSpriteHeight: number = 13;

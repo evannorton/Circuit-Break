@@ -8,6 +8,7 @@ interface StateSchema {
   movingXDirection: XDirection | null;
   movingYDirection: YDirection | null;
   playerEntityID: string | null;
+  punchedAt: number | null;
 }
 
 export const state: State<StateSchema> = new State<StateSchema>({
@@ -17,4 +18,5 @@ export const state: State<StateSchema> = new State<StateSchema>({
   movingXDirection: null,
   movingYDirection: null,
   playerEntityID: null,
+  punchedAt: null,
 });

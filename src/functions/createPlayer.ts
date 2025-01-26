@@ -15,6 +15,7 @@ import {
   renderHitboxes,
 } from "../constants";
 import { isPlayerJumping } from "./isPlayerJumping";
+import { isPlayerPunching } from "./isPlayerPunching";
 import { state } from "../state";
 
 export const createPlayer = (): void => {
@@ -96,6 +97,9 @@ export const createPlayer = (): void => {
                 state.values.movingYDirection !== null;
               switch (state.values.facingDirection) {
                 case XDirection.Left:
+                  if (isPlayerPunching()) {
+                    return "punch-left";
+                  }
                   if (isPlayerJumping()) {
                     return "jump-left";
                   }
@@ -104,6 +108,9 @@ export const createPlayer = (): void => {
                   }
                   return "idle-left";
                 case XDirection.Right:
+                  if (isPlayerPunching()) {
+                    return "punch-right";
+                  }
                   if (isPlayerJumping()) {
                     return "jump-right";
                   }
@@ -192,10 +199,43 @@ export const createPlayer = (): void => {
                 ],
                 id: "jump-right",
               },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: 24,
+                    sourceX: 0,
+                    sourceY: 192,
+                    width: 24,
+                  },
+                ],
+                id: "punch-left",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: 24,
+                    sourceX: 0,
+                    sourceY: 224,
+                    width: 24,
+                  },
+                ],
+                id: "punch-right",
+              },
             ],
             imagePath: "player",
           }),
-          x: -1,
+          x: (): number => {
+            switch (state.values.facingDirection) {
+              case XDirection.Left:
+                return -7;
+              case XDirection.Right:
+                return -1;
+            }
+          },
           y: (): number => {
             const baseOffset: number = -playerSpriteHeight + entityHitboxHeight;
             if (isPlayerJumping()) {
