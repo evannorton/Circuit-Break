@@ -1,17 +1,31 @@
-import { createEntity, getGameWidth } from "pixel-pigeon";
-import { levelID, maxY, minY, playerHeight } from "../constants";
+import { createEntity, createQuadrilateral, getGameWidth } from "pixel-pigeon";
+import { levelID, maxY, minY, renderHitboxes } from "../constants";
 
 export const createCollisionBoundaries = (): void => {
+  const boundaryWidth: number = getGameWidth();
+  const topBoundaryY: number = minY - 1;
+  const bottomBoundaryY: number = maxY + 1;
   createEntity({
     height: 1,
     layerID: "Collision",
     levelID,
     position: {
       x: 0,
-      y: minY - 1 - playerHeight,
+      y: topBoundaryY,
     },
+    quadrilaterals: renderHitboxes
+      ? [
+          {
+            quadrilateralID: createQuadrilateral({
+              color: "#8cd612",
+              height: 1,
+              width: boundaryWidth,
+            }),
+          },
+        ]
+      : undefined,
     type: "boundary",
-    width: getGameWidth(),
+    width: boundaryWidth,
   });
   createEntity({
     height: 1,
@@ -19,9 +33,20 @@ export const createCollisionBoundaries = (): void => {
     levelID,
     position: {
       x: 0,
-      y: maxY + 1,
+      y: bottomBoundaryY,
     },
+    quadrilaterals: renderHitboxes
+      ? [
+          {
+            quadrilateralID: createQuadrilateral({
+              color: "#8cd612",
+              height: 1,
+              width: boundaryWidth,
+            }),
+          },
+        ]
+      : undefined,
     type: "boundary",
-    width: getGameWidth(),
+    width: boundaryWidth,
   });
 };

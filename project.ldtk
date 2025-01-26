@@ -78,7 +78,7 @@
 		},
 		{
 			"__type": "Entities",
-			"identifier": "Player",
+			"identifier": "Entities",
 			"type": "Entities",
 			"uid": 3,
 			"doc": null,
@@ -218,7 +218,7 @@
 					"entityInstances": []
 				},
 				{
-					"__identifier": "Player",
+					"__identifier": "Entities",
 					"__type": "Entities",
 					"__cWid": 16,
 					"__cHei": 9,

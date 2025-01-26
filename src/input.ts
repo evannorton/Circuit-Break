@@ -4,11 +4,22 @@ import {
   createInputPressHandler,
   createInputTickHandler,
   getCurrentTime,
+  takeScreenshot,
 } from "pixel-pigeon";
 import { XDirection, YDirection } from "./types/Direction";
 import { isPlayerJumping } from "./functions/isPlayerJumping";
 import { state } from "./state";
 
+const screenshotInputCollectionID: string = createInputCollection({
+  keyboardButtons: [{ value: "KeyP" }],
+  name: "Screenshot",
+});
+createInputPressHandler({
+  inputCollectionID: screenshotInputCollectionID,
+  onInput: (): void => {
+    takeScreenshot();
+  },
+});
 const moveLeftInputCollectionID: string = createInputCollection({
   gamepadButtons: [14],
   keyboardButtons: [

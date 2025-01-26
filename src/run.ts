@@ -1,3 +1,4 @@
+import { createBox } from "./functions/createBox";
 import { createCollisionBoundaries } from "./functions/createCollisionBoundaries";
 import { createPlayer } from "./functions/createPlayer";
 import { goToLevel, setPauseMenuCondition } from "pixel-pigeon";
@@ -7,5 +8,6 @@ export const run = (): void => {
   setPauseMenuCondition((): boolean => true);
   goToLevel(levelID);
   createPlayer();
+  createBox();
   createCollisionBoundaries();
 };

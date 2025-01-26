@@ -1,28 +1,71 @@
 import {
   EntityPosition,
   createEntity,
+  createQuadrilateral,
   createSprite,
   getCurrentTime,
-  getGameHeight,
 } from "pixel-pigeon";
 import { XDirection } from "../types/Direction";
 import { isPlayerJumping } from "./isPlayerJumping";
-import { jumpDuration, levelID, playerHeight } from "../constants";
+import {
+  jumpDuration,
+  levelID,
+  minY,
+  playerHitboxHeight,
+  playerHitboxWidth,
+  playerSpriteHeight,
+  renderHitboxes,
+} from "../constants";
 import { state } from "../state";
 
 export const createPlayer = (): void => {
+  const y: number = minY;
   const position: EntityPosition = {
     x: 16,
-    y: getGameHeight() - 48,
+    y,
   };
   state.setValues({
     playerEntityID: createEntity({
       collidableEntityTypes: ["boundary"],
       collidesWithMap: true,
-      height: playerHeight,
-      layerID: "Player",
+      height: playerHitboxHeight,
+      layerID: "Entities",
       levelID,
       position,
+      quadrilaterals: renderHitboxes
+        ? [
+            {
+              quadrilateralID: createQuadrilateral({
+                color: "#d59cfc",
+                height: 1,
+                width: playerHitboxWidth,
+              }),
+            },
+            {
+              quadrilateralID: createQuadrilateral({
+                color: "#d59cfc",
+                height: 1,
+                width: playerHitboxWidth,
+              }),
+              y: playerHitboxHeight - 1,
+            },
+            {
+              quadrilateralID: createQuadrilateral({
+                color: "#d59cfc",
+                height: playerHitboxHeight,
+                width: 1,
+              }),
+            },
+            {
+              quadrilateralID: createQuadrilateral({
+                color: "#d59cfc",
+                height: playerHitboxHeight,
+                width: 1,
+              }),
+              x: playerHitboxWidth - 1,
+            },
+          ]
+        : undefined,
       sprites: [
         {
           spriteID: createSprite({
@@ -45,7 +88,7 @@ export const createPlayer = (): void => {
             imagePath: "shadow",
           }),
           x: -2,
-          y: 26,
+          y: -playerSpriteHeight + playerHitboxHeight + 26,
         },
         {
           spriteID: createSprite({
@@ -76,8 +119,8 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
-                    height: 32,
-                    sourceHeight: 32,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
                     sourceWidth: 18,
                     sourceX: 0,
                     sourceY: 0,
@@ -89,8 +132,8 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
-                    height: 32,
-                    sourceHeight: 32,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
                     sourceWidth: 18,
                     sourceX: 0,
                     sourceY: 32,
@@ -102,8 +145,8 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
-                    height: 32,
-                    sourceHeight: 32,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
                     sourceWidth: 18,
                     sourceX: 0,
                     sourceY: 64,
@@ -115,8 +158,8 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
-                    height: 32,
-                    sourceHeight: 32,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
                     sourceWidth: 18,
                     sourceX: 0,
                     sourceY: 96,
@@ -128,8 +171,8 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
-                    height: 32,
-                    sourceHeight: 32,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
                     sourceWidth: 18,
                     sourceX: 0,
                     sourceY: 128,
@@ -141,8 +184,8 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
-                    height: 32,
-                    sourceHeight: 32,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
                     sourceWidth: 18,
                     sourceX: 0,
                     sourceY: 160,
@@ -155,6 +198,7 @@ export const createPlayer = (): void => {
             imagePath: "player",
           }),
           y: (): number => {
+            const baseOffset: number = -playerSpriteHeight + playerHitboxHeight;
             if (isPlayerJumping()) {
               if (state.values.jumpedAt === null) {
                 throw new Error("Player is jumping but jumpedAt is null");
@@ -162,13 +206,15 @@ export const createPlayer = (): void => {
               const maxOffset: number = 12;
               const x: number =
                 (getCurrentTime() - state.values.jumpedAt) / (jumpDuration / 2);
-              return -Math.floor(maxOffset * (1 - Math.pow(x - 1, 2)));
+              return (
+                baseOffset - Math.floor(maxOffset * (1 - Math.pow(x - 1, 2)))
+              );
             }
-            return 0;
+            return baseOffset;
           },
         },
       ],
-      width: 16,
+      width: playerHitboxWidth,
     }),
   });
 };
