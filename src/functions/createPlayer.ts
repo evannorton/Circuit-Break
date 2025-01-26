@@ -6,9 +6,9 @@ import {
   getGameHeight,
 } from "pixel-pigeon";
 import { XDirection } from "../types/Direction";
+import { isPlayerJumping } from "./isPlayerJumping";
 import { jumpDuration, levelID, playerHeight } from "../constants";
 import { state } from "../state";
-import { isPlayerJumping } from "./isPlayerJumping";
 
 export const createPlayer = (): void => {
   const position: EntityPosition = {
@@ -127,7 +127,7 @@ export const createPlayer = (): void => {
                   },
                 ],
                 id: "jump-right",
-              }
+              },
             ],
             imagePath: "player",
           }),
@@ -137,11 +137,12 @@ export const createPlayer = (): void => {
                 throw new Error("Player is jumping but jumpedAt is null");
               }
               const maxOffset: number = 12;
-              const x: number = (getCurrentTime() - (state.values.jumpedAt)) / (jumpDuration / 2);
+              const x: number =
+                (getCurrentTime() - state.values.jumpedAt) / (jumpDuration / 2);
               return -Math.floor(maxOffset * (1 - Math.pow(x - 1, 2)));
             }
             return 0;
-          }
+          },
         },
       ],
       width: 16,

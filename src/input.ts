@@ -6,9 +6,8 @@ import {
   getCurrentTime,
 } from "pixel-pigeon";
 import { XDirection, YDirection } from "./types/Direction";
-import { state } from "./state";
-import { jumpDuration } from "./constants";
 import { isPlayerJumping } from "./functions/isPlayerJumping";
+import { state } from "./state";
 
 const moveLeftInputCollectionID: string = createInputCollection({
   gamepadButtons: [14],
@@ -91,7 +90,7 @@ createInputPressHandler({
   inputCollectionID: jumpInputCollectionID,
   onInput: (): void => {
     state.setValues({
-      jumpedAt: getCurrentTime()
-    })
+      jumpedAt: getCurrentTime(),
+    });
   },
 });
