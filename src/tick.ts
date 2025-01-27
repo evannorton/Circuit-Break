@@ -7,6 +7,7 @@ import {
   removeEntity,
   setEntityZIndex,
 } from "pixel-pigeon";
+import { XDirection } from "./types/Direction";
 import {
   enemyMovementXSpeed,
   enemyMovementYSpeed,
@@ -35,13 +36,16 @@ export const tick = (): void => {
   );
   for (const enemy of getDefinables(Enemy).values()) {
     const enemyPosition: EntityPosition = getEntityPosition(enemy.entityID);
+    const isMovingLeft: boolean =
+      enemyPosition.x - playerPosition.x > playerHitboxWidth + 3;
+    const isMovingRight: boolean =
+      playerPosition.x - enemyPosition.x > playerHitboxWidth + 3;
     moveEntity(enemy.entityID, {
-      xVelocity:
-        enemyPosition.x - playerPosition.x > playerHitboxWidth + 3
-          ? -enemyMovementXSpeed
-          : playerPosition.x - enemyPosition.x > playerHitboxWidth + 3
-            ? enemyMovementXSpeed
-            : undefined,
+      xVelocity: isMovingLeft
+        ? -enemyMovementXSpeed
+        : isMovingRight
+          ? enemyMovementXSpeed
+          : undefined,
       yVelocity:
         enemyPosition.y - playerPosition.y > Math.ceil(entityHitboxHeight / 2)
           ? -enemyMovementYSpeed
@@ -50,6 +54,12 @@ export const tick = (): void => {
             ? enemyMovementYSpeed
             : undefined,
     });
+    if (isMovingLeft) {
+      enemy.facingDirection = XDirection.Left;
+    }
+    if (isMovingRight) {
+      enemy.facingDirection = XDirection.Right;
+    }
   }
   [
     ...getEntityIDs({

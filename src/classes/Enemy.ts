@@ -18,7 +18,7 @@ interface EnemyOptions {}
 
 export class Enemy extends Definable {
   private readonly _entityID: string;
-  private readonly _facingDirection: XDirection = XDirection.Left;
+  private _facingDirection: XDirection = XDirection.Left;
   public constructor(options: EnemyOptions) {
     super();
     console.log(options);
@@ -228,6 +228,14 @@ export class Enemy extends Definable {
 
   public get entityID(): string {
     return this._entityID;
+  }
+
+  public get facingDirection(): XDirection {
+    return this._facingDirection;
+  }
+
+  public set facingDirection(facingDirection: XDirection) {
+    this._facingDirection = facingDirection;
   }
 
   public remove(): void {
