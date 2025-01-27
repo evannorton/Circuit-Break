@@ -1,5 +1,5 @@
 import { Definable } from "definables";
-import { XDirection } from "../types/Direction";
+import { XDirection, YDirection } from "../types/Direction";
 import {
   createEntity,
   createQuadrilateral,
@@ -19,6 +19,8 @@ interface EnemyOptions {}
 export class Enemy extends Definable {
   private readonly _entityID: string;
   private _facingDirection: XDirection = XDirection.Left;
+  private _movingXDirection: XDirection | null = null;
+  private _movingYDirection: YDirection | null = null;
   public constructor(options: EnemyOptions) {
     super();
     console.log(options);
@@ -94,8 +96,14 @@ export class Enemy extends Definable {
             animationID: (): string => {
               switch (this._facingDirection) {
                 case XDirection.Left:
+                  if (this.isMoving()) {
+                    return "walk-left";
+                  }
                   return "idle-left";
                 case XDirection.Right:
+                  if (this.isMoving()) {
+                    return "walk-right";
+                  }
                   return "idle-right";
               }
             },
@@ -234,12 +242,32 @@ export class Enemy extends Definable {
     return this._facingDirection;
   }
 
+  public get movingXDirection(): XDirection | null {
+    return this._movingXDirection;
+  }
+
+  public get movingYDirection(): YDirection | null {
+    return this._movingYDirection;
+  }
+
   public set facingDirection(facingDirection: XDirection) {
     this._facingDirection = facingDirection;
+  }
+
+  public set movingXDirection(movingXDirection: XDirection | null) {
+    this._movingXDirection = movingXDirection;
+  }
+
+  public set movingYDirection(movingYDirection: YDirection | null) {
+    this._movingYDirection = movingYDirection;
   }
 
   public remove(): void {
     super.remove();
     removeEntity(this._entityID);
+  }
+
+  private isMoving(): boolean {
+    return this._movingXDirection !== null || this._movingYDirection !== null;
   }
 }

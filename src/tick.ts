@@ -7,7 +7,7 @@ import {
   removeEntity,
   setEntityZIndex,
 } from "pixel-pigeon";
-import { XDirection } from "./types/Direction";
+import { XDirection, YDirection } from "./types/Direction";
 import {
   enemyMovementXSpeed,
   enemyMovementYSpeed,
@@ -40,25 +40,40 @@ export const tick = (): void => {
       enemyPosition.x - playerPosition.x > playerHitboxWidth + 3;
     const isMovingRight: boolean =
       playerPosition.x - enemyPosition.x > playerHitboxWidth + 3;
+    const xVelocity: number | undefined = isMovingLeft
+      ? -enemyMovementXSpeed
+      : isMovingRight
+        ? enemyMovementXSpeed
+        : 0;
+    const yVelocity: number | undefined =
+      enemyPosition.y - playerPosition.y > Math.ceil(entityHitboxHeight / 2)
+        ? -enemyMovementYSpeed
+        : playerPosition.y - enemyPosition.y > Math.ceil(entityHitboxHeight / 2)
+          ? enemyMovementYSpeed
+          : 0;
     moveEntity(enemy.entityID, {
-      xVelocity: isMovingLeft
-        ? -enemyMovementXSpeed
-        : isMovingRight
-          ? enemyMovementXSpeed
-          : undefined,
-      yVelocity:
-        enemyPosition.y - playerPosition.y > Math.ceil(entityHitboxHeight / 2)
-          ? -enemyMovementYSpeed
-          : playerPosition.y - enemyPosition.y >
-              Math.ceil(entityHitboxHeight / 2)
-            ? enemyMovementYSpeed
-            : undefined,
+      xVelocity,
+      yVelocity,
     });
-    if (isMovingLeft) {
-      enemy.facingDirection = XDirection.Left;
-    }
-    if (isMovingRight) {
+    if (xVelocity > 0) {
       enemy.facingDirection = XDirection.Right;
+      enemy.movingXDirection = XDirection.Right;
+    }
+    if (xVelocity < 0) {
+      enemy.facingDirection = XDirection.Left;
+      enemy.movingXDirection = XDirection.Left;
+    }
+    if (xVelocity === 0) {
+      enemy.movingXDirection = null;
+    }
+    if (yVelocity > 0) {
+      enemy.movingYDirection = YDirection.Down;
+    }
+    if (yVelocity < 0) {
+      enemy.movingYDirection = YDirection.Up;
+    }
+    if (yVelocity === 0) {
+      enemy.movingYDirection = null;
     }
   }
   [
