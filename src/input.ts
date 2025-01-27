@@ -1,3 +1,4 @@
+import { Enemy } from "./classes/Enemy";
 import {
   EntityCollidable,
   EntityPosition,
@@ -18,11 +19,12 @@ import { createDestructible } from "./functions/createDestructible";
 import {
   entityHitboxHeight,
   levelID,
-  maxPowerLevel,
   playerHitboxWidth,
   punchHitboxWidth,
   renderHitboxes,
 } from "./constants";
+import { getDefinable } from "definables";
+import { isDestructibleTakingDamage } from "./functions/isDestructibleTakingDamage";
 import { isPlayerJumping } from "./functions/isPlayerJumping";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
 import { state } from "./state";
@@ -166,30 +168,47 @@ createInputPressHandler({
             const punchedEntityCollidable: EntityCollidable | undefined =
               overlapData.entityCollidables.find(
                 (entityCollidable: EntityCollidable): boolean =>
-                  entityCollidable.type === "destructible",
+                  entityCollidable.type === "destructible" ||
+                  entityCollidable.type === "enemy",
               );
             if (typeof punchedEntityCollidable !== "undefined") {
+              if (state.values.punch === null) {
+                throw new Error(
+                  "An attempt was made to punch a destructible but no punch exists",
+                );
+              }
               switch (punchedEntityCollidable.type) {
                 case "destructible":
-                  if (state.values.destructible === null) {
-                    throw new Error(
-                      "An attempt was made to punch a destructible but no box exists",
-                    );
-                  }
-                  if (state.values.punch === null) {
-                    throw new Error(
-                      "An attempt was made to punch a destructible but no punch exists",
-                    );
-                  }
-                  state.values.destructible.hp--;
-                  state.values.destructible.tookDamageAt = getCurrentTime();
-                  if (state.values.destructible.hp === 0) {
-                    state.setValues({
-                      power: Math.min(state.values.power + 1, maxPowerLevel),
-                    });
-                    createDestructible();
+                  if (isDestructibleTakingDamage() === false) {
+                    if (state.values.destructible === null) {
+                      throw new Error(
+                        "An attempt was made to punch a destructible but no box exists",
+                      );
+                    }
+                    state.values.destructible.hp--;
+                    state.values.destructible.tookDamageAt = getCurrentTime();
+                    if (state.values.destructible.hp === 0) {
+                      state.setValues({
+                        power: state.values.power + 1,
+                      });
+                      createDestructible();
+                    }
                   }
                   break;
+                case "enemy": {
+                  const enemy: Enemy = getDefinable(
+                    Enemy,
+                    punchedEntityCollidable.entityID,
+                  );
+                  if (enemy.isTakingDamage() === false) {
+                    enemy.hp--;
+                    enemy.tookDamageAt = getCurrentTime();
+                    if (enemy.hp === 0) {
+                      enemy.remove();
+                    }
+                  }
+                  break;
+                }
               }
             }
           },

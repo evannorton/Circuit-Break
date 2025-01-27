@@ -3,13 +3,11 @@ import {
   createEntity,
   createQuadrilateral,
   createSprite,
-  getCurrentTime,
   getEntityPosition,
   getGameWidth,
   removeEntity,
 } from "pixel-pigeon";
 import {
-  damageAnimationDuration,
   destructibleHitboxWidth,
   destructibleSpriteHeight,
   entityHitboxHeight,
@@ -19,6 +17,7 @@ import {
   playerHitboxWidth,
   renderHitboxes,
 } from "../constants";
+import { isDestructibleTakingDamage } from "./isDestructibleTakingDamage";
 import { state } from "../state";
 
 const getDestructibleX = (): number => {
@@ -115,16 +114,7 @@ export const createDestructible = (): void => {
       {
         spriteID: createSprite({
           animationID: (): string => {
-            if (state.values.destructible === null) {
-              throw new Error(
-                "An attempt was made to get the animation ID of a destructible but no box exists",
-              );
-            }
-            if (
-              state.values.destructible.tookDamageAt !== null &&
-              getCurrentTime() - state.values.destructible.tookDamageAt <
-                damageAnimationDuration
-            ) {
+            if (isDestructibleTakingDamage()) {
               return "hit";
             }
             return "default";
