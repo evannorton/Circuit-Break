@@ -12,6 +12,7 @@ interface StateSchema {
   playerEntityID: string | null;
   power: number;
   punch: Punch | null;
+  spawnedEnemyAt: number | null;
 }
 
 export const state: State<StateSchema> = new State<StateSchema>({
@@ -23,4 +24,5 @@ export const state: State<StateSchema> = new State<StateSchema>({
   playerEntityID: null,
   power: 0,
   punch: null,
+  spawnedEnemyAt: null,
 });

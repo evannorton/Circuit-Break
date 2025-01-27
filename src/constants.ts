@@ -1,11 +1,15 @@
-export const renderHitboxes: boolean = false;
+export const renderHitboxes: boolean = true;
 export const playerMovementXSpeed: number = 48;
 export const playerMovementYSpeed: number = 32;
+export const enemyMovementXSpeed: number = 24;
+export const enemyMovementYSpeed: number = 16;
 export const minY: number = 84;
 export const maxY: number = 141;
 export const levelID: string = "Level_0";
 export const playerSpriteHeight: number = 32;
 export const playerHitboxWidth: number = 16;
+export const enemySpriteHeight: number = 32;
+export const enemyHitboxWidth: number = 16;
 export const jumpDuration: number = 750;
 export const punchDuration: number = 400;
 export const destructibleHitboxWidth: number = 15;

@@ -1,3 +1,4 @@
+import { Enemy } from "./classes/Enemy";
 import { createCollisionBoundaries } from "./functions/createCollisionBoundaries";
 import { createDestructible } from "./functions/createDestructible";
 import { createPlayer } from "./functions/createPlayer";
@@ -12,4 +13,5 @@ export const run = (): void => {
   createPlayer();
   createDestructible();
   createCollisionBoundaries();
+  new Enemy({});
 };

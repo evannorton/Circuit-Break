@@ -13,7 +13,7 @@ export const createCollisionBoundaries = (): void => {
   const bottomBoundaryY: number = maxY + 1;
   createEntity({
     height: 1,
-    layerID: "Collision",
+    layerID: "Boundaries",
     levelID,
     position: {
       x: 0,
@@ -35,7 +35,7 @@ export const createCollisionBoundaries = (): void => {
   });
   createEntity({
     height: 1,
-    layerID: "Collision",
+    layerID: "Boundaries",
     levelID,
     position: {
       x: 0,
