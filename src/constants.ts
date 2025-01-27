@@ -20,3 +20,4 @@ export const damageAnimationDuration: number = 350;
 export const maxPowerLevel: number = 99;
 export const minDestructibleSpawnDistanceX: number = 16;
 export const minDestructibleSpawnDistanceY: number = 8;
+export const powerLevels: number[] = [2, 4, 8, 16];
