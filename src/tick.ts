@@ -16,6 +16,7 @@ import {
   playerHitboxWidth,
 } from "./constants";
 import { getDefinables } from "definables";
+import { isPlayerKicking } from "./functions/isPlayerKicking";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
 import { movePlayer } from "./functions/movePlayer";
 import { state } from "./state";
@@ -28,7 +29,11 @@ export const tick = (): void => {
     removeEntity(state.values.punch.entityID);
     state.values.punch.entityID = null;
   }
-  if (isPlayerPunching() === false) {
+  if (state.values.kick !== null && state.values.kick.entityID !== null) {
+    removeEntity(state.values.kick.entityID);
+    state.values.kick.entityID = null;
+  }
+  if (isPlayerPunching() === false && isPlayerKicking() === false) {
     movePlayer();
   }
   const playerPosition: EntityPosition = getEntityPosition(

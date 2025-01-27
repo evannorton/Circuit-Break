@@ -15,6 +15,7 @@ import {
   renderHitboxes,
 } from "../constants";
 import { isPlayerJumping } from "./isPlayerJumping";
+import { isPlayerKicking } from "./isPlayerKicking";
 import { isPlayerPunching } from "./isPlayerPunching";
 import { state } from "../state";
 
@@ -97,6 +98,9 @@ export const createPlayer = (): void => {
                 state.values.movingYDirection !== null;
               switch (state.values.facingDirection) {
                 case XDirection.Left:
+                  if (isPlayerKicking()) {
+                    return "kick-left";
+                  }
                   if (isPlayerPunching()) {
                     return "punch-left";
                   }
@@ -108,6 +112,9 @@ export const createPlayer = (): void => {
                   }
                   return "idle-left";
                 case XDirection.Right:
+                  if (isPlayerKicking()) {
+                    return "kick-right";
+                  }
                   if (isPlayerPunching()) {
                     return "punch-right";
                   }
@@ -224,6 +231,32 @@ export const createPlayer = (): void => {
                   },
                 ],
                 id: "punch-right",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: 24,
+                    sourceX: 0,
+                    sourceY: 256,
+                    width: 24,
+                  },
+                ],
+                id: "kick-left",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: 24,
+                    sourceX: 0,
+                    sourceY: 288,
+                    width: 24,
+                  },
+                ],
+                id: "kick-right",
               },
             ],
             imagePath: "player",

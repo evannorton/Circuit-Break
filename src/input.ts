@@ -18,14 +18,18 @@ import { XDirection, YDirection } from "./types/Direction";
 import { createDestructible } from "./functions/createDestructible";
 import {
   entityHitboxHeight,
+  kickDamage,
+  kickHitboxWidth,
   levelID,
   playerHitboxWidth,
+  punchDamage,
   punchHitboxWidth,
   renderHitboxes,
 } from "./constants";
 import { getDefinable } from "definables";
 import { isDestructibleTakingDamage } from "./functions/isDestructibleTakingDamage";
 import { isPlayerJumping } from "./functions/isPlayerJumping";
+import { isPlayerKicking } from "./functions/isPlayerKicking";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
 import { state } from "./state";
 
@@ -117,7 +121,9 @@ const jumpInputCollectionID: string = createInputCollection({
 });
 createInputPressHandler({
   condition: (): boolean =>
-    isPlayerJumping() === false && isPlayerPunching() === false,
+    isPlayerJumping() === false &&
+    isPlayerPunching() === false &&
+    isPlayerKicking(),
   inputCollectionID: jumpInputCollectionID,
   onInput: (): void => {
     state.setValues({
@@ -128,11 +134,13 @@ createInputPressHandler({
 const punchInputCollectionID: string = createInputCollection({
   gamepadButtons: [2],
   keyboardButtons: [{ value: "KeyX" }],
-  name: "Punch",
+  name: "Light attack",
 });
 createInputPressHandler({
   condition: (): boolean =>
-    isPlayerJumping() === false && isPlayerPunching() === false,
+    isPlayerJumping() === false &&
+    isPlayerPunching() === false &&
+    isPlayerKicking() === false,
   inputCollectionID: punchInputCollectionID,
   onInput: (): void => {
     if (state.values.playerEntityID === null) {
@@ -185,9 +193,9 @@ createInputPressHandler({
                         "An attempt was made to punch a destructible but no box exists",
                       );
                     }
-                    state.values.destructible.hp--;
+                    state.values.destructible.hp -= punchDamage;
                     state.values.destructible.tookDamageAt = getCurrentTime();
-                    if (state.values.destructible.hp === 0) {
+                    if (state.values.destructible.hp < 0) {
                       state.setValues({
                         power: state.values.power + 1,
                       });
@@ -201,9 +209,139 @@ createInputPressHandler({
                     punchedEntityCollidable.entityID,
                   );
                   if (enemy.isTakingDamage() === false) {
-                    enemy.hp--;
+                    enemy.hp -= punchDamage;
                     enemy.tookDamageAt = getCurrentTime();
-                    if (enemy.hp === 0) {
+                    if (enemy.hp < 0) {
+                      enemy.remove();
+                    }
+                  }
+                  break;
+                }
+              }
+            }
+          },
+          position,
+          quadrilaterals: renderHitboxes
+            ? [
+                {
+                  quadrilateralID: createQuadrilateral({
+                    color: "#bdffca",
+                    height: 1,
+                    width: punchHitboxWidth,
+                  }),
+                },
+                {
+                  quadrilateralID: createQuadrilateral({
+                    color: "#bdffca",
+                    height: 1,
+                    width: punchHitboxWidth,
+                  }),
+                  y: entityHitboxHeight - 1,
+                },
+                {
+                  quadrilateralID: createQuadrilateral({
+                    color: "#bdffca",
+                    height: entityHitboxHeight,
+                    width: 1,
+                  }),
+                },
+                {
+                  quadrilateralID: createQuadrilateral({
+                    color: "#bdffca",
+                    height: entityHitboxHeight,
+                    width: 1,
+                  }),
+                  x: punchHitboxWidth - 1,
+                },
+              ]
+            : undefined,
+          width: punchHitboxWidth,
+        }),
+      },
+    });
+  },
+});
+const kickInputCollectionID: string = createInputCollection({
+  gamepadButtons: [3],
+  keyboardButtons: [{ value: "KeyC" }],
+  name: "Heavy attack",
+});
+createInputPressHandler({
+  condition: (): boolean =>
+    isPlayerJumping() === false &&
+    isPlayerPunching() === false &&
+    isPlayerKicking() === false,
+  inputCollectionID: kickInputCollectionID,
+  onInput: (): void => {
+    if (state.values.playerEntityID === null) {
+      throw new Error("An attempt was made to kick with no player entity");
+    }
+    moveEntity(state.values.playerEntityID, {});
+    const playerPosition: EntityPosition = getEntityPosition(
+      state.values.playerEntityID,
+    );
+    let position: EntityPosition | undefined;
+    switch (state.values.facingDirection) {
+      case XDirection.Left:
+        position = {
+          x: playerPosition.x - kickHitboxWidth,
+          y: playerPosition.y,
+        };
+        break;
+      case XDirection.Right:
+        position = {
+          x: playerPosition.x + playerHitboxWidth,
+          y: playerPosition.y,
+        };
+        break;
+    }
+    state.setValues({
+      kick: {
+        createdAt: getCurrentTime(),
+        entityID: createEntity({
+          height: entityHitboxHeight,
+          layerID: "Projectiles",
+          levelID,
+          onOverlap: (overlapData: OverlapData): void => {
+            const kickedEntityCollidable: EntityCollidable | undefined =
+              overlapData.entityCollidables.find(
+                (entityCollidable: EntityCollidable): boolean =>
+                  entityCollidable.type === "destructible" ||
+                  entityCollidable.type === "enemy",
+              );
+            if (typeof kickedEntityCollidable !== "undefined") {
+              if (state.values.kick === null) {
+                throw new Error(
+                  "An attempt was made to kick a destructible but no kick exists",
+                );
+              }
+              switch (kickedEntityCollidable.type) {
+                case "destructible":
+                  if (isDestructibleTakingDamage() === false) {
+                    if (state.values.destructible === null) {
+                      throw new Error(
+                        "An attempt was made to punch a destructible but no box exists",
+                      );
+                    }
+                    state.values.destructible.hp -= kickDamage;
+                    state.values.destructible.tookDamageAt = getCurrentTime();
+                    if (state.values.destructible.hp < 0) {
+                      state.setValues({
+                        power: state.values.power + 1,
+                      });
+                      createDestructible();
+                    }
+                  }
+                  break;
+                case "enemy": {
+                  const enemy: Enemy = getDefinable(
+                    Enemy,
+                    kickedEntityCollidable.entityID,
+                  );
+                  if (enemy.isTakingDamage() === false) {
+                    enemy.hp -= kickDamage;
+                    enemy.tookDamageAt = getCurrentTime();
+                    if (enemy.hp < 0) {
                       enemy.remove();
                     }
                   }
