@@ -8,7 +8,7 @@ export const createEnemy = (): void => {
   const currentTime: number = getCurrentTime();
   if (
     state.values.spawnedEnemyAt === null ||
-    currentTime - state.values.spawnedEnemyAt >= 5000
+    currentTime - state.values.spawnedEnemyAt >= 7500
   ) {
     const offset: number = 32;
     const x: number =

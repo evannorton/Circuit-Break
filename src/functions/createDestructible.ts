@@ -19,7 +19,7 @@ import {
   renderHitboxes,
 } from "../constants";
 import { getDefinables } from "definables";
-import { isDestructibleTakingDamage } from "./isDestructibleTakingDamage";
+import { isDestructibleStunned } from "./isDestructibleStunned";
 import { state } from "../state";
 
 const getDestructibleX = (attempt: number): number | null => {
@@ -147,8 +147,8 @@ export const createDestructible = (): void => {
         {
           spriteID: createSprite({
             animationID: (): string => {
-              if (isDestructibleTakingDamage()) {
-                return "hit";
+              if (isDestructibleStunned()) {
+                return "stunned";
               }
               return "default";
             },
@@ -177,7 +177,7 @@ export const createDestructible = (): void => {
                     width: 15,
                   },
                 ],
-                id: "hit",
+                id: "stunned",
               },
             ],
             imagePath: "destructible",

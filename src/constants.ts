@@ -22,6 +22,7 @@ export const kickHitboxWidth: number = 7;
 export const entityHitboxHeight: number = 4;
 export const playerDamageDuration: number = 50;
 export const enemyDamageDuration: number = 50;
+export const enemyStunDuration: number = 250;
 export const powerLevels: number[] = [2, 4, 8, 16];
 export const punchDamage: number = 1;
 export const kickDamage: number = 1.5;

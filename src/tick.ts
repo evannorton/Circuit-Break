@@ -19,6 +19,7 @@ import {
 import { executePlayerKick } from "./functions/executePlayerKick";
 import { executePlayerPunch } from "./functions/executePlayerPunch";
 import { getDefinables } from "definables";
+import { isEnemyStunned } from "./functions/isEnemyStunned";
 import { isPlayerKicking } from "./functions/isPlayerKicking";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
 import { movePlayer } from "./functions/movePlayer";
@@ -52,13 +53,16 @@ export const tick = (): void => {
       enemyPosition.x - playerPosition.x > playerHitboxWidth + 3;
     const isMovingRight: boolean =
       playerPosition.x - enemyPosition.x > playerHitboxWidth + 3;
-    const xVelocity: number | undefined = isMovingLeft
-      ? -enemyMovementXSpeed
-      : isMovingRight
-        ? enemyMovementXSpeed
-        : 0;
-    const yVelocity: number | undefined =
-      enemyPosition.y - playerPosition.y > Math.ceil(entityHitboxHeight / 2)
+    const xVelocity: number | undefined = isEnemyStunned(enemy.id)
+      ? 0
+      : isMovingLeft
+        ? -enemyMovementXSpeed
+        : isMovingRight
+          ? enemyMovementXSpeed
+          : 0;
+    const yVelocity: number | undefined = isEnemyStunned(enemy.id)
+      ? 0
+      : enemyPosition.y - playerPosition.y > Math.ceil(entityHitboxHeight / 2)
         ? -enemyMovementYSpeed
         : playerPosition.y - enemyPosition.y > Math.ceil(entityHitboxHeight / 2)
           ? enemyMovementYSpeed

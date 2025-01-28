@@ -15,7 +15,7 @@ import {
   renderHitboxes,
 } from "../constants";
 import { isEnemyMoving } from "../functions/isEnemyMoving";
-import { isEnemyTakingDamage } from "../functions/isEnemyTakingDamage";
+import { isEnemyStunned } from "../functions/isEnemyStunned";
 
 interface EnemyOptions {
   position: EntityPosition;
@@ -98,16 +98,16 @@ export class Enemy extends Definable {
             animationID: (): string => {
               switch (this._facingDirection) {
                 case XDirection.Left:
-                  if (isEnemyTakingDamage(this._id)) {
-                    return "damage-left";
+                  if (isEnemyStunned(this._id)) {
+                    return "stun-left";
                   }
                   if (isEnemyMoving(this._id)) {
                     return "walk-left";
                   }
                   return "idle-left";
                 case XDirection.Right:
-                  if (isEnemyTakingDamage(this._id)) {
-                    return "damage-right";
+                  if (isEnemyStunned(this._id)) {
+                    return "stun-right";
                   }
                   if (isEnemyMoving(this._id)) {
                     return "walk-right";
@@ -231,7 +231,7 @@ export class Enemy extends Definable {
                     width: 24,
                   },
                 ],
-                id: "damage-left",
+                id: "stun-left",
               },
               {
                 frames: [
@@ -244,7 +244,7 @@ export class Enemy extends Definable {
                     width: 24,
                   },
                 ],
-                id: "damage-right",
+                id: "stun-right",
               },
             ],
             imagePath: "enemy",
