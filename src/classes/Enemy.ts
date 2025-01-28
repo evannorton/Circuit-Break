@@ -10,6 +10,7 @@ import { XDirection, YDirection } from "../types/Direction";
 import {
   enemyHitboxWidth,
   enemySpriteHeight,
+  enemySpriteWidth,
   entityHitboxHeight,
   levelID,
   renderHitboxes,
@@ -77,12 +78,12 @@ export class Enemy extends Definable {
               {
                 frames: [
                   {
-                    height: 10,
-                    sourceHeight: 10,
-                    sourceWidth: 20,
+                    height: 15,
+                    sourceHeight: 15,
+                    sourceWidth: 38,
                     sourceX: 0,
                     sourceY: 0,
-                    width: 20,
+                    width: 38,
                   },
                 ],
                 id: "default",
@@ -90,8 +91,8 @@ export class Enemy extends Definable {
             ],
             imagePath: "shadow",
           }),
-          x: -2,
-          y: -enemySpriteHeight + entityHitboxHeight + 26,
+          x: -4,
+          y: -6,
         },
         {
           spriteID: createSprite({
@@ -99,7 +100,7 @@ export class Enemy extends Definable {
               switch (this._facingDirection) {
                 case XDirection.Left:
                   if (isEnemyStunned(this._id)) {
-                    return "stun-left";
+                    return "stunned-left";
                   }
                   if (isEnemyMoving(this._id)) {
                     return "walk-left";
@@ -107,7 +108,7 @@ export class Enemy extends Definable {
                   return "idle-left";
                 case XDirection.Right:
                   if (isEnemyStunned(this._id)) {
-                    return "stun-right";
+                    return "stunned-right";
                   }
                   if (isEnemyMoving(this._id)) {
                     return "walk-right";
@@ -121,10 +122,10 @@ export class Enemy extends Definable {
                   {
                     height: enemySpriteHeight,
                     sourceHeight: enemySpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: enemySpriteWidth,
                     sourceX: 0,
-                    sourceY: 0,
-                    width: 24,
+                    sourceY: enemySpriteHeight * 17,
+                    width: enemySpriteWidth,
                   },
                 ],
                 id: "idle-left",
@@ -134,10 +135,10 @@ export class Enemy extends Definable {
                   {
                     height: enemySpriteHeight,
                     sourceHeight: enemySpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: enemySpriteWidth,
                     sourceX: 0,
-                    sourceY: 32,
-                    width: 24,
+                    sourceY: 0,
+                    width: enemySpriteWidth,
                   },
                 ],
                 id: "idle-right",
@@ -147,10 +148,10 @@ export class Enemy extends Definable {
                   {
                     height: enemySpriteHeight,
                     sourceHeight: enemySpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: enemySpriteWidth,
                     sourceX: 0,
-                    sourceY: 64,
-                    width: 24,
+                    sourceY: enemySpriteHeight * 19,
+                    width: enemySpriteWidth,
                   },
                 ],
                 id: "walk-left",
@@ -160,10 +161,10 @@ export class Enemy extends Definable {
                   {
                     height: enemySpriteHeight,
                     sourceHeight: enemySpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: enemySpriteWidth,
                     sourceX: 0,
-                    sourceY: 96,
-                    width: 24,
+                    sourceY: enemySpriteHeight * 2,
+                    width: enemySpriteWidth,
                   },
                 ],
                 id: "walk-right",
@@ -173,10 +174,10 @@ export class Enemy extends Definable {
                   {
                     height: enemySpriteHeight,
                     sourceHeight: enemySpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: enemySpriteWidth,
                     sourceX: 0,
-                    sourceY: 128,
-                    width: 24,
+                    sourceY: enemySpriteHeight * 29,
+                    width: enemySpriteWidth,
                   },
                 ],
                 id: "jump-left",
@@ -186,10 +187,10 @@ export class Enemy extends Definable {
                   {
                     height: enemySpriteHeight,
                     sourceHeight: enemySpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: enemySpriteWidth,
                     sourceX: 0,
-                    sourceY: 160,
-                    width: 24,
+                    sourceY: enemySpriteHeight * 12,
+                    width: enemySpriteWidth,
                   },
                 ],
                 id: "jump-right",
@@ -199,10 +200,10 @@ export class Enemy extends Definable {
                   {
                     height: enemySpriteHeight,
                     sourceHeight: enemySpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: enemySpriteWidth,
                     sourceX: 0,
-                    sourceY: 192,
-                    width: 24,
+                    sourceY: enemySpriteHeight * 21,
+                    width: enemySpriteWidth,
                   },
                 ],
                 id: "punch-left",
@@ -212,10 +213,10 @@ export class Enemy extends Definable {
                   {
                     height: enemySpriteHeight,
                     sourceHeight: enemySpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: enemySpriteWidth,
                     sourceX: 0,
-                    sourceY: 224,
-                    width: 24,
+                    sourceY: enemySpriteHeight * 4,
+                    width: enemySpriteWidth,
                   },
                 ],
                 id: "punch-right",
@@ -225,26 +226,104 @@ export class Enemy extends Definable {
                   {
                     height: enemySpriteHeight,
                     sourceHeight: enemySpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: enemySpriteWidth,
                     sourceX: 0,
-                    sourceY: 256,
-                    width: 24,
+                    sourceY: enemySpriteHeight * 24,
+                    width: enemySpriteWidth,
                   },
                 ],
-                id: "stun-left",
+                id: "kick-left",
               },
               {
                 frames: [
                   {
                     height: enemySpriteHeight,
                     sourceHeight: enemySpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: enemySpriteWidth,
                     sourceX: 0,
-                    sourceY: 288,
-                    width: 24,
+                    sourceY: enemySpriteHeight * 7,
+                    width: enemySpriteWidth,
                   },
                 ],
-                id: "stun-right",
+                id: "kick-right",
+              },
+              {
+                frames: [
+                  {
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: 0,
+                    sourceY: enemySpriteHeight * 23,
+                    width: enemySpriteWidth,
+                  },
+                ],
+                id: "charge-punch-left",
+              },
+              {
+                frames: [
+                  {
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: 0,
+                    sourceY: enemySpriteHeight * 6,
+                    width: enemySpriteWidth,
+                  },
+                ],
+                id: "charge-punch-right",
+              },
+              {
+                frames: [
+                  {
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: 0,
+                    sourceY: enemySpriteHeight * 23,
+                    width: enemySpriteWidth,
+                  },
+                ],
+                id: "charge-kick-left",
+              },
+              {
+                frames: [
+                  {
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: 0,
+                    sourceY: enemySpriteHeight * 6,
+                    width: enemySpriteWidth,
+                  },
+                ],
+                id: "charge-kick-right",
+              },
+              {
+                frames: [
+                  {
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: 0,
+                    sourceY: enemySpriteHeight * 33,
+                    width: enemySpriteWidth,
+                  },
+                ],
+                id: "stunned-left",
+              },
+              {
+                frames: [
+                  {
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: 0,
+                    sourceY: enemySpriteHeight * 16,
+                    width: enemySpriteWidth,
+                  },
+                ],
+                id: "stunned-right",
               },
             ],
             imagePath: "enemy",
@@ -252,13 +331,14 @@ export class Enemy extends Definable {
           x: (): number => {
             switch (this._facingDirection) {
               case XDirection.Left:
-                return -7;
+                return -34;
               case XDirection.Right:
-                return -1;
+                return -17;
             }
           },
           y: (): number => {
-            const baseOffset: number = -enemySpriteHeight + entityHitboxHeight;
+            const baseOffset: number =
+              -enemySpriteHeight + entityHitboxHeight + 7;
             return baseOffset;
           },
         },
@@ -267,7 +347,6 @@ export class Enemy extends Definable {
       width: enemyHitboxWidth,
     });
     super(entityID);
-    console.log(options);
     this._entityID = entityID;
   }
 

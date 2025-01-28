@@ -11,7 +11,7 @@ export const damageDestructible = (damage: number): void => {
     }
     state.values.destructible.hp -= damage;
     state.values.destructible.tookDamageAt = getCurrentTime();
-    if (state.values.destructible.hp < 0) {
+    if (state.values.destructible.hp <= 0) {
       state.setValues({
         power: state.values.power + 1,
       });

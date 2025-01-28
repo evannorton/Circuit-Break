@@ -13,6 +13,7 @@ import {
   levelID,
   playerHitboxWidth,
   playerSpriteHeight,
+  playerSpriteWidth,
   punchBeforeDuration,
   renderHitboxes,
 } from "../constants";
@@ -76,12 +77,12 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
-                    height: 10,
-                    sourceHeight: 10,
-                    sourceWidth: 20,
+                    height: 15,
+                    sourceHeight: 15,
+                    sourceWidth: 38,
                     sourceX: 0,
                     sourceY: 0,
-                    width: 20,
+                    width: 38,
                   },
                 ],
                 id: "default",
@@ -89,8 +90,8 @@ export const createPlayer = (): void => {
             ],
             imagePath: "shadow",
           }),
-          x: -2,
-          y: -playerSpriteHeight + entityHitboxHeight + 26,
+          x: -4,
+          y: -6,
         },
         {
           spriteID: createSprite({
@@ -179,10 +180,10 @@ export const createPlayer = (): void => {
                   {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: 0,
-                    width: 24,
+                    sourceY: playerSpriteHeight * 17,
+                    width: playerSpriteWidth,
                   },
                 ],
                 id: "idle-left",
@@ -192,10 +193,10 @@ export const createPlayer = (): void => {
                   {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: 32,
-                    width: 24,
+                    sourceY: 0,
+                    width: playerSpriteWidth,
                   },
                 ],
                 id: "idle-right",
@@ -205,10 +206,10 @@ export const createPlayer = (): void => {
                   {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: 64,
-                    width: 24,
+                    sourceY: playerSpriteHeight * 19,
+                    width: playerSpriteWidth,
                   },
                 ],
                 id: "walk-left",
@@ -218,10 +219,10 @@ export const createPlayer = (): void => {
                   {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: 96,
-                    width: 24,
+                    sourceY: playerSpriteHeight * 2,
+                    width: playerSpriteWidth,
                   },
                 ],
                 id: "walk-right",
@@ -231,10 +232,10 @@ export const createPlayer = (): void => {
                   {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: 128,
-                    width: 24,
+                    sourceY: playerSpriteHeight * 29,
+                    width: playerSpriteWidth,
                   },
                 ],
                 id: "jump-left",
@@ -244,10 +245,10 @@ export const createPlayer = (): void => {
                   {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: 160,
-                    width: 24,
+                    sourceY: playerSpriteHeight * 12,
+                    width: playerSpriteWidth,
                   },
                 ],
                 id: "jump-right",
@@ -257,10 +258,10 @@ export const createPlayer = (): void => {
                   {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: 192,
-                    width: 24,
+                    sourceY: playerSpriteHeight * 21,
+                    width: playerSpriteWidth,
                   },
                 ],
                 id: "punch-left",
@@ -270,10 +271,10 @@ export const createPlayer = (): void => {
                   {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: 224,
-                    width: 24,
+                    sourceY: playerSpriteHeight * 4,
+                    width: playerSpriteWidth,
                   },
                 ],
                 id: "punch-right",
@@ -283,10 +284,10 @@ export const createPlayer = (): void => {
                   {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: 256,
-                    width: 24,
+                    sourceY: playerSpriteHeight * 24,
+                    width: playerSpriteWidth,
                   },
                 ],
                 id: "kick-left",
@@ -296,10 +297,10 @@ export const createPlayer = (): void => {
                   {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: 288,
-                    width: 24,
+                    sourceY: playerSpriteHeight * 7,
+                    width: playerSpriteWidth,
                   },
                 ],
                 id: "kick-right",
@@ -309,10 +310,10 @@ export const createPlayer = (): void => {
                   {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: 320,
-                    width: 24,
+                    sourceY: playerSpriteHeight * 23,
+                    width: playerSpriteWidth,
                   },
                 ],
                 id: "charge-punch-left",
@@ -322,10 +323,10 @@ export const createPlayer = (): void => {
                   {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: 352,
-                    width: 24,
+                    sourceY: playerSpriteHeight * 6,
+                    width: playerSpriteWidth,
                   },
                 ],
                 id: "charge-punch-right",
@@ -335,10 +336,10 @@ export const createPlayer = (): void => {
                   {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: 384,
-                    width: 24,
+                    sourceY: playerSpriteHeight * 23,
+                    width: playerSpriteWidth,
                   },
                 ],
                 id: "charge-kick-left",
@@ -348,10 +349,10 @@ export const createPlayer = (): void => {
                   {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
-                    sourceWidth: 24,
+                    sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: 416,
-                    width: 24,
+                    sourceY: playerSpriteHeight * 6,
+                    width: playerSpriteWidth,
                   },
                 ],
                 id: "charge-kick-right",
@@ -362,13 +363,14 @@ export const createPlayer = (): void => {
           x: (): number => {
             switch (state.values.facingDirection) {
               case XDirection.Left:
-                return -7;
+                return -34;
               case XDirection.Right:
-                return -1;
+                return -17;
             }
           },
           y: (): number => {
-            const baseOffset: number = -playerSpriteHeight + entityHitboxHeight;
+            const baseOffset: number =
+              -playerSpriteHeight + entityHitboxHeight + 7;
             if (isPlayerJumping()) {
               if (state.values.jumpedAt === null) {
                 throw new Error("Player is jumping but jumpedAt is null");

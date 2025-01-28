@@ -8,7 +8,7 @@ export const damageEnemy = (enemyID: string, damage: number): void => {
   if (isEnemyTakingDamage(enemyID) === false) {
     enemy.hp -= damage;
     enemy.tookDamageAt = getCurrentTime();
-    if (enemy.hp < 0) {
+    if (enemy.hp <= 0) {
       enemy.remove();
     }
   }
