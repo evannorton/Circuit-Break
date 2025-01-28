@@ -1,6 +1,5 @@
 import {
   CollisionData,
-  EntityCollidable,
   EntityPosition,
   getCurrentTime,
   getEntityPosition,
@@ -57,20 +56,19 @@ export const executePlayerKick = (): void => {
         y: position.y,
       },
     });
-    const kickedEntityCollidable: EntityCollidable | undefined =
-      collisionData.entityCollidables.find(
-        (entityCollidable: EntityCollidable): boolean =>
-          entityCollidable.type === "destructible" ||
-          entityCollidable.type === "enemy",
-      );
-    if (typeof kickedEntityCollidable !== "undefined") {
-      switch (kickedEntityCollidable.type) {
-        case "destructible":
-          damageDestructible(kickDamage);
-          break;
-        case "enemy": {
-          damageEnemy(kickedEntityCollidable.entityID, kickDamage);
-          break;
+    for (const entityCollidable of collisionData.entityCollidables) {
+      if (
+        entityCollidable.type === "destructible" ||
+        entityCollidable.type === "enemy"
+      ) {
+        switch (entityCollidable.type) {
+          case "destructible":
+            damageDestructible(kickDamage);
+            break;
+          case "enemy": {
+            damageEnemy(entityCollidable.entityID, kickDamage);
+            break;
+          }
         }
       }
     }
