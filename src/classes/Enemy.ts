@@ -1,11 +1,12 @@
 import { Definable } from "definables";
-import { XDirection, YDirection } from "../types/Direction";
 import {
+  EntityPosition,
   createEntity,
   createQuadrilateral,
   createSprite,
   removeEntity,
 } from "pixel-pigeon";
+import { XDirection, YDirection } from "../types/Direction";
 import {
   enemyHitboxWidth,
   enemySpriteHeight,
@@ -16,7 +17,9 @@ import {
 import { isEnemyMoving } from "../functions/isEnemyMoving";
 import { isEnemyTakingDamage } from "../functions/isEnemyTakingDamage";
 
-interface EnemyOptions {}
+interface EnemyOptions {
+  position: EntityPosition;
+}
 
 export class Enemy extends Definable {
   private readonly _entityID: string;
@@ -31,10 +34,7 @@ export class Enemy extends Definable {
       height: entityHitboxHeight,
       layerID: "Characters",
       levelID,
-      position: {
-        x: 200,
-        y: 100,
-      },
+      position: options.position,
       quadrilaterals: renderHitboxes
         ? [
             {

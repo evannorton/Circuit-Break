@@ -8,6 +8,7 @@ import {
 } from "pixel-pigeon";
 import { XDirection, YDirection } from "./types/Direction";
 import { createDestructible } from "./functions/createDestructible";
+import { createEnemy } from "./functions/createEnemy";
 import {
   enemyMovementXSpeed,
   enemyMovementYSpeed,
@@ -27,6 +28,8 @@ export const tick = (): void => {
   if (state.values.playerEntityID === null) {
     throw new Error("Player entity ID is null.");
   }
+  // Create enemy
+  createEnemy();
   // Create destructible if we don't already have one
   if (state.values.destructible === null) {
     createDestructible();

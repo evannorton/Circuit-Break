@@ -9,6 +9,7 @@ interface StateSchema {
   facingDirection: XDirection;
   jumpedAt: number | null;
   kick: Kick | null;
+  lastEnemyDirection: XDirection | null;
   movingXDirection: XDirection | null;
   movingYDirection: YDirection | null;
   playerEntityID: string | null;
@@ -22,6 +23,7 @@ export const state: State<StateSchema> = new State<StateSchema>({
   facingDirection: XDirection.Right,
   jumpedAt: null,
   kick: null,
+  lastEnemyDirection: null,
   movingXDirection: null,
   movingYDirection: null,
   playerEntityID: null,
