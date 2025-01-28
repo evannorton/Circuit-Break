@@ -1,4 +1,4 @@
-import { damageDuration } from "../constants";
+import { enemyDamageDuration } from "../constants";
 import { getCurrentTime } from "pixel-pigeon";
 import { state } from "../state";
 
@@ -10,6 +10,7 @@ export const isDestructibleTakingDamage = (): boolean => {
   }
   return (
     state.values.destructible.tookDamageAt !== null &&
-    getCurrentTime() - state.values.destructible.tookDamageAt < damageDuration
+    getCurrentTime() - state.values.destructible.tookDamageAt <
+      enemyDamageDuration
   );
 };

@@ -4,17 +4,17 @@ import {
   createEntity,
   createQuadrilateral,
   createSprite,
-  getCurrentTime,
   removeEntity,
 } from "pixel-pigeon";
 import {
-  damageDuration,
   enemyHitboxWidth,
   enemySpriteHeight,
   entityHitboxHeight,
   levelID,
   renderHitboxes,
 } from "../constants";
+import { isEnemyMoving } from "../functions/isEnemyMoving";
+import { isEnemyTakingDamage } from "../functions/isEnemyTakingDamage";
 
 interface EnemyOptions {}
 
@@ -98,18 +98,18 @@ export class Enemy extends Definable {
             animationID: (): string => {
               switch (this._facingDirection) {
                 case XDirection.Left:
-                  if (this.isTakingDamage()) {
+                  if (isEnemyTakingDamage(this._id)) {
                     return "damage-left";
                   }
-                  if (this.isMoving()) {
+                  if (isEnemyMoving(this._id)) {
                     return "walk-left";
                   }
                   return "idle-left";
                 case XDirection.Right:
-                  if (this.isTakingDamage()) {
+                  if (isEnemyTakingDamage(this._id)) {
                     return "damage-right";
                   }
-                  if (this.isMoving()) {
+                  if (isEnemyMoving(this._id)) {
                     return "walk-right";
                   }
                   return "idle-right";
@@ -283,21 +283,25 @@ export class Enemy extends Definable {
     return this._hp;
   }
 
-  public get movingXDirection(): XDirection | null {
-    return this._movingXDirection;
+  public get movingXDirection(): XDirection {
+    if (this._movingXDirection !== null) {
+      return this._movingXDirection;
+    }
+    throw new Error(this.getAccessorErrorMessage("movingXDirection"));
   }
 
-  public get movingYDirection(): YDirection | null {
-    return this._movingYDirection;
+  public get movingYDirection(): YDirection {
+    if (this._movingYDirection !== null) {
+      return this._movingYDirection;
+    }
+    throw new Error(this.getAccessorErrorMessage("movingYDirection"));
   }
 
   public get tookDamageAt(): number {
-    if (this._tookDamageAt === null) {
-      throw new Error(
-        "An attempt was made to get the time of damage taken but no time exists",
-      );
+    if (this._tookDamageAt !== null) {
+      return this._tookDamageAt;
     }
-    return this._tookDamageAt;
+    throw new Error(this.getAccessorErrorMessage("tookDamageAt"));
   }
 
   public set facingDirection(facingDirection: XDirection) {
@@ -320,23 +324,20 @@ export class Enemy extends Definable {
     this._tookDamageAt = tookDamageAt;
   }
 
-  public hasTookDamageAt(): boolean {
-    return this._tookDamageAt !== null;
+  public hasMovingXDirection(): boolean {
+    return this._movingXDirection !== null;
   }
 
-  public isTakingDamage(): boolean {
-    return (
-      this._tookDamageAt !== null &&
-      getCurrentTime() - this._tookDamageAt < damageDuration
-    );
+  public hasMovingYDirection(): boolean {
+    return this._movingYDirection !== null;
+  }
+
+  public hasTookDamageAt(): boolean {
+    return this._tookDamageAt !== null;
   }
 
   public remove(): void {
     super.remove();
     removeEntity(this._entityID);
-  }
-
-  private isMoving(): boolean {
-    return this._movingXDirection !== null || this._movingYDirection !== null;
   }
 }
