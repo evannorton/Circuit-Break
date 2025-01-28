@@ -9,9 +9,11 @@ import { XDirection } from "../types/Direction";
 import {
   entityHitboxHeight,
   jumpDuration,
+  kickBeforeDuration,
   levelID,
   playerHitboxWidth,
   playerSpriteHeight,
+  punchBeforeDuration,
   renderHitboxes,
 } from "../constants";
 import { isPlayerJumping } from "./isPlayerJumping";
@@ -99,9 +101,31 @@ export const createPlayer = (): void => {
               switch (state.values.facingDirection) {
                 case XDirection.Left:
                   if (isPlayerKicking()) {
+                    if (state.values.kick === null) {
+                      throw new Error(
+                        "Player is kicking but createdAt is null",
+                      );
+                    }
+                    if (
+                      getCurrentTime() - state.values.kick.createdAt <
+                      kickBeforeDuration
+                    ) {
+                      return "charge-kick-left";
+                    }
                     return "kick-left";
                   }
                   if (isPlayerPunching()) {
+                    if (state.values.punch === null) {
+                      throw new Error(
+                        "Player is punching but createdAt is null",
+                      );
+                    }
+                    if (
+                      getCurrentTime() - state.values.punch.createdAt <
+                      punchBeforeDuration
+                    ) {
+                      return "charge-punch-left";
+                    }
                     return "punch-left";
                   }
                   if (isPlayerJumping()) {
@@ -113,9 +137,31 @@ export const createPlayer = (): void => {
                   return "idle-left";
                 case XDirection.Right:
                   if (isPlayerKicking()) {
+                    if (state.values.kick === null) {
+                      throw new Error(
+                        "Player is kicking but createdAt is null",
+                      );
+                    }
+                    if (
+                      getCurrentTime() - state.values.kick.createdAt <
+                      kickBeforeDuration
+                    ) {
+                      return "charge-kick-right";
+                    }
                     return "kick-right";
                   }
                   if (isPlayerPunching()) {
+                    if (state.values.punch === null) {
+                      throw new Error(
+                        "Player is punching but createdAt is null",
+                      );
+                    }
+                    if (
+                      getCurrentTime() - state.values.punch.createdAt <
+                      punchBeforeDuration
+                    ) {
+                      return "charge-punch-right";
+                    }
                     return "punch-right";
                   }
                   if (isPlayerJumping()) {
@@ -257,6 +303,58 @@ export const createPlayer = (): void => {
                   },
                 ],
                 id: "kick-right",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: 24,
+                    sourceX: 0,
+                    sourceY: 320,
+                    width: 24,
+                  },
+                ],
+                id: "charge-punch-left",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: 24,
+                    sourceX: 0,
+                    sourceY: 352,
+                    width: 24,
+                  },
+                ],
+                id: "charge-punch-right",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: 24,
+                    sourceX: 0,
+                    sourceY: 384,
+                    width: 24,
+                  },
+                ],
+                id: "charge-kick-left",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: 24,
+                    sourceX: 0,
+                    sourceY: 416,
+                    width: 24,
+                  },
+                ],
+                id: "charge-kick-right",
               },
             ],
             imagePath: "player",

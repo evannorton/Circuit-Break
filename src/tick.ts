@@ -4,7 +4,6 @@ import {
   getEntityIDs,
   getEntityPosition,
   moveEntity,
-  removeEntity,
   setEntityZIndex,
 } from "pixel-pigeon";
 import { XDirection, YDirection } from "./types/Direction";
@@ -15,6 +14,8 @@ import {
   levelID,
   playerHitboxWidth,
 } from "./constants";
+import { executePlayerKick } from "./functions/executePlayerKick";
+import { executePlayerPunch } from "./functions/executePlayerPunch";
 import { getDefinables } from "definables";
 import { isPlayerKicking } from "./functions/isPlayerKicking";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
@@ -25,17 +26,15 @@ export const tick = (): void => {
   if (state.values.playerEntityID === null) {
     throw new Error("Player entity ID is null.");
   }
-  if (state.values.punch !== null && state.values.punch.entityID !== null) {
-    removeEntity(state.values.punch.entityID);
-    state.values.punch.entityID = null;
-  }
-  if (state.values.kick !== null && state.values.kick.entityID !== null) {
-    removeEntity(state.values.kick.entityID);
-    state.values.kick.entityID = null;
-  }
+  // Move player if not punching or kicking
   if (isPlayerPunching() === false && isPlayerKicking() === false) {
     movePlayer();
   }
+  // Execute punch
+  executePlayerPunch();
+  // Execute kick
+  executePlayerKick();
+  // Move enemies
   const playerPosition: EntityPosition = getEntityPosition(
     state.values.playerEntityID,
   );
@@ -81,6 +80,7 @@ export const tick = (): void => {
       enemy.movingYDirection = null;
     }
   }
+  // Y-sort characters
   [
     ...getEntityIDs({
       layerIDs: ["Characters"],

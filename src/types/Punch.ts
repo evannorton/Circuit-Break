@@ -1,4 +1,4 @@
 export interface Punch {
   readonly createdAt: number;
-  entityID: string | null;
+  wasExecuted: boolean;
 }

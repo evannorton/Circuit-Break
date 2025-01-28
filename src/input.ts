@@ -1,31 +1,13 @@
 import {
-  EntityCollidable,
-  EntityPosition,
   NumLock,
-  OverlapData,
-  createEntity,
   createInputCollection,
   createInputPressHandler,
   createInputTickHandler,
-  createQuadrilateral,
   getCurrentTime,
-  getEntityPosition,
   moveEntity,
   takeScreenshot,
 } from "pixel-pigeon";
 import { XDirection, YDirection } from "./types/Direction";
-import { damageDestructible } from "./functions/damageDestructible";
-import { damageEnemy } from "./functions/damageEnemy";
-import {
-  entityHitboxHeight,
-  kickDamage,
-  kickHitboxWidth,
-  levelID,
-  playerHitboxWidth,
-  punchDamage,
-  punchHitboxWidth,
-  renderHitboxes,
-} from "./constants";
 import { isPlayerJumping } from "./functions/isPlayerJumping";
 import { isPlayerKicking } from "./functions/isPlayerKicking";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
@@ -121,7 +103,7 @@ createInputPressHandler({
   condition: (): boolean =>
     isPlayerJumping() === false &&
     isPlayerPunching() === false &&
-    isPlayerKicking(),
+    isPlayerKicking() === false,
   inputCollectionID: jumpInputCollectionID,
   onInput: (): void => {
     state.setValues({
@@ -145,92 +127,10 @@ createInputPressHandler({
       throw new Error("An attempt was made to punch with no player entity");
     }
     moveEntity(state.values.playerEntityID, {});
-    const playerPosition: EntityPosition = getEntityPosition(
-      state.values.playerEntityID,
-    );
-    let position: EntityPosition | undefined;
-    switch (state.values.facingDirection) {
-      case XDirection.Left:
-        position = {
-          x: playerPosition.x - punchHitboxWidth,
-          y: playerPosition.y,
-        };
-        break;
-      case XDirection.Right:
-        position = {
-          x: playerPosition.x + playerHitboxWidth,
-          y: playerPosition.y,
-        };
-        break;
-    }
     state.setValues({
       punch: {
         createdAt: getCurrentTime(),
-        entityID: createEntity({
-          height: entityHitboxHeight,
-          layerID: "Projectiles",
-          levelID,
-          onOverlap: (overlapData: OverlapData): void => {
-            const punchedEntityCollidable: EntityCollidable | undefined =
-              overlapData.entityCollidables.find(
-                (entityCollidable: EntityCollidable): boolean =>
-                  entityCollidable.type === "destructible" ||
-                  entityCollidable.type === "enemy",
-              );
-            if (typeof punchedEntityCollidable !== "undefined") {
-              if (state.values.punch === null) {
-                throw new Error(
-                  "An attempt was made to punch a destructible but no punch exists",
-                );
-              }
-              switch (punchedEntityCollidable.type) {
-                case "destructible":
-                  damageDestructible(punchDamage);
-                  break;
-                case "enemy": {
-                  damageEnemy(punchedEntityCollidable.entityID, punchDamage);
-                  break;
-                }
-              }
-            }
-          },
-          position,
-          quadrilaterals: renderHitboxes
-            ? [
-                {
-                  quadrilateralID: createQuadrilateral({
-                    color: "#bdffca",
-                    height: 1,
-                    width: punchHitboxWidth,
-                  }),
-                },
-                {
-                  quadrilateralID: createQuadrilateral({
-                    color: "#bdffca",
-                    height: 1,
-                    width: punchHitboxWidth,
-                  }),
-                  y: entityHitboxHeight - 1,
-                },
-                {
-                  quadrilateralID: createQuadrilateral({
-                    color: "#bdffca",
-                    height: entityHitboxHeight,
-                    width: 1,
-                  }),
-                },
-                {
-                  quadrilateralID: createQuadrilateral({
-                    color: "#bdffca",
-                    height: entityHitboxHeight,
-                    width: 1,
-                  }),
-                  x: punchHitboxWidth - 1,
-                },
-              ]
-            : undefined,
-          width: punchHitboxWidth,
-        }),
+        wasExecuted: false,
       },
     });
   },
@@ -251,92 +151,10 @@ createInputPressHandler({
       throw new Error("An attempt was made to kick with no player entity");
     }
     moveEntity(state.values.playerEntityID, {});
-    const playerPosition: EntityPosition = getEntityPosition(
-      state.values.playerEntityID,
-    );
-    let position: EntityPosition | undefined;
-    switch (state.values.facingDirection) {
-      case XDirection.Left:
-        position = {
-          x: playerPosition.x - kickHitboxWidth,
-          y: playerPosition.y,
-        };
-        break;
-      case XDirection.Right:
-        position = {
-          x: playerPosition.x + playerHitboxWidth,
-          y: playerPosition.y,
-        };
-        break;
-    }
     state.setValues({
       kick: {
         createdAt: getCurrentTime(),
-        entityID: createEntity({
-          height: entityHitboxHeight,
-          layerID: "Projectiles",
-          levelID,
-          onOverlap: (overlapData: OverlapData): void => {
-            const kickedEntityCollidable: EntityCollidable | undefined =
-              overlapData.entityCollidables.find(
-                (entityCollidable: EntityCollidable): boolean =>
-                  entityCollidable.type === "destructible" ||
-                  entityCollidable.type === "enemy",
-              );
-            if (typeof kickedEntityCollidable !== "undefined") {
-              if (state.values.kick === null) {
-                throw new Error(
-                  "An attempt was made to kick a destructible but no kick exists",
-                );
-              }
-              switch (kickedEntityCollidable.type) {
-                case "destructible":
-                  damageDestructible(kickDamage);
-                  break;
-                case "enemy": {
-                  damageEnemy(kickedEntityCollidable.entityID, kickDamage);
-                  break;
-                }
-              }
-            }
-          },
-          position,
-          quadrilaterals: renderHitboxes
-            ? [
-                {
-                  quadrilateralID: createQuadrilateral({
-                    color: "#bdffca",
-                    height: 1,
-                    width: punchHitboxWidth,
-                  }),
-                },
-                {
-                  quadrilateralID: createQuadrilateral({
-                    color: "#bdffca",
-                    height: 1,
-                    width: punchHitboxWidth,
-                  }),
-                  y: entityHitboxHeight - 1,
-                },
-                {
-                  quadrilateralID: createQuadrilateral({
-                    color: "#bdffca",
-                    height: entityHitboxHeight,
-                    width: 1,
-                  }),
-                },
-                {
-                  quadrilateralID: createQuadrilateral({
-                    color: "#bdffca",
-                    height: entityHitboxHeight,
-                    width: 1,
-                  }),
-                  x: punchHitboxWidth - 1,
-                },
-              ]
-            : undefined,
-          width: punchHitboxWidth,
-        }),
+        wasExecuted: false,
       },
     });
   },
