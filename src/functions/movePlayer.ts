@@ -1,5 +1,6 @@
 import { XDirection, YDirection } from "../types/Direction";
 import { getInputTickHandlerGroupID, moveEntity } from "pixel-pigeon";
+import { isPlayerJumping } from "./isPlayerJumping";
 import {
   movementXInputTickHandlerID,
   movementYInputTickHandlerID,
@@ -13,12 +14,12 @@ export const movePlayer = (): void => {
       "An attempt was made to move the player with no player entity",
     );
   }
-  const xDirection: XDirection | null = getInputTickHandlerGroupID<XDirection>(
-    movementXInputTickHandlerID,
-  );
-  const yDirection: YDirection | null = getInputTickHandlerGroupID<YDirection>(
-    movementYInputTickHandlerID,
-  );
+  const xDirection: XDirection | null = isPlayerJumping()
+    ? state.values.movingXDirection
+    : getInputTickHandlerGroupID<XDirection>(movementXInputTickHandlerID);
+  const yDirection: YDirection | null = isPlayerJumping()
+    ? state.values.movingYDirection
+    : getInputTickHandlerGroupID<YDirection>(movementYInputTickHandlerID);
   const xVelocity: number =
     xDirection === XDirection.Left
       ? -playerMovementXSpeed
