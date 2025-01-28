@@ -40,14 +40,14 @@ export class Enemy extends Definable {
         ? [
             {
               quadrilateralID: createQuadrilateral({
-                color: "#d59cfc",
+                color: "#e03c28",
                 height: 1,
                 width: enemyHitboxWidth,
               }),
             },
             {
               quadrilateralID: createQuadrilateral({
-                color: "#d59cfc",
+                color: "#e03c28",
                 height: 1,
                 width: enemyHitboxWidth,
               }),
@@ -55,14 +55,14 @@ export class Enemy extends Definable {
             },
             {
               quadrilateralID: createQuadrilateral({
-                color: "#d59cfc",
+                color: "#e03c28",
                 height: entityHitboxHeight,
                 width: 1,
               }),
             },
             {
               quadrilateralID: createQuadrilateral({
-                color: "#d59cfc",
+                color: "#e03c28",
                 height: entityHitboxHeight,
                 width: 1,
               }),
