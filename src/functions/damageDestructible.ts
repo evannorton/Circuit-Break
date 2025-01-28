@@ -1,5 +1,4 @@
-import { createDestructible } from "./createDestructible";
-import { getCurrentTime } from "pixel-pigeon";
+import { getCurrentTime, removeEntity } from "pixel-pigeon";
 import { isDestructibleTakingDamage } from "./isDestructibleTakingDamage";
 import { state } from "../state";
 
@@ -16,7 +15,10 @@ export const damageDestructible = (damage: number): void => {
       state.setValues({
         power: state.values.power + 1,
       });
-      createDestructible();
+      removeEntity(state.values.destructible.entityID);
+      state.setValues({
+        destructible: null,
+      });
     }
   }
 };

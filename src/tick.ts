@@ -7,6 +7,7 @@ import {
   setEntityZIndex,
 } from "pixel-pigeon";
 import { XDirection, YDirection } from "./types/Direction";
+import { createDestructible } from "./functions/createDestructible";
 import {
   enemyMovementXSpeed,
   enemyMovementYSpeed,
@@ -25,6 +26,10 @@ import { state } from "./state";
 export const tick = (): void => {
   if (state.values.playerEntityID === null) {
     throw new Error("Player entity ID is null.");
+  }
+  // Create destructible if we don't already have one
+  if (state.values.destructible === null) {
+    createDestructible();
   }
   // Move player if not punching or kicking
   if (isPlayerPunching() === false && isPlayerKicking() === false) {
