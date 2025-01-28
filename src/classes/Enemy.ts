@@ -30,7 +30,7 @@ export class Enemy extends Definable {
   private _tookDamageAt: number | null = null;
   public constructor(options: EnemyOptions) {
     const entityID: string = createEntity({
-      collidableEntityTypes: ["boundary", "destructible", "player"],
+      collidableEntityTypes: ["boundary", "destructible", "player", "enemy"],
       height: entityHitboxHeight,
       layerID: "Characters",
       levelID,
