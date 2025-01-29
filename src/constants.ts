@@ -29,3 +29,4 @@ export const enemyStunDuration: number = 250;
 export const powerLevels: number[] = [2, 4, 8, 16];
 export const punchDamage: number = 1;
 export const kickDamage: number = 1.5;
+export const enemySpawnTime: number = 7500;
