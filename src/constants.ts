@@ -36,3 +36,4 @@ export const destructibleRisingFrameDuration: number = 100;
 export const destructibleIdleFrameDuration: number = 100;
 export const playerMaxHP: number = 12;
 export const heartsAmount: number = 6;
+export const jumpHeight: number = 18;

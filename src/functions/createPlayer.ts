@@ -10,6 +10,7 @@ import { XDirection } from "../types/Direction";
 import {
   entityHitboxHeight,
   jumpDuration,
+  jumpHeight,
   kickAfterDuration,
   kickBeforeDuration,
   levelID,
@@ -625,11 +626,10 @@ export const createPlayer = (): void => {
               if (state.values.jumpedAt === null) {
                 throw new Error("Player is jumping but jumpedAt is null");
               }
-              const maxOffset: number = 12;
               const x: number =
                 (getCurrentTime() - state.values.jumpedAt) / (jumpDuration / 2);
               return (
-                baseOffset - Math.floor(maxOffset * (1 - Math.pow(x - 1, 2)))
+                baseOffset - Math.floor(jumpHeight * (1 - Math.pow(x - 1, 2)))
               );
             }
             return baseOffset;
