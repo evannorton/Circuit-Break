@@ -77,26 +77,87 @@ export const createPlayer = (): void => {
       sprites: [
         {
           spriteID: createSprite({
-            animationID: "default",
+            animationID: (): string => {
+              if (isPlayerJumping()) {
+                return "jump";
+              }
+              return "default";
+            },
             animations: [
               {
                 frames: [
                   {
-                    height: 15,
-                    sourceHeight: 15,
-                    sourceWidth: 38,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
                     sourceX: 0,
                     sourceY: 0,
-                    width: 38,
+                    width: playerSpriteWidth,
                   },
                 ],
                 id: "default",
               },
+              {
+                frames: [
+                  {
+                    duration: jumpDuration / 5,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
+                    sourceY: 0,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: jumpDuration / 5,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
+                    sourceY: 0,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: jumpDuration / 5,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 3,
+                    sourceY: 0,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: jumpDuration / 5,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
+                    sourceY: 0,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
+                    sourceY: 0,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "jump",
+              },
             ],
             imagePath: "shadow",
           }),
-          x: -4,
-          y: -6,
+          x: (): number => {
+            switch (state.values.facingDirection) {
+              case XDirection.Left:
+                return -18;
+              case XDirection.Right:
+                return -17;
+            }
+          },
+          y: -playerSpriteHeight + entityHitboxHeight + 7,
         },
         {
           spriteID: createSprite({

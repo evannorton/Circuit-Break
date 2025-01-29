@@ -13,6 +13,7 @@ import {
   enemySpriteWidth,
   entityHitboxHeight,
   levelID,
+  punchAfterDuration,
   renderHitboxes,
 } from "../constants";
 import { isEnemyMoving } from "../functions/isEnemyMoving";
@@ -346,6 +347,7 @@ export class Enemy extends Definable {
               {
                 frames: [
                   {
+                    duration: punchAfterDuration / 3,
                     height: enemySpriteHeight,
                     sourceHeight: enemySpriteHeight,
                     sourceWidth: enemySpriteWidth,
@@ -353,12 +355,92 @@ export class Enemy extends Definable {
                     sourceY: enemySpriteHeight * 21,
                     width: enemySpriteWidth,
                   },
+                  {
+                    duration: punchAfterDuration / 3,
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth,
+                    sourceY: enemySpriteHeight * 21,
+                    width: enemySpriteWidth,
+                  },
+                  {
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth * 2,
+                    sourceY: enemySpriteHeight * 21,
+                    width: enemySpriteWidth,
+                  },
                 ],
-                id: "punch-left",
+                id: "punch-left-right",
               },
               {
                 frames: [
                   {
+                    duration: punchAfterDuration / 3,
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: 0,
+                    sourceY: enemySpriteHeight * 22,
+                    width: enemySpriteWidth,
+                  },
+                  {
+                    duration: punchAfterDuration / 3,
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth,
+                    sourceY: enemySpriteHeight * 22,
+                    width: enemySpriteWidth,
+                  },
+                  {
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth * 2,
+                    sourceY: enemySpriteHeight * 22,
+                    width: enemySpriteWidth,
+                  },
+                ],
+                id: "punch-left-left",
+              },
+              {
+                frames: [
+                  {
+                    duration: punchAfterDuration / 3,
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: 0,
+                    sourceY: enemySpriteHeight * 5,
+                    width: enemySpriteWidth,
+                  },
+                  {
+                    duration: punchAfterDuration / 3,
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth,
+                    sourceY: enemySpriteHeight * 5,
+                    width: enemySpriteWidth,
+                  },
+                  {
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth * 2,
+                    sourceY: enemySpriteHeight * 5,
+                    width: enemySpriteWidth,
+                  },
+                ],
+                id: "punch-right-right",
+              },
+              {
+                frames: [
+                  {
+                    duration: punchAfterDuration / 3,
                     height: enemySpriteHeight,
                     sourceHeight: enemySpriteHeight,
                     sourceWidth: enemySpriteWidth,
@@ -366,8 +448,25 @@ export class Enemy extends Definable {
                     sourceY: enemySpriteHeight * 4,
                     width: enemySpriteWidth,
                   },
+                  {
+                    duration: punchAfterDuration / 3,
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth,
+                    sourceY: enemySpriteHeight * 4,
+                    width: enemySpriteWidth,
+                  },
+                  {
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth * 2,
+                    sourceY: enemySpriteHeight * 4,
+                    width: enemySpriteWidth,
+                  },
                 ],
-                id: "punch-right",
+                id: "punch-right-left",
               },
               {
                 frames: [
