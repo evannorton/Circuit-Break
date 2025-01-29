@@ -1,8 +1,8 @@
 export const renderHitboxes: boolean = false;
-export const playerMovementXSpeed: number = 48;
-export const playerMovementYSpeed: number = 32;
-export const enemyMovementXSpeed: number = 24;
-export const enemyMovementYSpeed: number = 16;
+export const playerMovementXSpeed: number = 64;
+export const playerMovementYSpeed: number = (playerMovementXSpeed * 2) / 3;
+export const enemyMovementXSpeed: number = 32;
+export const enemyMovementYSpeed: number = (enemyMovementXSpeed * 2) / 3;
 export const minY: number = 114;
 export const maxY: number = 216;
 export const levelID: string = "Level_0";
