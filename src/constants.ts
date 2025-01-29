@@ -33,3 +33,5 @@ export const enemySpawnTime: number = 7500;
 export const destructibleRisingFrames: number = 17;
 export const destructibleRisingFrameDuration: number = 100;
 export const destructibleIdleFrameDuration: number = 100;
+export const playerMaxHP: number = 12;
+export const heartsAmount: number = 6;

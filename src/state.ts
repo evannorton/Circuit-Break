@@ -3,6 +3,7 @@ import { Kick } from "./types/Kick";
 import { Punch } from "./types/Punch";
 import { State } from "pixel-pigeon";
 import { XDirection, YDirection } from "./types/Direction";
+import { playerMaxHP } from "./constants";
 
 interface StateSchema {
   destructible: Destructible | null;
@@ -13,6 +14,7 @@ interface StateSchema {
   movingXDirection: XDirection | null;
   movingYDirection: YDirection | null;
   playerEntityID: string | null;
+  playerHP: number;
   power: number;
   punch: Punch | null;
   spawnedEnemyAt: number | null;
@@ -27,6 +29,7 @@ export const state: State<StateSchema> = new State<StateSchema>({
   movingXDirection: null,
   movingYDirection: null,
   playerEntityID: null,
+  playerHP: playerMaxHP,
   power: 0,
   punch: null,
   spawnedEnemyAt: null,
