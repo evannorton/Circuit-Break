@@ -7,6 +7,7 @@ import {
   moveEntity,
   takeScreenshot,
 } from "pixel-pigeon";
+import { PunchHand } from "./types/Punch";
 import { XDirection, YDirection } from "./types/Direction";
 import { isPlayerJumping } from "./functions/isPlayerJumping";
 import { isPlayerKicking } from "./functions/isPlayerKicking";
@@ -130,6 +131,10 @@ createInputPressHandler({
     state.setValues({
       punch: {
         createdAt: getCurrentTime(),
+        hand:
+          state.values.punch?.hand === PunchHand.Left
+            ? PunchHand.Right
+            : PunchHand.Left,
         wasExecuted: false,
       },
     });

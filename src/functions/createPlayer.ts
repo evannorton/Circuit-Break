@@ -5,6 +5,7 @@ import {
   createSprite,
   getCurrentTime,
 } from "pixel-pigeon";
+import { PunchHand } from "../types/Punch";
 import { XDirection } from "../types/Direction";
 import {
   entityHitboxHeight,
@@ -127,7 +128,10 @@ export const createPlayer = (): void => {
                     ) {
                       return "charge-punch-left";
                     }
-                    return "punch-left";
+                    if (state.values.punch.hand === PunchHand.Left) {
+                      return "punch-left-left";
+                    }
+                    return "punch-left-right";
                   }
                   if (isPlayerJumping()) {
                     return "jump-left";
@@ -163,7 +167,10 @@ export const createPlayer = (): void => {
                     ) {
                       return "charge-punch-right";
                     }
-                    return "punch-right";
+                    if (state.values.punch.hand === PunchHand.Left) {
+                      return "punch-right-left";
+                    }
+                    return "punch-right-right";
                   }
                   if (isPlayerJumping()) {
                     return "jump-right";
@@ -320,7 +327,33 @@ export const createPlayer = (): void => {
                     width: playerSpriteWidth,
                   },
                 ],
-                id: "punch-left",
+                id: "punch-left-right",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 22,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "punch-left-left",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 5,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "punch-right-right",
               },
               {
                 frames: [
@@ -333,7 +366,7 @@ export const createPlayer = (): void => {
                     width: playerSpriteWidth,
                   },
                 ],
-                id: "punch-right",
+                id: "punch-right-left",
               },
               {
                 frames: [
