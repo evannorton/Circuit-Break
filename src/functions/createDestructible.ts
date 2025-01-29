@@ -1,14 +1,19 @@
-import { Enemy } from "../classes/Enemy";
 import {
+  CreateSpriteOptionsAnimationFrame,
   EntityPosition,
   createEntity,
   createQuadrilateral,
   createSprite,
+  getCurrentTime,
   getEntityPosition,
   getGameWidth,
 } from "pixel-pigeon";
+import { Enemy } from "../classes/Enemy";
 import {
   destructibleHitboxWidth,
+  destructibleIdleFrameDuration,
+  destructibleRisingFrameDuration,
+  destructibleRisingFrames,
   destructibleSpriteHeight,
   destructibleSpriteWidth,
   enemyHitboxWidth,
@@ -20,7 +25,6 @@ import {
   renderHitboxes,
 } from "../constants";
 import { getDefinables } from "definables";
-import { isDestructibleStunned } from "./isDestructibleStunned";
 import { state } from "../state";
 
 const getDestructibleX = (attempt: number): number | null => {
@@ -102,6 +106,18 @@ export const createDestructible = (): void => {
   const x: number | null = getDestructibleX(0);
   const y: number | null = getDestructibleY(0);
   if (x !== null && y !== null) {
+    const risingFrames: CreateSpriteOptionsAnimationFrame[] = [];
+    for (let i: number = 0; i < destructibleRisingFrames; i++) {
+      risingFrames.push({
+        duration: destructibleRisingFrameDuration,
+        height: destructibleSpriteHeight,
+        sourceHeight: destructibleSpriteHeight,
+        sourceWidth: destructibleSpriteWidth,
+        sourceX: destructibleSpriteWidth * i,
+        sourceY: 0,
+        width: destructibleSpriteWidth,
+      });
+    }
     const entityID: string = createEntity({
       height: entityHitboxHeight,
       layerID: "Characters",
@@ -148,28 +164,40 @@ export const createDestructible = (): void => {
         {
           spriteID: createSprite({
             animationID: (): string => {
-              if (isDestructibleStunned()) {
-                return "stunned";
+              if (state.values.destructible === null) {
+                throw new Error(
+                  "An attempt was made to get the destructible's animation but the destructible does not exist",
+                );
               }
-              return "default";
+              if (
+                getCurrentTime() - state.values.destructible.createdAt <
+                destructibleRisingFrameDuration * 17
+              ) {
+                return "rising";
+              }
+              if (state.values.destructible.hp <= 1) {
+                return "idle-5";
+              }
+              if (state.values.destructible.hp <= 2) {
+                return "idle-4";
+              }
+              if (state.values.destructible.hp <= 3) {
+                return "idle-3";
+              }
+              if (state.values.destructible.hp <= 4) {
+                return "idle-2";
+              }
+              return "idle-1";
             },
             animations: [
               {
-                frames: [
-                  {
-                    height: destructibleSpriteHeight,
-                    sourceHeight: destructibleSpriteHeight,
-                    sourceWidth: destructibleSpriteWidth,
-                    sourceX: 0,
-                    sourceY: 0,
-                    width: destructibleSpriteWidth,
-                  },
-                ],
-                id: "default",
+                frames: risingFrames,
+                id: "rising",
               },
               {
                 frames: [
                   {
+                    duration: destructibleIdleFrameDuration,
                     height: destructibleSpriteHeight,
                     sourceHeight: destructibleSpriteHeight,
                     sourceWidth: destructibleSpriteWidth,
@@ -177,13 +205,114 @@ export const createDestructible = (): void => {
                     sourceY: destructibleSpriteHeight,
                     width: destructibleSpriteWidth,
                   },
+                  {
+                    duration: destructibleIdleFrameDuration,
+                    height: destructibleSpriteHeight,
+                    sourceHeight: destructibleSpriteHeight,
+                    sourceWidth: destructibleSpriteWidth,
+                    sourceX: destructibleSpriteWidth,
+                    sourceY: destructibleSpriteHeight,
+                    width: destructibleSpriteWidth,
+                  },
                 ],
-                id: "stunned",
+                id: "idle-1",
+              },
+              {
+                frames: [
+                  {
+                    duration: destructibleIdleFrameDuration,
+                    height: destructibleSpriteHeight,
+                    sourceHeight: destructibleSpriteHeight,
+                    sourceWidth: destructibleSpriteWidth,
+                    sourceX: 0 + destructibleSpriteWidth * 3,
+                    sourceY: destructibleSpriteHeight,
+                    width: destructibleSpriteWidth,
+                  },
+                  {
+                    duration: destructibleIdleFrameDuration,
+                    height: destructibleSpriteHeight,
+                    sourceHeight: destructibleSpriteHeight,
+                    sourceWidth: destructibleSpriteWidth,
+                    sourceX: destructibleSpriteWidth * 4,
+                    sourceY: destructibleSpriteHeight,
+                    width: destructibleSpriteWidth,
+                  },
+                ],
+                id: "idle-2",
+              },
+              {
+                frames: [
+                  {
+                    duration: destructibleIdleFrameDuration,
+                    height: destructibleSpriteHeight,
+                    sourceHeight: destructibleSpriteHeight,
+                    sourceWidth: destructibleSpriteWidth,
+                    sourceX: 0 + destructibleSpriteWidth * 6,
+                    sourceY: destructibleSpriteHeight,
+                    width: destructibleSpriteWidth,
+                  },
+                  {
+                    duration: destructibleIdleFrameDuration,
+                    height: destructibleSpriteHeight,
+                    sourceHeight: destructibleSpriteHeight,
+                    sourceWidth: destructibleSpriteWidth,
+                    sourceX: destructibleSpriteWidth * 7,
+                    sourceY: destructibleSpriteHeight,
+                    width: destructibleSpriteWidth,
+                  },
+                ],
+                id: "idle-3",
+              },
+              {
+                frames: [
+                  {
+                    duration: destructibleIdleFrameDuration,
+                    height: destructibleSpriteHeight,
+                    sourceHeight: destructibleSpriteHeight,
+                    sourceWidth: destructibleSpriteWidth,
+                    sourceX: 0 + destructibleSpriteWidth * 9,
+                    sourceY: destructibleSpriteHeight,
+                    width: destructibleSpriteWidth,
+                  },
+                  {
+                    duration: destructibleIdleFrameDuration,
+                    height: destructibleSpriteHeight,
+                    sourceHeight: destructibleSpriteHeight,
+                    sourceWidth: destructibleSpriteWidth,
+                    sourceX: destructibleSpriteWidth * 10,
+                    sourceY: destructibleSpriteHeight,
+                    width: destructibleSpriteWidth,
+                  },
+                ],
+                id: "idle-4",
+              },
+              {
+                frames: [
+                  {
+                    duration: destructibleIdleFrameDuration,
+                    height: destructibleSpriteHeight,
+                    sourceHeight: destructibleSpriteHeight,
+                    sourceWidth: destructibleSpriteWidth,
+                    sourceX: 0 + destructibleSpriteWidth * 12,
+                    sourceY: destructibleSpriteHeight,
+                    width: destructibleSpriteWidth,
+                  },
+                  {
+                    duration: destructibleIdleFrameDuration,
+                    height: destructibleSpriteHeight,
+                    sourceHeight: destructibleSpriteHeight,
+                    sourceWidth: destructibleSpriteWidth,
+                    sourceX: destructibleSpriteWidth * 13,
+                    sourceY: destructibleSpriteHeight,
+                    width: destructibleSpriteWidth,
+                  },
+                ],
+                id: "idle-5",
               },
             ],
             imagePath: "destructible",
           }),
-          y: -destructibleSpriteHeight + entityHitboxHeight,
+          y: -destructibleSpriteHeight + entityHitboxHeight + 2,
         },
       ],
       type: "destructible",
@@ -191,6 +320,7 @@ export const createDestructible = (): void => {
     });
     state.setValues({
       destructible: {
+        createdAt: getCurrentTime(),
         entityID,
         hp: 5,
         tookDamageAt: null,
