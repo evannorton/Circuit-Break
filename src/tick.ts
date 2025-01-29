@@ -21,6 +21,7 @@ import { executePlayerPunch } from "./functions/executePlayerPunch";
 import { getDefinables } from "definables";
 import { isEnemyStunned } from "./functions/isEnemyStunned";
 import { isPlayerKicking } from "./functions/isPlayerKicking";
+import { isPlayerLanding } from "./functions/isPlayerLanding";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
 import { movePlayer } from "./functions/movePlayer";
 import { state } from "./state";
@@ -36,8 +37,16 @@ export const tick = (): void => {
     createDestructible();
   }
   // Move player if not punching or kicking
-  if (isPlayerPunching() === false && isPlayerKicking() === false) {
+  if (
+    isPlayerPunching() === false &&
+    isPlayerKicking() === false &&
+    isPlayerLanding() === false
+  ) {
     movePlayer();
+  }
+  // Stop player from moving if landing
+  if (isPlayerLanding()) {
+    moveEntity(state.values.playerEntityID, {});
   }
   // Execute punch
   executePlayerPunch();

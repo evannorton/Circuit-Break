@@ -22,6 +22,7 @@ import {
 } from "../constants";
 import { isPlayerJumping } from "./isPlayerJumping";
 import { isPlayerKicking } from "./isPlayerKicking";
+import { isPlayerLanding } from "./isPlayerLanding";
 import { isPlayerPunching } from "./isPlayerPunching";
 import { state } from "../state";
 
@@ -138,6 +139,9 @@ export const createPlayer = (): void => {
                   if (isPlayerJumping()) {
                     return "jump-left";
                   }
+                  if (isPlayerLanding()) {
+                    return "land-left";
+                  }
                   if (isMoving) {
                     return "walk-left";
                   }
@@ -176,6 +180,9 @@ export const createPlayer = (): void => {
                   }
                   if (isPlayerJumping()) {
                     return "jump-right";
+                  }
+                  if (isPlayerLanding()) {
+                    return "land-right";
                   }
                   if (isMoving) {
                     return "walk-right";
@@ -335,6 +342,32 @@ export const createPlayer = (): void => {
                   },
                 ],
                 id: "jump-right",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 28,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "land-left",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 11,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "land-right",
               },
               {
                 frames: [

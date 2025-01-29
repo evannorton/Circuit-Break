@@ -13,6 +13,7 @@ export const enemySpriteHeight: number = 64;
 export const enemySpriteWidth: number = 80;
 export const enemyHitboxWidth: number = 29;
 export const jumpDuration: number = 500;
+export const landDuration: number = 167;
 export const punchBeforeDuration: number = 83;
 export const kickBeforeDuration: number = 167;
 export const punchAfterDuration: number = 167;

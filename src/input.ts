@@ -11,6 +11,7 @@ import { PunchHand } from "./types/Punch";
 import { XDirection, YDirection } from "./types/Direction";
 import { isPlayerJumping } from "./functions/isPlayerJumping";
 import { isPlayerKicking } from "./functions/isPlayerKicking";
+import { isPlayerLanding } from "./functions/isPlayerLanding";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
 import { state } from "./state";
 
@@ -103,6 +104,7 @@ const jumpInputCollectionID: string = createInputCollection({
 createInputPressHandler({
   condition: (): boolean =>
     isPlayerJumping() === false &&
+    isPlayerLanding() === false &&
     isPlayerPunching() === false &&
     isPlayerKicking() === false,
   inputCollectionID: jumpInputCollectionID,
@@ -120,6 +122,7 @@ const punchInputCollectionID: string = createInputCollection({
 createInputPressHandler({
   condition: (): boolean =>
     isPlayerJumping() === false &&
+    isPlayerLanding() === false &&
     isPlayerPunching() === false &&
     isPlayerKicking() === false,
   inputCollectionID: punchInputCollectionID,
@@ -148,6 +151,7 @@ const kickInputCollectionID: string = createInputCollection({
 createInputPressHandler({
   condition: (): boolean =>
     isPlayerJumping() === false &&
+    isPlayerLanding() === false &&
     isPlayerPunching() === false &&
     isPlayerKicking() === false,
   inputCollectionID: kickInputCollectionID,
