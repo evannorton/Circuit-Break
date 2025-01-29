@@ -1,15 +1,9 @@
-import {
-  CreateLabelOptionsText,
-  createLabel,
-  createQuadrilateral,
-  createSprite,
-  getGameWidth,
-} from "pixel-pigeon";
-import { getPowerLevel } from "../getPowerLevel";
+import { createQuadrilateral, createSprite, getGameWidth } from "pixel-pigeon";
 import { isPowerPercentageReached } from "../isPowerPercentageReached";
 
 export const createUI = (): void => {
-  const width: number = 61;
+  const width: number = 65;
+  const height: number = 53;
   const x: number = getGameWidth() - width - 1;
   const y: number = 0;
   createSprite({
@@ -18,8 +12,8 @@ export const createUI = (): void => {
       {
         frames: [
           {
-            height: 62,
-            sourceHeight: 62,
+            height,
+            sourceHeight: height,
             sourceWidth: width,
             sourceX: 0,
             sourceY: 0,
@@ -35,33 +29,16 @@ export const createUI = (): void => {
     },
     imagePath: "battery",
   });
-  createLabel({
-    color: "#eeffa9",
-    coordinates: {
-      x: getGameWidth() - width + Math.floor(width / 2),
-      y: 14,
-    },
-    horizontalAlignment: "center",
-    text: (): CreateLabelOptionsText => {
-      const powerLevel: number | null = getPowerLevel();
-      if (powerLevel === null) {
-        return { value: "MAX" };
-      }
-      return {
-        value: `PWR ${powerLevel}`,
-      };
-    },
-  });
-  for (let i: number = 0; i < 16; i++) {
-    const tickX: number = x + 19;
+  for (let i: number = 0; i < 20; i++) {
+    const tickX: number = x + 22;
     createQuadrilateral({
-      color: "#eeffa9",
+      color: "#d59cfc",
       coordinates: {
-        condition: (): boolean => isPowerPercentageReached((i + 1) / 16),
+        condition: (): boolean => isPowerPercentageReached((i + 1) / 20),
         x: tickX + i + Math.floor(i / 2),
-        y: y + 26,
+        y: y + 23,
       },
-      height: 8,
+      height: 5,
       width: 1,
     });
   }
