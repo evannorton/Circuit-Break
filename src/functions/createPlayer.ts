@@ -320,7 +320,7 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
-                    duration: Math.ceil(punchAfterDuration / 2),
+                    duration: punchAfterDuration / 3,
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
@@ -329,10 +329,19 @@ export const createPlayer = (): void => {
                     width: playerSpriteWidth,
                   },
                   {
+                    duration: punchAfterDuration / 3,
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
                     sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 21,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
                     sourceY: playerSpriteHeight * 21,
                     width: playerSpriteWidth,
                   },
@@ -342,7 +351,7 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
-                    duration: Math.ceil(punchAfterDuration / 2),
+                    duration: punchAfterDuration / 3,
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
@@ -351,10 +360,19 @@ export const createPlayer = (): void => {
                     width: playerSpriteWidth,
                   },
                   {
+                    duration: punchAfterDuration / 3,
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
                     sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 22,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
                     sourceY: playerSpriteHeight * 22,
                     width: playerSpriteWidth,
                   },
@@ -364,7 +382,7 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
-                    duration: Math.ceil(punchAfterDuration / 2),
+                    duration: punchAfterDuration / 3,
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
@@ -373,10 +391,19 @@ export const createPlayer = (): void => {
                     width: playerSpriteWidth,
                   },
                   {
+                    duration: punchAfterDuration / 3,
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
                     sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 5,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
                     sourceY: playerSpriteHeight * 5,
                     width: playerSpriteWidth,
                   },
@@ -386,7 +413,7 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
-                    duration: Math.ceil(punchAfterDuration / 2),
+                    duration: punchAfterDuration / 3,
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
@@ -395,10 +422,19 @@ export const createPlayer = (): void => {
                     width: playerSpriteWidth,
                   },
                   {
+                    duration: punchAfterDuration / 3,
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
                     sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 4,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
                     sourceY: playerSpriteHeight * 4,
                     width: playerSpriteWidth,
                   },
@@ -407,6 +443,14 @@ export const createPlayer = (): void => {
               },
               {
                 frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 24,
+                    width: playerSpriteWidth,
+                  },
                   {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
