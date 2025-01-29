@@ -295,11 +295,20 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
+                    duration: jumpDuration / 2,
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: playerSpriteHeight * 29,
+                    sourceY: playerSpriteHeight * 26,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 27,
                     width: playerSpriteWidth,
                   },
                 ],
@@ -308,11 +317,20 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
+                    duration: jumpDuration / 2,
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
                     sourceX: 0,
-                    sourceY: playerSpriteHeight * 12,
+                    sourceY: playerSpriteHeight * 9,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 10,
                     width: playerSpriteWidth,
                   },
                 ],
