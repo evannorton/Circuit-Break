@@ -15,6 +15,7 @@ import {
   playerHitboxWidth,
   playerSpriteHeight,
   playerSpriteWidth,
+  punchAfterDuration,
   punchBeforeDuration,
   renderHitboxes,
 } from "../constants";
@@ -319,10 +320,19 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
+                    duration: Math.ceil(punchAfterDuration / 2),
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
                     sourceX: 0,
+                    sourceY: playerSpriteHeight * 21,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
                     sourceY: playerSpriteHeight * 21,
                     width: playerSpriteWidth,
                   },
@@ -332,10 +342,19 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
+                    duration: Math.ceil(punchAfterDuration / 2),
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
                     sourceX: 0,
+                    sourceY: playerSpriteHeight * 22,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
                     sourceY: playerSpriteHeight * 22,
                     width: playerSpriteWidth,
                   },
@@ -345,10 +364,19 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
+                    duration: Math.ceil(punchAfterDuration / 2),
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
                     sourceX: 0,
+                    sourceY: playerSpriteHeight * 5,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
                     sourceY: playerSpriteHeight * 5,
                     width: playerSpriteWidth,
                   },
@@ -358,10 +386,19 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
+                    duration: Math.ceil(punchAfterDuration / 2),
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
                     sourceX: 0,
+                    sourceY: playerSpriteHeight * 4,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
                     sourceY: playerSpriteHeight * 4,
                     width: playerSpriteWidth,
                   },
