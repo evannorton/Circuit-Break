@@ -12,6 +12,7 @@ import {
   enemySpriteHeight,
   enemySpriteWidth,
   entityHitboxHeight,
+  jumpDuration,
   levelID,
   punchAfterDuration,
   renderHitboxes,
@@ -79,21 +80,77 @@ export class Enemy extends Definable {
               {
                 frames: [
                   {
-                    height: 15,
-                    sourceHeight: 15,
-                    sourceWidth: 38,
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
                     sourceX: 0,
                     sourceY: 0,
-                    width: 38,
+                    width: enemySpriteWidth,
                   },
                 ],
                 id: "default",
               },
+              {
+                frames: [
+                  {
+                    duration: jumpDuration / 5,
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth,
+                    sourceY: 0,
+                    width: enemySpriteWidth,
+                  },
+                  {
+                    duration: jumpDuration / 5,
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth * 2,
+                    sourceY: 0,
+                    width: enemySpriteWidth,
+                  },
+                  {
+                    duration: jumpDuration / 5,
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth * 3,
+                    sourceY: 0,
+                    width: enemySpriteWidth,
+                  },
+                  {
+                    duration: jumpDuration / 5,
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth * 2,
+                    sourceY: 0,
+                    width: enemySpriteWidth,
+                  },
+                  {
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth,
+                    sourceY: 0,
+                    width: enemySpriteWidth,
+                  },
+                ],
+                id: "jump",
+              },
             ],
             imagePath: "shadow",
           }),
-          x: -4,
-          y: -6,
+          x: (): number => {
+            switch (this._facingDirection) {
+              case XDirection.Left:
+                return -18;
+              case XDirection.Right:
+                return -17;
+            }
+          },
+          y: -enemySpriteHeight + entityHitboxHeight + 7,
         },
         {
           spriteID: createSprite({
