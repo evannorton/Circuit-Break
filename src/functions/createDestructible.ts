@@ -9,6 +9,7 @@ import {
   getGameWidth,
 } from "pixel-pigeon";
 import { Enemy } from "../classes/Enemy";
+import { XDirection } from "../types/Direction";
 import {
   destructibleHitboxWidth,
   destructibleIdleFrameDuration,
@@ -163,6 +164,29 @@ export const createDestructible = (): void => {
       sprites: [
         {
           spriteID: createSprite({
+            animationID: "default",
+            animations: [
+              {
+                frames: [
+                  {
+                    height: 10,
+                    sourceHeight: 10,
+                    sourceWidth: 16,
+                    sourceX: 0,
+                    sourceY: 0,
+                    width: 16,
+                  },
+                ],
+                id: "default",
+              },
+            ],
+            imagePath: "destructible-base",
+          }),
+          x: -3,
+          y: -3,
+        },
+        {
+          spriteID: createSprite({
             animationID: (): string => {
               if (state.values.destructible === null) {
                 throw new Error(
@@ -312,7 +336,36 @@ export const createDestructible = (): void => {
             ],
             imagePath: "destructible",
           }),
-          x: -3,
+          x: (): number => {
+            if (state.values.destructible === null) {
+              throw new Error(
+                "An attempt was made to get the destructible's x position but the destructible does not exist",
+              );
+            }
+            const baseOffset: number = -3;
+            if (state.values.destructible.tookDamageAt !== null) {
+              const diff: number =
+                getCurrentTime() - state.values.destructible.tookDamageAt;
+              const duration: number = 50;
+              if (diff < duration) {
+                if (
+                  state.values.destructible.damageDirection === XDirection.Left
+                ) {
+                  return baseOffset - 1;
+                }
+                return baseOffset + 1;
+              }
+              if (diff < duration * 2) {
+                if (
+                  state.values.destructible.damageDirection === XDirection.Left
+                ) {
+                  return baseOffset + 1;
+                }
+                return baseOffset - 1;
+              }
+            }
+            return baseOffset;
+          },
           y: -destructibleSpriteHeight + entityHitboxHeight + 2,
         },
       ],
@@ -322,6 +375,7 @@ export const createDestructible = (): void => {
     state.setValues({
       destructible: {
         createdAt: getCurrentTime(),
+        damageDirection: null,
         entityID,
         hp: 5,
         tookDamageAt: null,

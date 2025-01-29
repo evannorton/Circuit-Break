@@ -9,6 +9,7 @@ export const damageDestructible = (damage: number): void => {
         "An attempt was made to punch a destructible but no box exists",
       );
     }
+    state.values.destructible.damageDirection = state.values.facingDirection;
     state.values.destructible.hp -= damage;
     state.values.destructible.tookDamageAt = getCurrentTime();
     if (state.values.destructible.hp <= 0) {
