@@ -40,9 +40,10 @@ const getDestructibleX = (attempt: number): number | null => {
   const playerPosition: EntityPosition | null = getEntityPosition(
     state.values.playerEntityID,
   );
-  const x: number = Math.floor(
-    Math.random() * (getGameWidth() - destructibleHitboxWidth),
-  );
+  const minBoxX: number = playerHitboxWidth;
+  const maxBoxX: number =
+    getGameWidth() - destructibleHitboxWidth - playerHitboxWidth;
+  const x: number = Math.floor(Math.random() * (maxBoxX - minBoxX)) + minBoxX;
   const unsafeXs: [number, number][] = [
     [
       playerPosition.x - destructibleHitboxWidth,
@@ -77,8 +78,8 @@ const getDestructibleY = (attempt: number): number | null => {
   const playerPosition: EntityPosition | null = getEntityPosition(
     state.values.playerEntityID,
   );
-  const minBoxY: number = minY;
-  const maxBoxY: number = maxY - entityHitboxHeight + 1;
+  const minBoxY: number = minY + 19;
+  const maxBoxY: number = maxY - entityHitboxHeight + 1 - 6;
   const y: number = Math.floor(Math.random() * (maxBoxY - minBoxY)) + minBoxY;
   const unsafeYs: [number, number][] = [
     [
