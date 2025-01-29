@@ -1,4 +1,4 @@
-export const renderHitboxes: boolean = true;
+export const renderHitboxes: boolean = false;
 export const playerMovementXSpeed: number = 48;
 export const playerMovementYSpeed: number = 32;
 export const enemyMovementXSpeed: number = 24;

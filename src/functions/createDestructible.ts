@@ -120,7 +120,7 @@ export const createDestructible = (): void => {
         width: destructibleSpriteWidth,
       });
     }
-    const entityID: string = createEntity({
+    const batteryEntityID: string = createEntity({
       height: entityHitboxHeight,
       layerID: "Characters",
       levelID,
@@ -163,29 +163,6 @@ export const createDestructible = (): void => {
           ]
         : undefined,
       sprites: [
-        {
-          spriteID: createSprite({
-            animationID: "default",
-            animations: [
-              {
-                frames: [
-                  {
-                    height: 10,
-                    sourceHeight: 10,
-                    sourceWidth: 16,
-                    sourceX: 0,
-                    sourceY: 0,
-                    width: 16,
-                  },
-                ],
-                id: "default",
-              },
-            ],
-            imagePath: "destructible-base",
-          }),
-          x: -3,
-          y: -3,
-        },
         {
           spriteID: createSprite({
             animationID: (): string => {
@@ -373,11 +350,47 @@ export const createDestructible = (): void => {
       type: "destructible",
       width: destructibleHitboxWidth,
     });
+    const baseEntityID: string = createEntity({
+      height: entityHitboxHeight,
+      layerID: "Bases",
+      levelID,
+      position: {
+        x,
+        y,
+      },
+      sprites: [
+        {
+          spriteID: createSprite({
+            animationID: "default",
+            animations: [
+              {
+                frames: [
+                  {
+                    height: 10,
+                    sourceHeight: 10,
+                    sourceWidth: 16,
+                    sourceX: 0,
+                    sourceY: 0,
+                    width: 16,
+                  },
+                ],
+                id: "default",
+              },
+            ],
+            imagePath: "destructible-base",
+          }),
+          x: -3,
+          y: -3,
+        },
+      ],
+      width: destructibleHitboxWidth,
+    });
     state.setValues({
       destructible: {
+        baseEntityID,
+        batteryEntityID,
         createdAt: getCurrentTime(),
         damageDirection: null,
-        entityID,
         hp: 5,
         tookDamageAt: null,
       },

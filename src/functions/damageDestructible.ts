@@ -16,7 +16,8 @@ export const damageDestructible = (damage: number): void => {
       state.setValues({
         power: state.values.power + 1,
       });
-      removeEntity(state.values.destructible.entityID);
+      removeEntity(state.values.destructible.batteryEntityID);
+      removeEntity(state.values.destructible.baseEntityID);
       state.setValues({
         destructible: null,
       });
