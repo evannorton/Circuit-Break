@@ -312,6 +312,7 @@ export const createDestructible = (): void => {
             ],
             imagePath: "destructible",
           }),
+          x: -3,
           y: -destructibleSpriteHeight + entityHitboxHeight + 2,
         },
       ],

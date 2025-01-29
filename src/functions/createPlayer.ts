@@ -25,7 +25,7 @@ import { state } from "../state";
 export const createPlayer = (): void => {
   const position: EntityPosition = {
     x: 16,
-    y: 96,
+    y: 160,
   };
   state.setValues({
     playerEntityID: createEntity({
