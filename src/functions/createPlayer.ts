@@ -10,6 +10,7 @@ import { XDirection } from "../types/Direction";
 import {
   entityHitboxHeight,
   jumpDuration,
+  kickAfterDuration,
   kickBeforeDuration,
   levelID,
   playerHitboxWidth,
@@ -444,6 +445,7 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
+                    duration: kickAfterDuration / 3,
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
@@ -452,10 +454,19 @@ export const createPlayer = (): void => {
                     width: playerSpriteWidth,
                   },
                   {
+                    duration: kickAfterDuration / 3,
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
-                    sourceX: 0,
+                    sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 24,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
                     sourceY: playerSpriteHeight * 24,
                     width: playerSpriteWidth,
                   },
@@ -465,10 +476,28 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
+                    duration: kickAfterDuration / 3,
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
                     sourceX: 0,
+                    sourceY: playerSpriteHeight * 7,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: kickAfterDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 7,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
                     sourceY: playerSpriteHeight * 7,
                     width: playerSpriteWidth,
                   },
