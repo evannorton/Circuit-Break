@@ -4,8 +4,11 @@ import {
   createEntity,
   createQuadrilateral,
   createSprite,
+  getCurrentTime,
   removeEntity,
 } from "pixel-pigeon";
+import { Kick } from "../types/Kick";
+import { Punch, PunchHand } from "../types/Punch";
 import { XDirection, YDirection } from "../types/Direction";
 import {
   enemyHitboxWidth,
@@ -13,11 +16,16 @@ import {
   enemySpriteWidth,
   entityHitboxHeight,
   jumpDuration,
+  kickAfterDuration,
+  kickBeforeDuration,
   levelID,
   punchAfterDuration,
+  punchBeforeDuration,
   renderHitboxes,
 } from "../constants";
+import { isEnemyKicking } from "../functions/isEnemyKicking";
 import { isEnemyMoving } from "../functions/isEnemyMoving";
+import { isEnemyPunching } from "../functions/isEnemyPunching";
 import { isEnemyStunned } from "../functions/isEnemyStunned";
 
 interface EnemyOptions {
@@ -26,10 +34,12 @@ interface EnemyOptions {
 
 export class Enemy extends Definable {
   private readonly _entityID: string;
-  private _hp: number = 5;
+  private _hp: number = 6;
   private _facingDirection: XDirection = XDirection.Left;
+  private _kick: Kick | null = null;
   private _movingXDirection: XDirection | null = null;
   private _movingYDirection: YDirection | null = null;
+  private _punch: Punch | null = null;
   private _tookDamageAt: number | null = null;
   public constructor(options: EnemyOptions) {
     const entityID: string = createEntity({
@@ -157,6 +167,27 @@ export class Enemy extends Definable {
             animationID: (): string => {
               switch (this._facingDirection) {
                 case XDirection.Left:
+                  if (isEnemyPunching(this._id)) {
+                    if (
+                      getCurrentTime() - this.punch.createdAt <
+                      punchBeforeDuration
+                    ) {
+                      return "charge-punch-left";
+                    }
+                    if (this.punch.hand === PunchHand.Left) {
+                      return "punch-left-left";
+                    }
+                    return "punch-left-right";
+                  }
+                  if (isEnemyKicking(this._id)) {
+                    if (
+                      getCurrentTime() - this.kick.createdAt <
+                      kickBeforeDuration
+                    ) {
+                      return "charge-kick-left";
+                    }
+                    return "kick-left";
+                  }
                   if (isEnemyStunned(this._id)) {
                     return "stunned-left";
                   }
@@ -165,6 +196,27 @@ export class Enemy extends Definable {
                   }
                   return "idle-left";
                 case XDirection.Right:
+                  if (isEnemyPunching(this._id)) {
+                    if (
+                      getCurrentTime() - this.punch.createdAt <
+                      punchBeforeDuration
+                    ) {
+                      return "charge-punch-right";
+                    }
+                    if (this.punch.hand === PunchHand.Left) {
+                      return "punch-right-left";
+                    }
+                    return "punch-right-right";
+                  }
+                  if (isEnemyKicking(this._id)) {
+                    if (
+                      getCurrentTime() - this.kick.createdAt <
+                      kickBeforeDuration
+                    ) {
+                      return "charge-kick-right";
+                    }
+                    return "kick-right";
+                  }
                   if (isEnemyStunned(this._id)) {
                     return "stunned-right";
                   }
@@ -528,10 +580,28 @@ export class Enemy extends Definable {
               {
                 frames: [
                   {
+                    duration: kickAfterDuration / 3,
                     height: enemySpriteHeight,
                     sourceHeight: enemySpriteHeight,
                     sourceWidth: enemySpriteWidth,
                     sourceX: 0,
+                    sourceY: enemySpriteHeight * 24,
+                    width: enemySpriteWidth,
+                  },
+                  {
+                    duration: kickAfterDuration / 3,
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth,
+                    sourceY: enemySpriteHeight * 24,
+                    width: enemySpriteWidth,
+                  },
+                  {
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth * 2,
                     sourceY: enemySpriteHeight * 24,
                     width: enemySpriteWidth,
                   },
@@ -541,10 +611,28 @@ export class Enemy extends Definable {
               {
                 frames: [
                   {
+                    duration: kickAfterDuration / 3,
                     height: enemySpriteHeight,
                     sourceHeight: enemySpriteHeight,
                     sourceWidth: enemySpriteWidth,
                     sourceX: 0,
+                    sourceY: enemySpriteHeight * 7,
+                    width: enemySpriteWidth,
+                  },
+                  {
+                    duration: kickAfterDuration / 3,
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth,
+                    sourceY: enemySpriteHeight * 7,
+                    width: enemySpriteWidth,
+                  },
+                  {
+                    height: enemySpriteHeight,
+                    sourceHeight: enemySpriteHeight,
+                    sourceWidth: enemySpriteWidth,
+                    sourceX: enemySpriteWidth * 2,
                     sourceY: enemySpriteHeight * 7,
                     width: enemySpriteWidth,
                   },
@@ -654,16 +742,19 @@ export class Enemy extends Definable {
     this._entityID = entityID;
   }
 
-  public get entityID(): string {
-    return this._entityID;
-  }
-
   public get facingDirection(): XDirection {
     return this._facingDirection;
   }
 
   public get hp(): number {
     return this._hp;
+  }
+
+  public get kick(): Kick {
+    if (this._kick !== null) {
+      return this._kick;
+    }
+    throw new Error(this.getAccessorErrorMessage("kick"));
   }
 
   public get movingXDirection(): XDirection {
@@ -678,6 +769,13 @@ export class Enemy extends Definable {
       return this._movingYDirection;
     }
     throw new Error(this.getAccessorErrorMessage("movingYDirection"));
+  }
+
+  public get punch(): Punch {
+    if (this._punch !== null) {
+      return this._punch;
+    }
+    throw new Error(this.getAccessorErrorMessage("punch"));
   }
 
   public get tookDamageAt(): number {
@@ -695,6 +793,10 @@ export class Enemy extends Definable {
     this._hp = hp;
   }
 
+  public set kick(kick: Kick) {
+    this._kick = kick;
+  }
+
   public set movingXDirection(movingXDirection: XDirection | null) {
     this._movingXDirection = movingXDirection;
   }
@@ -703,8 +805,16 @@ export class Enemy extends Definable {
     this._movingYDirection = movingYDirection;
   }
 
+  public set punch(punch: Punch) {
+    this._punch = punch;
+  }
+
   public set tookDamageAt(tookDamageAt: number) {
     this._tookDamageAt = tookDamageAt;
+  }
+
+  public hasKick(): boolean {
+    return this._kick !== null;
   }
 
   public hasMovingXDirection(): boolean {
@@ -713,6 +823,10 @@ export class Enemy extends Definable {
 
   public hasMovingYDirection(): boolean {
     return this._movingYDirection !== null;
+  }
+
+  public hasPunch(): boolean {
+    return this._punch !== null;
   }
 
   public hasTookDamageAt(): boolean {

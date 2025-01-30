@@ -11,7 +11,7 @@ import { damageEnemy } from "./damageEnemy";
 import {
   entityHitboxHeight,
   kickBeforeDuration,
-  kickDamage,
+  playerKickDamage,
   kickHitboxWidth,
   playerHitboxWidth,
 } from "../constants";
@@ -63,10 +63,10 @@ export const executePlayerKick = (): void => {
       ) {
         switch (entityCollidable.type) {
           case "destructible":
-            damageDestructible(kickDamage);
+            damageDestructible(playerKickDamage);
             break;
           case "enemy": {
-            damageEnemy(entityCollidable.entityID, kickDamage);
+            damageEnemy(entityCollidable.entityID, playerKickDamage);
             break;
           }
         }

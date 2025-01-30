@@ -50,11 +50,11 @@ const getDestructibleX = (attempt: number): number | null => {
       playerPosition.x + playerHitboxWidth,
     ],
   ];
-  for (const monster of getDefinables(Enemy).values()) {
-    const monsterPosition: EntityPosition = getEntityPosition(monster.entityID);
+  for (const enemy of getDefinables(Enemy).values()) {
+    const enemyPosition: EntityPosition = getEntityPosition(enemy.id);
     unsafeXs.push([
-      monsterPosition.x - destructibleHitboxWidth,
-      monsterPosition.x + enemyHitboxWidth,
+      enemyPosition.x - destructibleHitboxWidth,
+      enemyPosition.x + enemyHitboxWidth,
     ]);
   }
   if (
@@ -87,11 +87,11 @@ const getDestructibleY = (attempt: number): number | null => {
       playerPosition.y + entityHitboxHeight,
     ],
   ];
-  for (const monster of getDefinables(Enemy).values()) {
-    const monsterPosition: EntityPosition = getEntityPosition(monster.entityID);
+  for (const enemy of getDefinables(Enemy).values()) {
+    const enemyPosition: EntityPosition = getEntityPosition(enemy.id);
     unsafeYs.push([
-      monsterPosition.y - entityHitboxHeight,
-      monsterPosition.y + entityHitboxHeight,
+      enemyPosition.y - entityHitboxHeight,
+      enemyPosition.y + entityHitboxHeight,
     ]);
   }
   if (

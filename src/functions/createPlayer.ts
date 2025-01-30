@@ -25,6 +25,7 @@ import { isPlayerJumping } from "./isPlayerJumping";
 import { isPlayerKicking } from "./isPlayerKicking";
 import { isPlayerLanding } from "./isPlayerLanding";
 import { isPlayerPunching } from "./isPlayerPunching";
+import { isPlayerStunned } from "./isPlayerStunned";
 import { state } from "../state";
 
 export const createPlayer = (): void => {
@@ -182,18 +183,18 @@ export const createPlayer = (): void => {
                     return "kick-left";
                   }
                   if (isPlayerPunching()) {
-                    if (state.values.punch === null) {
+                    if (state.values.playerPunch === null) {
                       throw new Error(
                         "Player is punching but createdAt is null",
                       );
                     }
                     if (
-                      getCurrentTime() - state.values.punch.createdAt <
+                      getCurrentTime() - state.values.playerPunch.createdAt <
                       punchBeforeDuration
                     ) {
                       return "charge-punch-left";
                     }
-                    if (state.values.punch.hand === PunchHand.Left) {
+                    if (state.values.playerPunch.hand === PunchHand.Left) {
                       return "punch-left-left";
                     }
                     return "punch-left-right";
@@ -203,6 +204,9 @@ export const createPlayer = (): void => {
                   }
                   if (isPlayerLanding()) {
                     return "land-left";
+                  }
+                  if (isPlayerStunned()) {
+                    return "stunned-left";
                   }
                   if (isMoving) {
                     return "walk-left";
@@ -224,18 +228,18 @@ export const createPlayer = (): void => {
                     return "kick-right";
                   }
                   if (isPlayerPunching()) {
-                    if (state.values.punch === null) {
+                    if (state.values.playerPunch === null) {
                       throw new Error(
                         "Player is punching but createdAt is null",
                       );
                     }
                     if (
-                      getCurrentTime() - state.values.punch.createdAt <
+                      getCurrentTime() - state.values.playerPunch.createdAt <
                       punchBeforeDuration
                     ) {
                       return "charge-punch-right";
                     }
-                    if (state.values.punch.hand === PunchHand.Left) {
+                    if (state.values.playerPunch.hand === PunchHand.Left) {
                       return "punch-right-left";
                     }
                     return "punch-right-right";
@@ -245,6 +249,9 @@ export const createPlayer = (): void => {
                   }
                   if (isPlayerLanding()) {
                     return "land-right";
+                  }
+                  if (isPlayerStunned()) {
+                    return "stunned-right";
                   }
                   if (isMoving) {
                     return "walk-right";
@@ -760,6 +767,32 @@ export const createPlayer = (): void => {
                   },
                 ],
                 id: "charge-kick-right",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 33,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "stunned-left",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 16,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "stunned-right",
               },
             ],
             imagePath: "player",

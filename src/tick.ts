@@ -1,4 +1,3 @@
-import { Enemy } from "./classes/Enemy";
 import {
   EntityPosition,
   getEntityIDs,
@@ -6,23 +5,18 @@ import {
   moveEntity,
   setEntityZIndex,
 } from "pixel-pigeon";
-import { XDirection, YDirection } from "./types/Direction";
 import { createDestructible } from "./functions/createDestructible";
 import { createEnemy } from "./functions/createEnemy";
-import {
-  enemyMovementXSpeed,
-  enemyMovementYSpeed,
-  entityHitboxHeight,
-  levelID,
-  playerHitboxWidth,
-} from "./constants";
+import { doEnemiesBehavior } from "./functions/doEnemiesBehavior";
+import { executeEnemiesKicks } from "./functions/executeEnemiesKicks";
+import { executeEnemiesPunches } from "./functions/executeEnemiesPunches";
 import { executePlayerKick } from "./functions/executePlayerKick";
 import { executePlayerPunch } from "./functions/executePlayerPunch";
-import { getDefinables } from "definables";
-import { isEnemyStunned } from "./functions/isEnemyStunned";
 import { isPlayerKicking } from "./functions/isPlayerKicking";
 import { isPlayerLanding } from "./functions/isPlayerLanding";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
+import { isPlayerStunned } from "./functions/isPlayerStunned";
+import { levelID } from "./constants";
 import { movePlayer } from "./functions/movePlayer";
 import { state } from "./state";
 
@@ -40,7 +34,8 @@ export const tick = (): void => {
   if (
     isPlayerPunching() === false &&
     isPlayerKicking() === false &&
-    isPlayerLanding() === false
+    isPlayerLanding() === false &&
+    isPlayerStunned() === false
   ) {
     movePlayer();
   }
@@ -48,59 +43,16 @@ export const tick = (): void => {
   if (isPlayerLanding()) {
     moveEntity(state.values.playerEntityID, {});
   }
-  // Execute punch
+  // Execute player punch
   executePlayerPunch();
-  // Execute kick
+  // Execute player kick
   executePlayerKick();
-  // Move enemies
-  const playerPosition: EntityPosition = getEntityPosition(
-    state.values.playerEntityID,
-  );
-  for (const enemy of getDefinables(Enemy).values()) {
-    const enemyPosition: EntityPosition = getEntityPosition(enemy.entityID);
-    const isMovingLeft: boolean =
-      enemyPosition.x - playerPosition.x > playerHitboxWidth + 3;
-    const isMovingRight: boolean =
-      playerPosition.x - enemyPosition.x > playerHitboxWidth + 3;
-    const xVelocity: number | undefined = isEnemyStunned(enemy.id)
-      ? 0
-      : isMovingLeft
-        ? -enemyMovementXSpeed
-        : isMovingRight
-          ? enemyMovementXSpeed
-          : 0;
-    const yVelocity: number | undefined = isEnemyStunned(enemy.id)
-      ? 0
-      : enemyPosition.y - playerPosition.y > Math.ceil(entityHitboxHeight / 2)
-        ? -enemyMovementYSpeed
-        : playerPosition.y - enemyPosition.y > Math.ceil(entityHitboxHeight / 2)
-          ? enemyMovementYSpeed
-          : 0;
-    moveEntity(enemy.entityID, {
-      xVelocity,
-      yVelocity,
-    });
-    if (xVelocity > 0) {
-      enemy.facingDirection = XDirection.Right;
-      enemy.movingXDirection = XDirection.Right;
-    }
-    if (xVelocity < 0) {
-      enemy.facingDirection = XDirection.Left;
-      enemy.movingXDirection = XDirection.Left;
-    }
-    if (xVelocity === 0) {
-      enemy.movingXDirection = null;
-    }
-    if (yVelocity > 0) {
-      enemy.movingYDirection = YDirection.Down;
-    }
-    if (yVelocity < 0) {
-      enemy.movingYDirection = YDirection.Up;
-    }
-    if (yVelocity === 0) {
-      enemy.movingYDirection = null;
-    }
-  }
+  // Execute enemies punches
+  executeEnemiesPunches();
+  // Execute enemies kicks
+  executeEnemiesKicks();
+  // Enemies behavior
+  doEnemiesBehavior();
   // Y-sort characters
   [
     ...getEntityIDs({

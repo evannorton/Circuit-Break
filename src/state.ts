@@ -15,8 +15,9 @@ interface StateSchema {
   movingYDirection: YDirection | null;
   playerEntityID: string | null;
   playerHP: number;
+  playerPunch: Punch | null;
+  playerTookDamageAt: number | null;
   power: number;
-  punch: Punch | null;
   spawnedEnemyAt: number | null;
 }
 
@@ -30,7 +31,8 @@ export const state: State<StateSchema> = new State<StateSchema>({
   movingYDirection: null,
   playerEntityID: null,
   playerHP: playerMaxHP,
+  playerPunch: null,
+  playerTookDamageAt: null,
   power: 0,
-  punch: null,
   spawnedEnemyAt: null,
 });

@@ -132,10 +132,10 @@ createInputPressHandler({
     }
     moveEntity(state.values.playerEntityID, {});
     state.setValues({
-      punch: {
+      playerPunch: {
         createdAt: getCurrentTime(),
         hand:
-          state.values.punch?.hand === PunchHand.Left
+          state.values.playerPunch?.hand === PunchHand.Left
             ? PunchHand.Right
             : PunchHand.Left,
         wasExecuted: false,

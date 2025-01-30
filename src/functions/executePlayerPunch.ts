@@ -11,8 +11,8 @@ import { damageEnemy } from "./damageEnemy";
 import {
   entityHitboxHeight,
   playerHitboxWidth,
+  playerPunchDamage,
   punchBeforeDuration,
-  punchDamage,
   punchHitboxWidth,
 } from "../constants";
 import { state } from "../state";
@@ -24,9 +24,9 @@ export const executePlayerPunch = (): void => {
     );
   }
   if (
-    state.values.punch !== null &&
-    state.values.punch.wasExecuted === false &&
-    getCurrentTime() - state.values.punch.createdAt >= punchBeforeDuration
+    state.values.playerPunch !== null &&
+    state.values.playerPunch.wasExecuted === false &&
+    getCurrentTime() - state.values.playerPunch.createdAt >= punchBeforeDuration
   ) {
     const playerPosition: EntityPosition = getEntityPosition(
       state.values.playerEntityID,
@@ -46,7 +46,7 @@ export const executePlayerPunch = (): void => {
         };
         break;
     }
-    state.values.punch.wasExecuted = true;
+    state.values.playerPunch.wasExecuted = true;
     const collisionData: CollisionData = getRectangleCollisionData({
       entityTypes: ["destructible", "enemy"],
       rectangle: {
@@ -59,10 +59,10 @@ export const executePlayerPunch = (): void => {
     for (const entityCollidable of collisionData.entityCollidables) {
       switch (entityCollidable.type) {
         case "destructible":
-          damageDestructible(punchDamage);
+          damageDestructible(playerPunchDamage);
           break;
         case "enemy": {
-          damageEnemy(entityCollidable.entityID, punchDamage);
+          damageEnemy(entityCollidable.entityID, playerPunchDamage);
           break;
         }
       }
