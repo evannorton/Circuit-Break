@@ -1,7 +1,7 @@
 export const renderHitboxes: boolean = false;
-export const playerMovementXSpeed: number = 64;
+export const playerMovementXSpeed: number = 80;
 export const playerMovementYSpeed: number = (playerMovementXSpeed * 2) / 3;
-export const enemyMovementXSpeed: number = 32;
+export const enemyMovementXSpeed: number = 40;
 export const enemyMovementYSpeed: number = (enemyMovementXSpeed * 2) / 3;
 export const minY: number = 114;
 export const maxY: number = 216;
