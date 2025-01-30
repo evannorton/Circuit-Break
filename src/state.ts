@@ -8,6 +8,7 @@ import { playerMaxHP } from "./constants";
 interface StateSchema {
   destructible: Destructible | null;
   facingDirection: XDirection;
+  gameStartedAt: number | null;
   jumpedAt: number | null;
   kick: Kick | null;
   lastEnemyDirection: XDirection | null;
@@ -24,6 +25,7 @@ interface StateSchema {
 export const state: State<StateSchema> = new State<StateSchema>({
   destructible: null,
   facingDirection: XDirection.Right,
+  gameStartedAt: null,
   jumpedAt: null,
   kick: null,
   lastEnemyDirection: null,

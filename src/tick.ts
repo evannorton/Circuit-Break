@@ -12,6 +12,7 @@ import { executeEnemiesKicks } from "./functions/executeEnemiesKicks";
 import { executeEnemiesPunches } from "./functions/executeEnemiesPunches";
 import { executePlayerKick } from "./functions/executePlayerKick";
 import { executePlayerPunch } from "./functions/executePlayerPunch";
+import { isGameOngoing } from "./functions/isGameOngoing";
 import { isPlayerKicking } from "./functions/isPlayerKicking";
 import { isPlayerLanding } from "./functions/isPlayerLanding";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
@@ -21,57 +22,59 @@ import { movePlayer } from "./functions/movePlayer";
 import { state } from "./state";
 
 export const tick = (): void => {
-  if (state.values.playerEntityID === null) {
-    throw new Error("Player entity ID is null.");
+  if (isGameOngoing()) {
+    if (state.values.playerEntityID === null) {
+      throw new Error("Player entity ID is null.");
+    }
+    // Create enemy
+    createEnemy();
+    // Create destructible if we don't already have one
+    if (state.values.destructible === null) {
+      createDestructible();
+    }
+    // Move player if not punching or kicking
+    if (
+      isPlayerPunching() === false &&
+      isPlayerKicking() === false &&
+      isPlayerLanding() === false &&
+      isPlayerStunned() === false
+    ) {
+      movePlayer();
+    }
+    // Stop player from moving if landing
+    if (isPlayerLanding()) {
+      moveEntity(state.values.playerEntityID, {});
+    }
+    // Execute player punch
+    executePlayerPunch();
+    // Execute player kick
+    executePlayerKick();
+    // Execute enemies punches
+    executeEnemiesPunches();
+    // Execute enemies kicks
+    executeEnemiesKicks();
+    // Enemies behavior
+    doEnemiesBehavior();
+    // Y-sort characters
+    [
+      ...getEntityIDs({
+        layerIDs: ["Characters"],
+        levelIDs: [levelID],
+      }),
+    ]
+      .sort((a: string, b: string): number => {
+        const aPosition: EntityPosition = getEntityPosition(a);
+        const bPosition: EntityPosition = getEntityPosition(b);
+        if (aPosition.y < bPosition.y) {
+          return -1;
+        }
+        if (aPosition.y > bPosition.y) {
+          return 1;
+        }
+        return 0;
+      })
+      .forEach((entityID: string, entityIndex: number): void => {
+        setEntityZIndex(entityID, entityIndex);
+      });
   }
-  // Create enemy
-  createEnemy();
-  // Create destructible if we don't already have one
-  if (state.values.destructible === null) {
-    createDestructible();
-  }
-  // Move player if not punching or kicking
-  if (
-    isPlayerPunching() === false &&
-    isPlayerKicking() === false &&
-    isPlayerLanding() === false &&
-    isPlayerStunned() === false
-  ) {
-    movePlayer();
-  }
-  // Stop player from moving if landing
-  if (isPlayerLanding()) {
-    moveEntity(state.values.playerEntityID, {});
-  }
-  // Execute player punch
-  executePlayerPunch();
-  // Execute player kick
-  executePlayerKick();
-  // Execute enemies punches
-  executeEnemiesPunches();
-  // Execute enemies kicks
-  executeEnemiesKicks();
-  // Enemies behavior
-  doEnemiesBehavior();
-  // Y-sort characters
-  [
-    ...getEntityIDs({
-      layerIDs: ["Characters"],
-      levelIDs: [levelID],
-    }),
-  ]
-    .sort((a: string, b: string): number => {
-      const aPosition: EntityPosition = getEntityPosition(a);
-      const bPosition: EntityPosition = getEntityPosition(b);
-      if (aPosition.y < bPosition.y) {
-        return -1;
-      }
-      if (aPosition.y > bPosition.y) {
-        return 1;
-      }
-      return 0;
-    })
-    .forEach((entityID: string, entityIndex: number): void => {
-      setEntityZIndex(entityID, entityIndex);
-    });
 };
