@@ -178,7 +178,13 @@ export const createPlayer = (): void => {
                       getCurrentTime() - state.values.playerKick.createdAt <
                       kickBeforeDuration
                     ) {
+                      if (isPlayerJumping()) {
+                        return "charge-jump-kick-left";
+                      }
                       return "charge-kick-left";
+                    }
+                    if (isPlayerJumping()) {
+                      return "jump-kick-left";
                     }
                     return "kick-left";
                   }
@@ -232,7 +238,13 @@ export const createPlayer = (): void => {
                       getCurrentTime() - state.values.playerKick.createdAt <
                       kickBeforeDuration
                     ) {
+                      if (isPlayerJumping()) {
+                        return "charge-jump-kick-right";
+                      }
                       return "charge-kick-right";
+                    }
+                    if (isPlayerJumping()) {
+                      return "jump-kick-right";
                     }
                     return "kick-right";
                   }
@@ -804,6 +816,68 @@ export const createPlayer = (): void => {
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
                     sourceX: 0,
+                    sourceY: playerSpriteHeight * 32,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: kickAfterDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 32,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
+                    sourceY: playerSpriteHeight * 32,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "jump-kick-left",
+              },
+              {
+                frames: [
+                  {
+                    duration: kickAfterDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 15,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: kickAfterDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 15,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
+                    sourceY: playerSpriteHeight * 15,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "jump-kick-right",
+              },
+              {
+                frames: [
+                  {
+                    duration: kickAfterDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
                     sourceY: playerSpriteHeight * 24,
                     width: playerSpriteWidth,
                   },
@@ -909,6 +983,32 @@ export const createPlayer = (): void => {
                   },
                 ],
                 id: "charge-jump-punch-right",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 26,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "charge-jump-kick-left",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 9,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "charge-jump-kick-right",
               },
               {
                 frames: [

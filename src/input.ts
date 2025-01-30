@@ -173,7 +173,6 @@ createInputPressHandler({
 createInputPressHandler({
   condition: (): boolean =>
     isGameOngoing() &&
-    isPlayerJumping() === false &&
     isPlayerLanding() === false &&
     isPlayerPunching() === false &&
     isPlayerKicking() === false,
@@ -182,12 +181,21 @@ createInputPressHandler({
     if (state.values.playerEntityID === null) {
       throw new Error("An attempt was made to kick with no player entity");
     }
-    moveEntity(state.values.playerEntityID, {});
-    state.setValues({
-      playerKick: {
-        createdAt: getCurrentTime(),
-        wasExecuted: false,
-      },
-    });
+    if (isPlayerJumping()) {
+      state.setValues({
+        playerKick: {
+          createdAt: getCurrentTime(),
+          wasExecuted: false,
+        },
+      });
+    } else {
+      moveEntity(state.values.playerEntityID, {});
+      state.setValues({
+        playerKick: {
+          createdAt: getCurrentTime(),
+          wasExecuted: false,
+        },
+      });
+    }
   },
 });
