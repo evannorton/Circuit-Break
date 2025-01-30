@@ -59,16 +59,18 @@ export const createGameOverScreen = (): void => {
         facingDirection: XDirection.Right,
         gameEndedAt: null,
         jumpedAt: null,
-        playerKick: null,
         lastEnemyDirection: null,
         movingXDirection: null,
         movingYDirection: null,
         playerEntityID: null,
         playerHP: playerMaxHP,
+        playerKick: null,
         playerPunch: null,
+        playerStunDuration: null,
         playerTookDamageAt: null,
         power: 0,
         spawnedEnemyAt: null,
+        unlockDisplayedAt: null,
       });
       for (const enemy of getDefinables(Enemy).values()) {
         enemy.remove();

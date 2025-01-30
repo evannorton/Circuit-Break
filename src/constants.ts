@@ -1,3 +1,5 @@
+import { PowerLevel } from "./types/PowerLevel";
+
 export const renderHitboxes: boolean = false;
 export const playerMovementXSpeed: number = 80;
 export const playerMovementYSpeed: number = (playerMovementXSpeed * 2) / 3;
@@ -34,7 +36,6 @@ export const enemyPunchedStunDuration: number = 500;
 export const enemyKickStunDuration: number = 667;
 export const enemyJumpPunchedStunDuration: number = 883;
 export const enemyJumpKickedStunDuration: number = 1000;
-export const powerLevels: number[] = [2, 5, 10, 20];
 export const playerPunchDamage: number = 1;
 export const playerKickDamage: number = 1.5;
 export const enemyPunchDamage: number = 1;
@@ -46,3 +47,25 @@ export const destructibleIdleFrameDuration: number = 100;
 export const playerMaxHP: number = 12;
 export const heartsAmount: number = 6;
 export const jumpHeight: number = 18;
+export const powerLevels: PowerLevel[] = [
+  {
+    amount: 2,
+    unlockImagePath: "unlocks/high-kick",
+    unlockName: "High Kick",
+  },
+  {
+    amount: 5,
+    unlockImagePath: "unlocks/high-kick",
+    unlockName: "High Kick",
+  },
+  {
+    amount: 10,
+    unlockImagePath: "unlocks/high-kick",
+    unlockName: "High Kick",
+  },
+  {
+    amount: 20,
+    unlockImagePath: "unlocks/high-kick",
+    unlockName: "High Kick",
+  },
+];

@@ -32,7 +32,7 @@ export const doEnemiesBehavior = (): void => {
     const isLeftFarFromPlayer: boolean =
       enemyPosition.x - playerPosition.x > playerHitboxWidth + 3;
     const isRightFarFromPlayer: boolean =
-      playerPosition.x - enemyPosition.x > playerHitboxWidth + 3;
+      playerPosition.x - enemyPosition.x > playerHitboxWidth + 10;
     const isUpFarFromPlayer: boolean =
       enemyPosition.y - playerPosition.y > Math.ceil(entityHitboxHeight / 2);
     const isDownFarFromPlayer: boolean =

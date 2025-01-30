@@ -1,4 +1,5 @@
 import { getCurrentTime, removeEntity } from "pixel-pigeon";
+import { getPowerLevelIndex } from "./getPowerLevel";
 import { isDestructibleRising } from "./isDestructibleRising";
 import { isDestructibleTakingDamage } from "./isDestructibleTakingDamage";
 import { state } from "../state";
@@ -22,14 +23,19 @@ export const damageDestructible = (
     state.values.destructible.tookDamageAt = currentTime;
     state.values.destructible.stunDuration = stunDuration;
     if (state.values.destructible.hp <= 0) {
-      state.setValues({
-        power: state.values.power + 1,
-      });
+      const powerLevelIndex: number | null = getPowerLevelIndex();
       removeEntity(state.values.destructible.batteryEntityID);
       removeEntity(state.values.destructible.baseEntityID);
       state.setValues({
         destructible: null,
+        power: state.values.power + 1,
       });
+      const newPowerLevelIndex: number | null = getPowerLevelIndex();
+      if (newPowerLevelIndex !== powerLevelIndex) {
+        state.setValues({
+          unlockDisplayedAt: currentTime,
+        });
+      }
     }
   }
 };
