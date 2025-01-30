@@ -40,6 +40,7 @@ export class Enemy extends Definable {
   private _movingXDirection: XDirection | null = null;
   private _movingYDirection: YDirection | null = null;
   private _punch: Punch | null = null;
+  private _stunDuration: number | null = null;
   private _tookDamageAt: number | null = null;
   public constructor(options: EnemyOptions) {
     const entityID: string = createEntity({
@@ -778,6 +779,13 @@ export class Enemy extends Definable {
     throw new Error(this.getAccessorErrorMessage("punch"));
   }
 
+  public get stunDuration(): number {
+    if (this._stunDuration !== null) {
+      return this._stunDuration;
+    }
+    throw new Error(this.getAccessorErrorMessage("stunDuration"));
+  }
+
   public get tookDamageAt(): number {
     if (this._tookDamageAt !== null) {
       return this._tookDamageAt;
@@ -793,7 +801,7 @@ export class Enemy extends Definable {
     this._hp = hp;
   }
 
-  public set kick(kick: Kick) {
+  public set kick(kick: Kick | null) {
     this._kick = kick;
   }
 
@@ -805,8 +813,12 @@ export class Enemy extends Definable {
     this._movingYDirection = movingYDirection;
   }
 
-  public set punch(punch: Punch) {
+  public set punch(punch: Punch | null) {
     this._punch = punch;
+  }
+
+  public set stunDuration(stunDuration: number) {
+    this._stunDuration = stunDuration;
   }
 
   public set tookDamageAt(tookDamageAt: number) {

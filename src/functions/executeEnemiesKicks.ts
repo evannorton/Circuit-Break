@@ -14,6 +14,7 @@ import {
   entityHitboxHeight,
   kickBeforeDuration,
   kickHitboxWidth,
+  playerKickedStunDuration,
 } from "../constants";
 import { getDefinables } from "definables";
 
@@ -53,7 +54,7 @@ export const executeEnemiesKicks = (): void => {
       for (const entityCollidable of collisionData.entityCollidables) {
         switch (entityCollidable.type) {
           case "player":
-            damagePlayer(enemyKickDamage);
+            damagePlayer(enemyKickDamage, playerKickedStunDuration);
             break;
         }
       }

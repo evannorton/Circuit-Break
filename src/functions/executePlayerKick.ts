@@ -9,12 +9,15 @@ import { XDirection } from "../types/Direction";
 import { damageDestructible } from "./damageDestructible";
 import { damageEnemy } from "./damageEnemy";
 import {
+  enemyJumpKickedStunDuration,
+  enemyKickStunDuration,
   entityHitboxHeight,
   kickBeforeDuration,
-  playerKickDamage,
   kickHitboxWidth,
   playerHitboxWidth,
+  playerKickDamage,
 } from "../constants";
+import { isPlayerJumping } from "./isPlayerJumping";
 import { state } from "../state";
 
 export const executePlayerKick = (): void => {
@@ -24,9 +27,9 @@ export const executePlayerKick = (): void => {
     );
   }
   if (
-    state.values.kick !== null &&
-    state.values.kick.wasExecuted === false &&
-    getCurrentTime() - state.values.kick.createdAt >= kickBeforeDuration
+    state.values.playerKick !== null &&
+    state.values.playerKick.wasExecuted === false &&
+    getCurrentTime() - state.values.playerKick.createdAt >= kickBeforeDuration
   ) {
     const playerPosition: EntityPosition = getEntityPosition(
       state.values.playerEntityID,
@@ -46,7 +49,7 @@ export const executePlayerKick = (): void => {
         };
         break;
     }
-    state.values.kick.wasExecuted = true;
+    state.values.playerKick.wasExecuted = true;
     const collisionData: CollisionData = getRectangleCollisionData({
       entityTypes: ["destructible", "enemy"],
       rectangle: {
@@ -63,10 +66,21 @@ export const executePlayerKick = (): void => {
       ) {
         switch (entityCollidable.type) {
           case "destructible":
-            damageDestructible(playerKickDamage);
+            damageDestructible(
+              playerKickDamage,
+              isPlayerJumping()
+                ? enemyJumpKickedStunDuration
+                : enemyKickStunDuration,
+            );
             break;
           case "enemy": {
-            damageEnemy(entityCollidable.entityID, playerKickDamage);
+            damageEnemy(
+              entityCollidable.entityID,
+              playerKickDamage,
+              isPlayerJumping()
+                ? enemyJumpKickedStunDuration
+                : enemyKickStunDuration,
+            );
             break;
           }
         }

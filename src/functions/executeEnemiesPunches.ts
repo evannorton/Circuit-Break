@@ -12,6 +12,7 @@ import {
   enemyHitboxWidth,
   enemyPunchDamage,
   entityHitboxHeight,
+  playerPunchedStunDuration,
   punchBeforeDuration,
   punchHitboxWidth,
 } from "../constants";
@@ -53,7 +54,7 @@ export const executeEnemiesPunches = (): void => {
       for (const entityCollidable of collisionData.entityCollidables) {
         switch (entityCollidable.type) {
           case "player":
-            damagePlayer(enemyPunchDamage);
+            damagePlayer(enemyPunchDamage, playerPunchedStunDuration);
             break;
         }
       }

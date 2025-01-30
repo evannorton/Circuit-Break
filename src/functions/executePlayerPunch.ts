@@ -9,12 +9,17 @@ import { XDirection } from "../types/Direction";
 import { damageDestructible } from "./damageDestructible";
 import { damageEnemy } from "./damageEnemy";
 import {
+  enemyJumpPunchedStunDuration,
+  enemyPunchDamage,
+  enemyPunchedStunDuration,
   entityHitboxHeight,
+  jumpPunchHitboxWidth,
   playerHitboxWidth,
   playerPunchDamage,
   punchBeforeDuration,
   punchHitboxWidth,
 } from "../constants";
+import { isPlayerJumping } from "./isPlayerJumping";
 import { state } from "../state";
 
 export const executePlayerPunch = (): void => {
@@ -31,11 +36,14 @@ export const executePlayerPunch = (): void => {
     const playerPosition: EntityPosition = getEntityPosition(
       state.values.playerEntityID,
     );
+    const calculatedPunchHitboxWidth: number = isPlayerJumping()
+      ? jumpPunchHitboxWidth
+      : punchHitboxWidth;
     let position: EntityPosition | undefined;
     switch (state.values.facingDirection) {
       case XDirection.Left:
         position = {
-          x: playerPosition.x - punchHitboxWidth,
+          x: playerPosition.x - calculatedPunchHitboxWidth,
           y: playerPosition.y,
         };
         break;
@@ -51,7 +59,7 @@ export const executePlayerPunch = (): void => {
       entityTypes: ["destructible", "enemy"],
       rectangle: {
         height: entityHitboxHeight,
-        width: punchHitboxWidth,
+        width: calculatedPunchHitboxWidth,
         x: position.x,
         y: position.y,
       },
@@ -59,10 +67,19 @@ export const executePlayerPunch = (): void => {
     for (const entityCollidable of collisionData.entityCollidables) {
       switch (entityCollidable.type) {
         case "destructible":
-          damageDestructible(playerPunchDamage);
+          damageDestructible(
+            playerPunchDamage,
+            isPlayerJumping() ? enemyJumpPunchedStunDuration : enemyPunchDamage,
+          );
           break;
         case "enemy": {
-          damageEnemy(entityCollidable.entityID, playerPunchDamage);
+          damageEnemy(
+            entityCollidable.entityID,
+            playerPunchDamage,
+            isPlayerJumping()
+              ? enemyJumpPunchedStunDuration
+              : enemyPunchedStunDuration,
+          );
           break;
         }
       }

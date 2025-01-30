@@ -1,8 +1,9 @@
 import { getCurrentTime, moveEntity } from "pixel-pigeon";
+import { isPlayerStunned } from "./isPlayerStunned";
 import { isPlayerTakingDamage } from "./isPlayerTakingDamage";
 import { state } from "../state";
 
-export const damagePlayer = (damage: number): void => {
+export const damagePlayer = (damage: number, stunDuration: number): void => {
   if (state.values.playerEntityID === null) {
     throw new Error("Player entity ID is null.");
   }
@@ -12,9 +13,16 @@ export const damagePlayer = (damage: number): void => {
   const currentTime: number = getCurrentTime();
   if (isPlayerTakingDamage() === false) {
     moveEntity(state.values.playerEntityID, {});
+    if (isPlayerStunned() === false) {
+      state.setValues({
+        playerStunDuration: stunDuration,
+        playerTookDamageAt: currentTime,
+      });
+    }
     state.setValues({
       playerHP: state.values.playerHP - damage,
-      playerTookDamageAt: currentTime,
+      playerKick: null,
+      playerPunch: null,
     });
     if (state.values.playerHP <= 0) {
       state.setValues({

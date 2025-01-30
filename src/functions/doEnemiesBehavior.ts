@@ -86,6 +86,7 @@ export const doEnemiesBehavior = (): void => {
       isRightFarFromPlayer === false &&
       isUpFarFromPlayer === false &&
       isDownFarFromPlayer === false &&
+      isEnemyStunned(enemy.id) === false &&
       isEnemyPunching(enemy.id) === false &&
       isEnemyKicking(enemy.id) === false &&
       (enemy.hasPunch() === false ||

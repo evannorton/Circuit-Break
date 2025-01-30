@@ -392,6 +392,7 @@ export const createDestructible = (): void => {
         createdAt: getCurrentTime(),
         damageDirection: null,
         hp: 5,
+        stunDuration: null,
         tookDamageAt: null,
       },
     });

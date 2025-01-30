@@ -59,7 +59,7 @@ export const createGameOverScreen = (): void => {
         facingDirection: XDirection.Right,
         gameEndedAt: null,
         jumpedAt: null,
-        kick: null,
+        playerKick: null,
         lastEnemyDirection: null,
         movingXDirection: null,
         movingYDirection: null,

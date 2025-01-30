@@ -11,13 +11,14 @@ interface StateSchema {
   gameEndedAt: number | null;
   gameStartedAt: number | null;
   jumpedAt: number | null;
-  kick: Kick | null;
   lastEnemyDirection: XDirection | null;
   movingXDirection: XDirection | null;
   movingYDirection: YDirection | null;
   playerEntityID: string | null;
   playerHP: number;
+  playerKick: Kick | null;
   playerPunch: Punch | null;
+  playerStunDuration: number | null;
   playerTookDamageAt: number | null;
   power: number;
   spawnedEnemyAt: number | null;
@@ -29,13 +30,14 @@ export const state: State<StateSchema> = new State<StateSchema>({
   gameEndedAt: null,
   gameStartedAt: null,
   jumpedAt: null,
-  kick: null,
   lastEnemyDirection: null,
   movingXDirection: null,
   movingYDirection: null,
   playerEntityID: null,
   playerHP: playerMaxHP,
+  playerKick: null,
   playerPunch: null,
+  playerStunDuration: null,
   playerTookDamageAt: null,
   power: 0,
   spawnedEnemyAt: null,

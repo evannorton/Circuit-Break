@@ -3,7 +3,10 @@ import { isDestructibleRising } from "./isDestructibleRising";
 import { isDestructibleTakingDamage } from "./isDestructibleTakingDamage";
 import { state } from "../state";
 
-export const damageDestructible = (damage: number): void => {
+export const damageDestructible = (
+  damage: number,
+  stunDuration: number,
+): void => {
   if (
     isDestructibleTakingDamage() === false &&
     isDestructibleRising() === false
@@ -17,6 +20,7 @@ export const damageDestructible = (damage: number): void => {
     state.values.destructible.damageDirection = state.values.facingDirection;
     state.values.destructible.hp -= damage;
     state.values.destructible.tookDamageAt = currentTime;
+    state.values.destructible.stunDuration = stunDuration;
     if (state.values.destructible.hp <= 0) {
       state.setValues({
         power: state.values.power + 1,

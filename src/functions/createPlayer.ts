@@ -169,13 +169,13 @@ export const createPlayer = (): void => {
               switch (state.values.facingDirection) {
                 case XDirection.Left:
                   if (isPlayerKicking()) {
-                    if (state.values.kick === null) {
+                    if (state.values.playerKick === null) {
                       throw new Error(
                         "Player is kicking but createdAt is null",
                       );
                     }
                     if (
-                      getCurrentTime() - state.values.kick.createdAt <
+                      getCurrentTime() - state.values.playerKick.createdAt <
                       kickBeforeDuration
                     ) {
                       return "charge-kick-left";
@@ -192,10 +192,19 @@ export const createPlayer = (): void => {
                       getCurrentTime() - state.values.playerPunch.createdAt <
                       punchBeforeDuration
                     ) {
+                      if (isPlayerJumping()) {
+                        return "charge-jump-punch-left";
+                      }
                       return "charge-punch-left";
                     }
                     if (state.values.playerPunch.hand === PunchHand.Left) {
+                      if (isPlayerJumping()) {
+                        return "jump-punch-left-left";
+                      }
                       return "punch-left-left";
+                    }
+                    if (isPlayerJumping()) {
+                      return "jump-punch-left-right";
                     }
                     return "punch-left-right";
                   }
@@ -214,13 +223,13 @@ export const createPlayer = (): void => {
                   return "idle-left";
                 case XDirection.Right:
                   if (isPlayerKicking()) {
-                    if (state.values.kick === null) {
+                    if (state.values.playerKick === null) {
                       throw new Error(
                         "Player is kicking but createdAt is null",
                       );
                     }
                     if (
-                      getCurrentTime() - state.values.kick.createdAt <
+                      getCurrentTime() - state.values.playerKick.createdAt <
                       kickBeforeDuration
                     ) {
                       return "charge-kick-right";
@@ -237,10 +246,19 @@ export const createPlayer = (): void => {
                       getCurrentTime() - state.values.playerPunch.createdAt <
                       punchBeforeDuration
                     ) {
+                      if (isPlayerJumping()) {
+                        return "charge-jump-punch-right";
+                      }
                       return "charge-punch-right";
                     }
                     if (state.values.playerPunch.hand === PunchHand.Left) {
+                      if (isPlayerJumping()) {
+                        return "jump-punch-right-left";
+                      }
                       return "punch-right-left";
+                    }
+                    if (isPlayerJumping()) {
+                      return "jump-punch-right-right";
                     }
                     return "punch-right-right";
                   }
@@ -657,6 +675,130 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
+                    duration: punchAfterDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 30,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: punchAfterDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 30,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
+                    sourceY: playerSpriteHeight * 30,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "jump-punch-left-right",
+              },
+              {
+                frames: [
+                  {
+                    duration: punchAfterDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 31,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: punchAfterDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 31,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
+                    sourceY: playerSpriteHeight * 31,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "jump-punch-left-left",
+              },
+              {
+                frames: [
+                  {
+                    duration: punchAfterDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 13,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: punchAfterDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 13,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
+                    sourceY: playerSpriteHeight * 13,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "jump-punch-right-right",
+              },
+              {
+                frames: [
+                  {
+                    duration: punchAfterDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 14,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: punchAfterDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 14,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
+                    sourceY: playerSpriteHeight * 14,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "jump-punch-right-left",
+              },
+              {
+                frames: [
+                  {
                     duration: kickAfterDuration / 3,
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
@@ -741,6 +883,32 @@ export const createPlayer = (): void => {
                   },
                 ],
                 id: "charge-punch-right",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 26,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "charge-jump-punch-left",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 9,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "charge-jump-punch-right",
               },
               {
                 frames: [

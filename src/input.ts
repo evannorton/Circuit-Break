@@ -136,7 +136,6 @@ createInputPressHandler({
 createInputPressHandler({
   condition: (): boolean =>
     isGameOngoing() &&
-    isPlayerJumping() === false &&
     isPlayerLanding() === false &&
     isPlayerPunching() === false &&
     isPlayerKicking() === false,
@@ -145,17 +144,30 @@ createInputPressHandler({
     if (state.values.playerEntityID === null) {
       throw new Error("An attempt was made to punch with no player entity");
     }
-    moveEntity(state.values.playerEntityID, {});
-    state.setValues({
-      playerPunch: {
-        createdAt: getCurrentTime(),
-        hand:
-          state.values.playerPunch?.hand === PunchHand.Left
-            ? PunchHand.Right
-            : PunchHand.Left,
-        wasExecuted: false,
-      },
-    });
+    if (isPlayerJumping()) {
+      state.setValues({
+        playerPunch: {
+          createdAt: getCurrentTime(),
+          hand:
+            state.values.playerPunch?.hand === PunchHand.Left
+              ? PunchHand.Right
+              : PunchHand.Left,
+          wasExecuted: false,
+        },
+      });
+    } else {
+      moveEntity(state.values.playerEntityID, {});
+      state.setValues({
+        playerPunch: {
+          createdAt: getCurrentTime(),
+          hand:
+            state.values.playerPunch?.hand === PunchHand.Left
+              ? PunchHand.Right
+              : PunchHand.Left,
+          wasExecuted: false,
+        },
+      });
+    }
   },
 });
 createInputPressHandler({
@@ -172,7 +184,7 @@ createInputPressHandler({
     }
     moveEntity(state.values.playerEntityID, {});
     state.setValues({
-      kick: {
+      playerKick: {
         createdAt: getCurrentTime(),
         wasExecuted: false,
       },
