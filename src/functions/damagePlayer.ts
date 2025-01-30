@@ -17,12 +17,9 @@ export const damagePlayer = (damage: number): void => {
       playerTookDamageAt: currentTime,
     });
     if (state.values.playerHP <= 0) {
-      alert(
-        `You survived ${Math.floor(
-          (currentTime - state.values.gameStartedAt) / 1000,
-        )} seconds and collected ${state.values.power} power.`,
-      );
-      window.location.reload();
+      state.setValues({
+        gameEndedAt: currentTime,
+      });
     }
   }
 };

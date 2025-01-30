@@ -9,6 +9,7 @@ import {
 } from "pixel-pigeon";
 import { PunchHand } from "./types/Punch";
 import { XDirection, YDirection } from "./types/Direction";
+import { isGameOngoing } from "./functions/isGameOngoing";
 import { isPlayerJumping } from "./functions/isPlayerJumping";
 import { isPlayerKicking } from "./functions/isPlayerKicking";
 import { isPlayerLanding } from "./functions/isPlayerLanding";
@@ -19,11 +20,12 @@ const screenshotInputCollectionID: string = createInputCollection({
   keyboardButtons: [{ value: "KeyP" }],
   name: "Screenshot",
 });
-createInputPressHandler({
-  inputCollectionID: screenshotInputCollectionID,
-  onInput: (): void => {
-    takeScreenshot();
-  },
+
+export const startInputCollectionID: string = createInputCollection({
+  gamepadButtons: [9],
+  keyboardButtons: [{ value: "Space" }, { value: "Enter" }],
+  mouseButtons: [0],
+  name: "Start / retry",
 });
 const moveLeftInputCollectionID: string = createInputCollection({
   gamepadButtons: [14],
@@ -69,6 +71,27 @@ const moveDownInputCollectionID: string = createInputCollection({
   ],
   name: "Move down",
 });
+const jumpInputCollectionID: string = createInputCollection({
+  gamepadButtons: [0],
+  keyboardButtons: [{ value: "KeyZ" }],
+  name: "Jump",
+});
+const punchInputCollectionID: string = createInputCollection({
+  gamepadButtons: [2],
+  keyboardButtons: [{ value: "KeyX" }],
+  name: "Light attack",
+});
+const kickInputCollectionID: string = createInputCollection({
+  gamepadButtons: [3],
+  keyboardButtons: [{ value: "KeyC" }],
+  name: "Heavy attack",
+});
+createInputPressHandler({
+  inputCollectionID: screenshotInputCollectionID,
+  onInput: (): void => {
+    takeScreenshot();
+  },
+});
 
 export const movementXInputTickHandlerID: string =
   createInputTickHandler<XDirection>({
@@ -96,13 +119,9 @@ export const movementYInputTickHandlerID: string =
       },
     ],
   });
-const jumpInputCollectionID: string = createInputCollection({
-  gamepadButtons: [0],
-  keyboardButtons: [{ value: "KeyZ" }],
-  name: "Jump",
-});
 createInputPressHandler({
   condition: (): boolean =>
+    isGameOngoing() &&
     isPlayerJumping() === false &&
     isPlayerLanding() === false &&
     isPlayerPunching() === false &&
@@ -114,13 +133,9 @@ createInputPressHandler({
     });
   },
 });
-const punchInputCollectionID: string = createInputCollection({
-  gamepadButtons: [2],
-  keyboardButtons: [{ value: "KeyX" }],
-  name: "Light attack",
-});
 createInputPressHandler({
   condition: (): boolean =>
+    isGameOngoing() &&
     isPlayerJumping() === false &&
     isPlayerLanding() === false &&
     isPlayerPunching() === false &&
@@ -143,13 +158,9 @@ createInputPressHandler({
     });
   },
 });
-const kickInputCollectionID: string = createInputCollection({
-  gamepadButtons: [3],
-  keyboardButtons: [{ value: "KeyC" }],
-  name: "Heavy attack",
-});
 createInputPressHandler({
   condition: (): boolean =>
+    isGameOngoing() &&
     isPlayerJumping() === false &&
     isPlayerLanding() === false &&
     isPlayerPunching() === false &&
@@ -167,11 +178,4 @@ createInputPressHandler({
       },
     });
   },
-});
-
-export const startInputCollectionID: string = createInputCollection({
-  gamepadButtons: [9],
-  keyboardButtons: [{ value: "Space" }, { value: "Enter" }],
-  mouseButtons: [0],
-  name: "Start",
 });
