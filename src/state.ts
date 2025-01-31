@@ -24,6 +24,8 @@ interface StateSchema {
   playerTookDamageAt: number | null;
   power: number;
   spawnedEnemyAt: number | null;
+  titleAdvancedAt: number | null;
+  titleStartedAt: number | null;
   unlockDisplayedAt: number | null;
 }
 
@@ -45,5 +47,7 @@ export const state: State<StateSchema> = new State<StateSchema>({
   playerTookDamageAt: null,
   power: 0,
   spawnedEnemyAt: null,
+  titleAdvancedAt: null,
+  titleStartedAt: null,
   unlockDisplayedAt: null,
 });

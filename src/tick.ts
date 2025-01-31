@@ -1,5 +1,6 @@
 import {
   EntityPosition,
+  getCurrentTime,
   getEntityIDs,
   getEntityPosition,
   moveEntity,
@@ -19,11 +20,13 @@ import { isPlayerKicking } from "./functions/isPlayerKicking";
 import { isPlayerLanding } from "./functions/isPlayerLanding";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
 import { isPlayerStunned } from "./functions/isPlayerStunned";
-import { levelID } from "./constants";
+import { levelID, titleFadeDuration } from "./constants";
 import { movePlayer } from "./functions/movePlayer";
 import { state } from "./state";
+import { startGame } from "./functions/startGame";
 
 export const tick = (): void => {
+  const currentTime: number = getCurrentTime();
   if (isGameOngoing()) {
     if (state.values.playerEntityID === null) {
       throw new Error("Player entity ID is null.");
@@ -81,5 +84,8 @@ export const tick = (): void => {
       .forEach((entityID: string, entityIndex: number): void => {
         setEntityZIndex(entityID, entityIndex);
       });
+  }
+  else if (state.values.titleAdvancedAt !== null && currentTime - state.values.titleAdvancedAt >= titleFadeDuration) {
+    startGame();
   }
 };

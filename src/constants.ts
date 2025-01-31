@@ -1,5 +1,6 @@
 import { PowerLevel } from "./types/PowerLevel";
 
+export const titleFadeDuration: number = 1500;
 export const renderHitboxes: boolean = false;
 export const playerMovementXSpeed: number = 80;
 export const playerMovementYSpeed: number = (playerMovementXSpeed * 2) / 3;
