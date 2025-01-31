@@ -100,6 +100,7 @@ export const doEnemiesBehavior = (): void => {
             enemy.hasPunch() && enemy.punch.hand === PunchHand.Left
               ? PunchHand.Right
               : PunchHand.Left,
+          isJumping: false,
           wasExecuted: false,
         };
       } else {

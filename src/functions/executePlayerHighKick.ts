@@ -9,27 +9,26 @@ import { XDirection } from "../types/Direction";
 import { damageDestructible } from "./damageDestructible";
 import { damageEnemy } from "./damageEnemy";
 import {
-  enemyJumpKickedStunDuration,
-  enemyKickedStunDuration,
+  enemyHighKickedStunDuration,
   entityHitboxHeight,
-  kickBeforeDuration,
-  kickHitboxWidth,
+  highKickBeforeDuration,
+  highKickHitboxWidth,
+  playerHighKickDamage,
   playerHitboxWidth,
-  playerKickDamage,
 } from "../constants";
-import { isPlayerJumping } from "./isPlayerJumping";
 import { state } from "../state";
 
-export const executePlayerKick = (): void => {
+export const executePlayerHighKick = (): void => {
   if (state.values.playerEntityID === null) {
     throw new Error(
-      "An attempt was made to create a kick entity but no player entity exists",
+      "An attempt was made to create a highKick entity but no player entity exists",
     );
   }
   if (
-    state.values.playerKick !== null &&
-    state.values.playerKick.wasExecuted === false &&
-    getCurrentTime() - state.values.playerKick.createdAt >= kickBeforeDuration
+    state.values.playerHighKick !== null &&
+    state.values.playerHighKick.wasExecuted === false &&
+    getCurrentTime() - state.values.playerHighKick.createdAt >=
+      highKickBeforeDuration
   ) {
     const playerPosition: EntityPosition = getEntityPosition(
       state.values.playerEntityID,
@@ -38,7 +37,7 @@ export const executePlayerKick = (): void => {
     switch (state.values.facingDirection) {
       case XDirection.Left:
         position = {
-          x: playerPosition.x - kickHitboxWidth,
+          x: playerPosition.x - highKickHitboxWidth,
           y: playerPosition.y,
         };
         break;
@@ -49,12 +48,12 @@ export const executePlayerKick = (): void => {
         };
         break;
     }
-    state.values.playerKick.wasExecuted = true;
+    state.values.playerHighKick.wasExecuted = true;
     const collisionData: CollisionData = getRectangleCollisionData({
       entityTypes: ["destructible", "enemy"],
       rectangle: {
         height: entityHitboxHeight,
-        width: kickHitboxWidth,
+        width: highKickHitboxWidth,
         x: position.x,
         y: position.y,
       },
@@ -67,19 +66,15 @@ export const executePlayerKick = (): void => {
         switch (entityCollidable.type) {
           case "destructible":
             damageDestructible(
-              playerKickDamage,
-              isPlayerJumping()
-                ? enemyJumpKickedStunDuration
-                : enemyKickedStunDuration,
+              playerHighKickDamage,
+              enemyHighKickedStunDuration,
             );
             break;
           case "enemy": {
             damageEnemy(
               entityCollidable.entityID,
-              playerKickDamage,
-              isPlayerJumping()
-                ? enemyJumpKickedStunDuration
-                : enemyKickedStunDuration,
+              playerHighKickDamage,
+              enemyHighKickedStunDuration,
             );
             break;
           }

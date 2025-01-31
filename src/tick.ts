@@ -10,9 +10,11 @@ import { createEnemy } from "./functions/createEnemy";
 import { doEnemiesBehavior } from "./functions/doEnemiesBehavior";
 import { executeEnemiesKicks } from "./functions/executeEnemiesKicks";
 import { executeEnemiesPunches } from "./functions/executeEnemiesPunches";
+import { executePlayerHighKick } from "./functions/executePlayerHighKick";
 import { executePlayerKick } from "./functions/executePlayerKick";
 import { executePlayerPunch } from "./functions/executePlayerPunch";
 import { isGameOngoing } from "./functions/isGameOngoing";
+import { isPlayerHighKicking } from "./functions/isPlayerHighKicking";
 import { isPlayerKicking } from "./functions/isPlayerKicking";
 import { isPlayerLanding } from "./functions/isPlayerLanding";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
@@ -36,6 +38,7 @@ export const tick = (): void => {
     if (
       isPlayerPunching() === false &&
       isPlayerKicking() === false &&
+      isPlayerHighKicking() === false &&
       isPlayerLanding() === false &&
       isPlayerStunned() === false
     ) {
@@ -49,6 +52,8 @@ export const tick = (): void => {
     executePlayerPunch();
     // Execute player kick
     executePlayerKick();
+    // Execute player high kick
+    executePlayerHighKick();
     // Execute enemies punches
     executeEnemiesPunches();
     // Execute enemies kicks

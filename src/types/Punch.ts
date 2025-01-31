@@ -5,5 +5,6 @@ export enum PunchHand {
 export interface Punch {
   readonly createdAt: number;
   readonly hand: PunchHand;
+  readonly isJumping: boolean;
   wasExecuted: boolean;
 }

@@ -9,7 +9,9 @@ import {
 } from "pixel-pigeon";
 import { PunchHand } from "./types/Punch";
 import { XDirection, YDirection } from "./types/Direction";
+import { canHighKick } from "./functions/canHighKick";
 import { isGameOngoing } from "./functions/isGameOngoing";
+import { isPlayerHighKicking } from "./functions/isPlayerHighKicking";
 import { isPlayerJumping } from "./functions/isPlayerJumping";
 import { isPlayerKicking } from "./functions/isPlayerKicking";
 import { isPlayerLanding } from "./functions/isPlayerLanding";
@@ -125,7 +127,8 @@ createInputPressHandler({
     isPlayerJumping() === false &&
     isPlayerLanding() === false &&
     isPlayerPunching() === false &&
-    isPlayerKicking() === false,
+    isPlayerKicking() === false &&
+    isPlayerHighKicking() === false,
   inputCollectionID: jumpInputCollectionID,
   onInput: (): void => {
     state.setValues({
@@ -138,7 +141,8 @@ createInputPressHandler({
     isGameOngoing() &&
     isPlayerLanding() === false &&
     isPlayerPunching() === false &&
-    isPlayerKicking() === false,
+    isPlayerKicking() === false &&
+    isPlayerHighKicking() === false,
   inputCollectionID: punchInputCollectionID,
   onInput: (): void => {
     if (state.values.playerEntityID === null) {
@@ -152,6 +156,7 @@ createInputPressHandler({
             state.values.playerPunch?.hand === PunchHand.Left
               ? PunchHand.Right
               : PunchHand.Left,
+          isJumping: true,
           wasExecuted: false,
         },
       });
@@ -164,6 +169,7 @@ createInputPressHandler({
             state.values.playerPunch?.hand === PunchHand.Left
               ? PunchHand.Right
               : PunchHand.Left,
+          isJumping: false,
           wasExecuted: false,
         },
       });
@@ -175,7 +181,8 @@ createInputPressHandler({
     isGameOngoing() &&
     isPlayerLanding() === false &&
     isPlayerPunching() === false &&
-    isPlayerKicking() === false,
+    isPlayerKicking() === false &&
+    isPlayerHighKicking() === false,
   inputCollectionID: kickInputCollectionID,
   onInput: (): void => {
     if (state.values.playerEntityID === null) {
@@ -190,12 +197,21 @@ createInputPressHandler({
       });
     } else {
       moveEntity(state.values.playerEntityID, {});
-      state.setValues({
-        playerKick: {
-          createdAt: getCurrentTime(),
-          wasExecuted: false,
-        },
-      });
+      if (canHighKick()) {
+        state.setValues({
+          playerHighKick: {
+            createdAt: getCurrentTime(),
+            wasExecuted: false,
+          },
+        });
+      } else {
+        state.setValues({
+          playerKick: {
+            createdAt: getCurrentTime(),
+            wasExecuted: false,
+          },
+        });
+      }
     }
   },
 });

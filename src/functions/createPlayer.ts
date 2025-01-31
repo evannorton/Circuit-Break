@@ -9,6 +9,8 @@ import { PunchHand } from "../types/Punch";
 import { XDirection } from "../types/Direction";
 import {
   entityHitboxHeight,
+  highKickAfterDuration,
+  highKickBeforeDuration,
   jumpDuration,
   jumpHeight,
   kickAfterDuration,
@@ -21,6 +23,7 @@ import {
   punchBeforeDuration,
   renderHitboxes,
 } from "../constants";
+import { isPlayerHighKicking } from "./isPlayerHighKicking";
 import { isPlayerJumping } from "./isPlayerJumping";
 import { isPlayerKicking } from "./isPlayerKicking";
 import { isPlayerLanding } from "./isPlayerLanding";
@@ -168,6 +171,20 @@ export const createPlayer = (): void => {
                 state.values.movingYDirection !== null;
               switch (state.values.facingDirection) {
                 case XDirection.Left:
+                  if (isPlayerHighKicking()) {
+                    if (state.values.playerHighKick === null) {
+                      throw new Error(
+                        "Player is high kicking but createdAt is null",
+                      );
+                    }
+                    if (
+                      getCurrentTime() - state.values.playerHighKick.createdAt <
+                      highKickBeforeDuration
+                    ) {
+                      return "charge-high-kick-left";
+                    }
+                    return "high-kick-left";
+                  }
                   if (isPlayerKicking()) {
                     if (state.values.playerKick === null) {
                       throw new Error(
@@ -228,6 +245,20 @@ export const createPlayer = (): void => {
                   }
                   return "idle-left";
                 case XDirection.Right:
+                  if (isPlayerHighKicking()) {
+                    if (state.values.playerHighKick === null) {
+                      throw new Error(
+                        "Player is high kicking but createdAt is null",
+                      );
+                    }
+                    if (
+                      getCurrentTime() - state.values.playerHighKick.createdAt <
+                      highKickBeforeDuration
+                    ) {
+                      return "charge-high-kick-right";
+                    }
+                    return "high-kick-right";
+                  }
                   if (isPlayerKicking()) {
                     if (state.values.playerKick === null) {
                       throw new Error(
@@ -935,6 +966,86 @@ export const createPlayer = (): void => {
               {
                 frames: [
                   {
+                    duration: highKickAfterDuration / 4,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 25,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: highKickAfterDuration / 4,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 25,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: highKickAfterDuration / 4,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
+                    sourceY: playerSpriteHeight * 25,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 3,
+                    sourceY: playerSpriteHeight * 25,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "high-kick-left",
+              },
+              {
+                frames: [
+                  {
+                    duration: highKickAfterDuration / 4,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 8,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: highKickAfterDuration / 4,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 8,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: highKickAfterDuration / 4,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
+                    sourceY: playerSpriteHeight * 8,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 3,
+                    sourceY: playerSpriteHeight * 8,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "high-kick-right",
+              },
+              {
+                frames: [
+                  {
                     height: playerSpriteHeight,
                     sourceHeight: playerSpriteHeight,
                     sourceWidth: playerSpriteWidth,
@@ -1035,6 +1146,32 @@ export const createPlayer = (): void => {
                   },
                 ],
                 id: "charge-kick-right",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 23,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "charge-high-kick-left",
+              },
+              {
+                frames: [
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: 0,
+                    sourceY: playerSpriteHeight * 6,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "charge-high-kick-right",
               },
               {
                 frames: [

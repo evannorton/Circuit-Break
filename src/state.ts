@@ -1,4 +1,5 @@
 import { Destructible } from "./types/Destructible";
+import { HighKick } from "./types/HighKick";
 import { Kick } from "./types/Kick";
 import { Punch } from "./types/Punch";
 import { State } from "pixel-pigeon";
@@ -16,6 +17,7 @@ interface StateSchema {
   movingYDirection: YDirection | null;
   playerEntityID: string | null;
   playerHP: number;
+  playerHighKick: HighKick | null;
   playerKick: Kick | null;
   playerPunch: Punch | null;
   playerStunDuration: number | null;
@@ -36,6 +38,7 @@ export const state: State<StateSchema> = new State<StateSchema>({
   movingYDirection: null,
   playerEntityID: null,
   playerHP: playerMaxHP,
+  playerHighKick: null,
   playerKick: null,
   playerPunch: null,
   playerStunDuration: null,

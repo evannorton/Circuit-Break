@@ -21,6 +21,7 @@ export const damagePlayer = (damage: number, stunDuration: number): void => {
     }
     state.setValues({
       playerHP: state.values.playerHP - damage,
+      playerHighKick: null,
       playerKick: null,
       playerPunch: null,
     });

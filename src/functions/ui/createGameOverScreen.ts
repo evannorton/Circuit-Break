@@ -64,6 +64,7 @@ export const createGameOverScreen = (): void => {
         movingYDirection: null,
         playerEntityID: null,
         playerHP: playerMaxHP,
+        playerHighKick: null,
         playerKick: null,
         playerPunch: null,
         playerStunDuration: null,
