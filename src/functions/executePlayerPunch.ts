@@ -79,6 +79,7 @@ export const executePlayerPunch = (): void => {
             isPlayerJumping()
               ? enemyJumpPunchedStunDuration
               : enemyPunchedStunDuration,
+            0,
           );
           break;
         }

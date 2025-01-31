@@ -80,6 +80,7 @@ export const executePlayerKick = (): void => {
               isPlayerJumping()
                 ? enemyJumpKickedStunDuration
                 : enemyKickedStunDuration,
+              0,
             );
             break;
           }

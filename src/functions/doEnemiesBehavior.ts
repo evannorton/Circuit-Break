@@ -17,6 +17,7 @@ import { getDefinables } from "definables";
 import { isEnemyKicking } from "./isEnemyKicking";
 import { isEnemyPunching } from "./isEnemyPunching";
 import { isEnemyStunned } from "../functions/isEnemyStunned";
+import { isEnemyTakingKnockback } from "./isEnemyTakingKnockback";
 import { state } from "../state";
 
 export const doEnemiesBehavior = (): void => {
@@ -37,49 +38,53 @@ export const doEnemiesBehavior = (): void => {
       enemyPosition.y - playerPosition.y > Math.ceil(entityHitboxHeight / 2);
     const isDownFarFromPlayer: boolean =
       playerPosition.y - enemyPosition.y > Math.ceil(entityHitboxHeight / 2);
-    const xVelocity: number | undefined =
-      isEnemyPunching(enemy.id) ||
-      isEnemyKicking(enemy.id) ||
-      isEnemyStunned(enemy.id)
-        ? 0
-        : isLeftFarFromPlayer
-          ? -enemyMovementXSpeed
-          : isRightFarFromPlayer
-            ? enemyMovementXSpeed
-            : 0;
-    const yVelocity: number | undefined =
-      isEnemyPunching(enemy.id) ||
-      isEnemyKicking(enemy.id) ||
-      isEnemyStunned(enemy.id)
-        ? 0
-        : isUpFarFromPlayer
-          ? -enemyMovementYSpeed
-          : isDownFarFromPlayer
-            ? enemyMovementYSpeed
-            : 0;
-    moveEntity(enemy.id, {
-      xVelocity,
-      yVelocity,
-    });
-    if (xVelocity > 0) {
-      enemy.facingDirection = XDirection.Right;
-      enemy.movingXDirection = XDirection.Right;
-    }
-    if (xVelocity < 0) {
-      enemy.facingDirection = XDirection.Left;
-      enemy.movingXDirection = XDirection.Left;
-    }
-    if (xVelocity === 0) {
-      enemy.movingXDirection = null;
-    }
-    if (yVelocity > 0) {
-      enemy.movingYDirection = YDirection.Down;
-    }
-    if (yVelocity < 0) {
-      enemy.movingYDirection = YDirection.Up;
-    }
-    if (yVelocity === 0) {
-      enemy.movingYDirection = null;
+    if (isEnemyTakingKnockback(enemy.id)) {
+      moveEntity(enemy.id, { xVelocity: enemy.knockbackVelocity });
+    } else {
+      const xVelocity: number | undefined =
+        isEnemyPunching(enemy.id) ||
+        isEnemyKicking(enemy.id) ||
+        isEnemyStunned(enemy.id)
+          ? 0
+          : isLeftFarFromPlayer
+            ? -enemyMovementXSpeed
+            : isRightFarFromPlayer
+              ? enemyMovementXSpeed
+              : 0;
+      const yVelocity: number | undefined =
+        isEnemyPunching(enemy.id) ||
+        isEnemyKicking(enemy.id) ||
+        isEnemyStunned(enemy.id)
+          ? 0
+          : isUpFarFromPlayer
+            ? -enemyMovementYSpeed
+            : isDownFarFromPlayer
+              ? enemyMovementYSpeed
+              : 0;
+      moveEntity(enemy.id, {
+        xVelocity,
+        yVelocity,
+      });
+      if (xVelocity > 0) {
+        enemy.facingDirection = XDirection.Right;
+        enemy.movingXDirection = XDirection.Right;
+      }
+      if (xVelocity < 0) {
+        enemy.facingDirection = XDirection.Left;
+        enemy.movingXDirection = XDirection.Left;
+      }
+      if (xVelocity === 0) {
+        enemy.movingXDirection = null;
+      }
+      if (yVelocity > 0) {
+        enemy.movingYDirection = YDirection.Down;
+      }
+      if (yVelocity < 0) {
+        enemy.movingYDirection = YDirection.Up;
+      }
+      if (yVelocity === 0) {
+        enemy.movingYDirection = null;
+      }
     }
     if (
       isLeftFarFromPlayer === false &&
@@ -87,6 +92,7 @@ export const doEnemiesBehavior = (): void => {
       isUpFarFromPlayer === false &&
       isDownFarFromPlayer === false &&
       isEnemyStunned(enemy.id) === false &&
+      isEnemyTakingKnockback(enemy.id) === false &&
       isEnemyPunching(enemy.id) === false &&
       isEnemyKicking(enemy.id) === false &&
       (enemy.hasPunch() === false ||

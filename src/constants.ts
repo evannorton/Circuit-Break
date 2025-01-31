@@ -53,6 +53,8 @@ export const playerMaxHP: number = 12;
 export const heartsAmount: number = 6;
 export const jumpHeight: number = 18;
 export const comboThreshold: number = 250;
+export const highKickKnockbackDuration: number = 750;
+export const knockbackVelocity: number = 120;
 export const powerLevels: PowerLevel[] = [
   {
     amount: 2,

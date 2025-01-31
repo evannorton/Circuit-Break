@@ -27,6 +27,7 @@ import { isEnemyKicking } from "../functions/isEnemyKicking";
 import { isEnemyMoving } from "../functions/isEnemyMoving";
 import { isEnemyPunching } from "../functions/isEnemyPunching";
 import { isEnemyStunned } from "../functions/isEnemyStunned";
+import { isEnemyTakingKnockback } from "../functions/isEnemyTakingKnockback";
 
 interface EnemyOptions {
   position: EntityPosition;
@@ -37,6 +38,8 @@ export class Enemy extends Definable {
   private _hp: number = 6;
   private _facingDirection: XDirection = XDirection.Left;
   private _kick: Kick | null = null;
+  private _knockbackDuration: number | null = null;
+  private _knockbackVelocity: number | null = null;
   private _movingXDirection: XDirection | null = null;
   private _movingYDirection: YDirection | null = null;
   private _punch: Punch | null = null;
@@ -189,7 +192,10 @@ export class Enemy extends Definable {
                     }
                     return "kick-left";
                   }
-                  if (isEnemyStunned(this._id)) {
+                  if (
+                    isEnemyTakingKnockback(this._id) ||
+                    isEnemyStunned(this._id)
+                  ) {
                     return "stunned-left";
                   }
                   if (isEnemyMoving(this._id)) {
@@ -218,7 +224,10 @@ export class Enemy extends Definable {
                     }
                     return "kick-right";
                   }
-                  if (isEnemyStunned(this._id)) {
+                  if (
+                    isEnemyTakingKnockback(this._id) ||
+                    isEnemyStunned(this._id)
+                  ) {
                     return "stunned-right";
                   }
                   if (isEnemyMoving(this._id)) {
@@ -758,6 +767,20 @@ export class Enemy extends Definable {
     throw new Error(this.getAccessorErrorMessage("kick"));
   }
 
+  public get knockbackDuration(): number {
+    if (this._knockbackDuration !== null) {
+      return this._knockbackDuration;
+    }
+    throw new Error(this.getAccessorErrorMessage("knockbackDuration"));
+  }
+
+  public get knockbackVelocity(): number {
+    if (this._knockbackVelocity !== null) {
+      return this._knockbackVelocity;
+    }
+    throw new Error(this.getAccessorErrorMessage("knockbackVelocity"));
+  }
+
   public get movingXDirection(): XDirection {
     if (this._movingXDirection !== null) {
       return this._movingXDirection;
@@ -803,6 +826,14 @@ export class Enemy extends Definable {
 
   public set kick(kick: Kick | null) {
     this._kick = kick;
+  }
+
+  public set knockbackDuration(knockbackDuration: number | null) {
+    this._knockbackDuration = knockbackDuration;
+  }
+
+  public set knockbackVelocity(knockbackVelocity: number | null) {
+    this._knockbackVelocity = knockbackVelocity;
   }
 
   public set movingXDirection(movingXDirection: XDirection | null) {

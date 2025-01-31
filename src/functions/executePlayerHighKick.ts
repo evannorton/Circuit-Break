@@ -13,6 +13,7 @@ import {
   entityHitboxHeight,
   highKickBeforeDuration,
   highKickHitboxWidth,
+  highKickKnockbackDuration,
   playerHighKickDamage,
   playerHitboxWidth,
 } from "../constants";
@@ -75,6 +76,7 @@ export const executePlayerHighKick = (): void => {
               entityCollidable.entityID,
               playerHighKickDamage,
               enemyHighKickedStunDuration,
+              highKickKnockbackDuration,
             );
             break;
           }

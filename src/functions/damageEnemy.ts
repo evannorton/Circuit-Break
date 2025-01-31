@@ -1,22 +1,38 @@
 import { Enemy } from "../classes/Enemy";
-import { getCurrentTime } from "pixel-pigeon";
+import { getCurrentTime, getEntityPosition } from "pixel-pigeon";
 import { getDefinable } from "definables";
 import { isEnemyStunned } from "./isEnemyStunned";
 import { isEnemyTakingDamage } from "./isEnemyTakingDamage";
+import { isEnemyTakingKnockback } from "./isEnemyTakingKnockback";
+import { knockbackVelocity } from "../constants";
+import { state } from "../state";
 
 export const damageEnemy = (
   enemyID: string,
   damage: number,
   stunDuration: number,
+  knockbackDuration: number,
 ): void => {
-  const enemy: Enemy = getDefinable(Enemy, enemyID);
-  if (isEnemyTakingDamage(enemyID) === false) {
+  if (state.values.playerEntityID === null) {
+    throw new Error("Player entity ID is null.");
+  }
+  if (
+    isEnemyTakingDamage(enemyID) === false &&
+    isEnemyTakingKnockback(enemyID) === false
+  ) {
+    const enemy: Enemy = getDefinable(Enemy, enemyID);
     const currentTime: number = getCurrentTime();
     enemy.hp -= damage;
     if (isEnemyStunned(enemyID) === false) {
       enemy.tookDamageAt = currentTime;
       enemy.stunDuration = stunDuration;
     }
+    enemy.knockbackDuration = knockbackDuration;
+    enemy.knockbackVelocity =
+      getEntityPosition(state.values.playerEntityID).x <
+      getEntityPosition(enemy.id).x
+        ? knockbackVelocity
+        : -knockbackVelocity;
     enemy.kick = null;
     enemy.punch = null;
     if (enemy.hp <= 0) {
