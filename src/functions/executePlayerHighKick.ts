@@ -76,6 +76,7 @@ export const executePlayerHighKick = (): void => {
               entityCollidable.entityID,
               playerHighKickDamage,
               enemyHighKickedStunDuration,
+              true,
               highKickKnockbackDuration,
             );
             break;

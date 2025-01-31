@@ -11,6 +11,7 @@ export const damageEnemy = (
   enemyID: string,
   damage: number,
   stunDuration: number,
+  overrideStun: boolean,
   knockbackDuration: number,
 ): void => {
   if (state.values.playerEntityID === null) {
@@ -23,7 +24,7 @@ export const damageEnemy = (
     const enemy: Enemy = getDefinable(Enemy, enemyID);
     const currentTime: number = getCurrentTime();
     enemy.hp -= damage;
-    if (isEnemyStunned(enemyID) === false) {
+    if (overrideStun || isEnemyStunned(enemyID) === false) {
       enemy.tookDamageAt = currentTime;
       enemy.stunDuration = stunDuration;
     }

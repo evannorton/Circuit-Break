@@ -20,8 +20,8 @@ export const createTitleScreen = (): void => {
       return 1;
     }
     const time: number = getCurrentTime() - state.values.titleAdvancedAt;
-    return 1 - Math.min(time / (titleFadeDuration * .875), 1);
-  }
+    return 1 - Math.min(time / (titleFadeDuration * 0.875), 1);
+  };
   // Solid color
   createQuadrilateral({
     color: "#A675FE",
@@ -74,7 +74,7 @@ export const createTitleScreen = (): void => {
             patternHeight,
         },
         imagePath: "title/pattern",
-        opacity
+        opacity,
       });
     }
   }
@@ -164,7 +164,7 @@ export const createTitleScreen = (): void => {
       },
     },
     imagePath: "title/character",
-    opacity
+    opacity,
   });
   // Button
   const buttonWidth: number = 90;
@@ -213,7 +213,7 @@ export const createTitleScreen = (): void => {
       state.values.titleAdvancedAt !== null
         ? "title/button-pressed"
         : "title/button",
-        opacity
+    opacity,
   });
   createButton({
     coordinates: {
@@ -267,7 +267,7 @@ export const createTitleScreen = (): void => {
       y: 0,
     },
     imagePath: "title/glass",
-    opacity
+    opacity,
   });
   // Input handler
   createInputPressHandler({

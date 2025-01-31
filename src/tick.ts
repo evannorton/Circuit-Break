@@ -22,8 +22,8 @@ import { isPlayerPunching } from "./functions/isPlayerPunching";
 import { isPlayerStunned } from "./functions/isPlayerStunned";
 import { levelID, titleFadeDuration } from "./constants";
 import { movePlayer } from "./functions/movePlayer";
-import { state } from "./state";
 import { startGame } from "./functions/startGame";
+import { state } from "./state";
 
 export const tick = (): void => {
   const currentTime: number = getCurrentTime();
@@ -84,8 +84,11 @@ export const tick = (): void => {
       .forEach((entityID: string, entityIndex: number): void => {
         setEntityZIndex(entityID, entityIndex);
       });
-  }
-  else if (state.values.titleAdvancedAt !== null && currentTime - state.values.titleAdvancedAt >= titleFadeDuration) {
+  } else if (
+    state.values.gameEndedAt === null &&
+    state.values.titleAdvancedAt !== null &&
+    currentTime - state.values.titleAdvancedAt >= titleFadeDuration
+  ) {
     startGame();
   }
 };
