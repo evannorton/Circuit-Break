@@ -7,6 +7,7 @@ import { XDirection, YDirection } from "./types/Direction";
 import { playerMaxHP } from "./constants";
 
 interface StateSchema {
+  defeatAdvancedAt: number | null;
   destructible: Destructible | null;
   facingDirection: XDirection;
   gameEndedAt: number | null;
@@ -30,6 +31,7 @@ interface StateSchema {
 }
 
 export const state: State<StateSchema> = new State<StateSchema>({
+  defeatAdvancedAt: null,
   destructible: null,
   facingDirection: XDirection.Right,
   gameEndedAt: null,

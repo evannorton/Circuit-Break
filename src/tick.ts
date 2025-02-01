@@ -22,6 +22,7 @@ import { isPlayerPunching } from "./functions/isPlayerPunching";
 import { isPlayerStunned } from "./functions/isPlayerStunned";
 import { levelID, titleFadeDuration } from "./constants";
 import { movePlayer } from "./functions/movePlayer";
+import { retry } from "./functions/retry";
 import { startGame } from "./functions/startGame";
 import { state } from "./state";
 
@@ -90,5 +91,10 @@ export const tick = (): void => {
     currentTime - state.values.titleAdvancedAt >= titleFadeDuration
   ) {
     startGame();
+  } else if (
+    state.values.defeatAdvancedAt !== null &&
+    getCurrentTime() - state.values.defeatAdvancedAt >= 500
+  ) {
+    retry();
   }
 };

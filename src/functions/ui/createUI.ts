@@ -1,9 +1,9 @@
-import { createGameOverScreen } from "./createGameOverScreen";
+import { createDefeatScreen } from "./createDefeatScreen";
 import { createHUD } from "./createHUD";
 import { createTitleScreen } from "./createTitleScreen";
 
 export const createUI = (): void => {
   createTitleScreen();
-  createGameOverScreen();
+  createDefeatScreen();
   createHUD();
 };
