@@ -1,8 +1,13 @@
 import { Enemy } from "../classes/Enemy";
 import { XDirection } from "../types/Direction";
+import {
+  applyAudioSourceVolume,
+  fadeInAudioSourceVolume,
+  fadeOutAudioSourceVolume,
+  removeEntity,
+} from "pixel-pigeon";
 import { getDefinables } from "definables";
 import { playerMaxHP } from "../constants";
-import { applyAudioSourceVolume, fadeInAudioSourceVolume, fadeOutAudioSourceVolume, removeEntity } from "pixel-pigeon";
 import { startGame } from "./startGame";
 import { state } from "../state";
 
@@ -40,10 +45,10 @@ export const retry = (): void => {
   }
   startGame();
   fadeOutAudioSourceVolume("music/chill", {
-    duration: 1000,     
+    duration: 1000,
   });
   applyAudioSourceVolume("music/main", { volume: 1 });
   fadeInAudioSourceVolume("music/main", {
-    duration: 1000,     
+    duration: 1000,
   });
 };
