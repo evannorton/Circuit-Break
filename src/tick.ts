@@ -11,6 +11,7 @@ import { createEnemy } from "./functions/createEnemy";
 import { doEnemiesBehavior } from "./functions/doEnemiesBehavior";
 import { executeEnemiesKicks } from "./functions/executeEnemiesKicks";
 import { executeEnemiesPunches } from "./functions/executeEnemiesPunches";
+import { executeEnemiesSwoops } from "./functions/executeEnemiesSwoops";
 import { executePlayerHighKick } from "./functions/executePlayerHighKick";
 import { executePlayerKick } from "./functions/executePlayerKick";
 import { executePlayerPunch } from "./functions/executePlayerPunch";
@@ -62,6 +63,8 @@ export const tick = (): void => {
     executeEnemiesPunches();
     // Execute enemies kicks
     executeEnemiesKicks();
+    // Execute enemies swoops
+    executeEnemiesSwoops();
     // Enemies behavior
     doEnemiesBehavior();
     // Y-sort characters

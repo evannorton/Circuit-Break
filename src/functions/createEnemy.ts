@@ -23,7 +23,11 @@ export const createEnemy = (): void => {
     };
     new Enemy({
       position,
-      type: EnemyType.Base,
+      spawnDirection:
+        state.values.lastEnemyDirection === XDirection.Left
+          ? XDirection.Right
+          : XDirection.Left,
+      type: EnemyType.Flying,
     });
     state.setValues({
       lastEnemyDirection:

@@ -56,7 +56,7 @@ export const executePlayerPunch = (): void => {
     }
     state.values.playerPunch.wasExecuted = true;
     const collisionData: CollisionData = getRectangleCollisionData({
-      entityTypes: ["destructible", "enemy"],
+      entityTypes: ["destructible", "enemy-base", "enemy-flying"],
       rectangle: {
         height: entityHitboxHeight,
         width: calculatedPunchHitboxWidth,
@@ -72,7 +72,13 @@ export const executePlayerPunch = (): void => {
             isPlayerJumping() ? enemyJumpPunchedStunDuration : enemyPunchDamage,
           );
           break;
-        case "enemy": {
+        case "enemy-base":
+        case "enemy-flying": {
+          if (entityCollidable.type === "enemy-flying") {
+            if (isPlayerJumping() === false) {
+              return;
+            }
+          }
           damageEnemy(
             entityCollidable.entityID,
             playerPunchDamage,

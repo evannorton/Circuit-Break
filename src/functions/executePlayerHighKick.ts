@@ -51,7 +51,7 @@ export const executePlayerHighKick = (): void => {
     }
     state.values.playerHighKick.wasExecuted = true;
     const collisionData: CollisionData = getRectangleCollisionData({
-      entityTypes: ["destructible", "enemy"],
+      entityTypes: ["destructible", "enemy-base", "enemy-flying"],
       rectangle: {
         height: entityHitboxHeight,
         width: highKickHitboxWidth,
@@ -62,7 +62,8 @@ export const executePlayerHighKick = (): void => {
     for (const entityCollidable of collisionData.entityCollidables) {
       if (
         entityCollidable.type === "destructible" ||
-        entityCollidable.type === "enemy"
+        entityCollidable.type === "enemy-base" ||
+        entityCollidable.type === "enemy-flying"
       ) {
         switch (entityCollidable.type) {
           case "destructible":
@@ -71,7 +72,8 @@ export const executePlayerHighKick = (): void => {
               enemyHighKickedStunDuration,
             );
             break;
-          case "enemy": {
+          case "enemy-base":
+          case "enemy-flying": {
             damageEnemy(
               entityCollidable.entityID,
               playerHighKickDamage,

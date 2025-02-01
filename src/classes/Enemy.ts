@@ -1,20 +1,15 @@
 import { Definable } from "definables";
-import {
-  EntityPosition,
-  createEntity,
-  createQuadrilateral,
-  removeEntity,
-} from "pixel-pigeon";
+import { EntityPosition, createEntity, removeEntity } from "pixel-pigeon";
 import { Kick } from "../types/Kick";
 import { Punch } from "../types/Punch";
+import { Swoop } from "../types/Swoop";
 import { XDirection, YDirection } from "../types/Direction";
+import { addEnemyQuadrilaterals } from "../functions/addEnemyQuadrilaterals";
 import { addEnemySprites } from "../functions/addEnemySprites";
-import {
-  baseEnemyHitboxWidth,
-  entityHitboxHeight,
-  levelID,
-  renderHitboxes,
-} from "../constants";
+import { entityHitboxHeight, levelID } from "../constants";
+import { getEnemyCollidableEntities } from "../functions/getEnemyCollidableEntities";
+import { getEnemyHitboxWidth } from "../functions/getEnemyHitboxWidth";
+import { getEnemyMaxHP } from "../functions/getEnemyMaxHP";
 
 export enum EnemyType {
   Base = "base",
@@ -22,10 +17,12 @@ export enum EnemyType {
 }
 export interface EnemyOptions {
   position: EntityPosition;
+  spawnDirection: XDirection;
   type: EnemyType;
 }
 export class Enemy extends Definable {
-  private _hp: number = 6;
+  private _hasAttacked: boolean = false;
+  private _hp: number;
   private _facingDirection: XDirection = XDirection.Left;
   private _kick: Kick | null = null;
   private _knockbackDuration: number | null = null;
@@ -33,60 +30,35 @@ export class Enemy extends Definable {
   private _movingXDirection: XDirection | null = null;
   private _movingYDirection: YDirection | null = null;
   private _punch: Punch | null = null;
+  private readonly _spawnDirection: XDirection;
   private _stunDuration: number | null = null;
+  private _swoop: Swoop | null = null;
   private _tookDamageAt: number | null = null;
   private readonly _type: EnemyType;
   public constructor(options: EnemyOptions) {
     const entityID: string = createEntity({
-      collidableEntityTypes: ["boundary", "destructible", "player", "enemy"],
+      collidableEntityTypes: getEnemyCollidableEntities(options.type),
       height: entityHitboxHeight,
       layerID: "Characters",
       levelID,
       position: options.position,
-      quadrilaterals: renderHitboxes
-        ? [
-            {
-              quadrilateralID: createQuadrilateral({
-                color: "#e03c28",
-                height: 1,
-                width: baseEnemyHitboxWidth,
-              }),
-            },
-            {
-              quadrilateralID: createQuadrilateral({
-                color: "#e03c28",
-                height: 1,
-                width: baseEnemyHitboxWidth,
-              }),
-              y: entityHitboxHeight - 1,
-            },
-            {
-              quadrilateralID: createQuadrilateral({
-                color: "#e03c28",
-                height: entityHitboxHeight,
-                width: 1,
-              }),
-            },
-            {
-              quadrilateralID: createQuadrilateral({
-                color: "#e03c28",
-                height: entityHitboxHeight,
-                width: 1,
-              }),
-              x: baseEnemyHitboxWidth - 1,
-            },
-          ]
-        : undefined,
-      type: "enemy",
-      width: baseEnemyHitboxWidth,
+      type: `enemy-${options.type}`,
+      width: getEnemyHitboxWidth(options.type),
     });
     super(entityID);
     this._type = options.type;
+    this._hp = getEnemyMaxHP(options.type);
+    this._spawnDirection = options.spawnDirection;
     addEnemySprites(this._id);
+    addEnemyQuadrilaterals(this._id);
   }
 
   public get facingDirection(): XDirection {
     return this._facingDirection;
+  }
+
+  public get hasAttacked(): boolean {
+    return this._hasAttacked;
   }
 
   public get hp(): number {
@@ -135,11 +107,22 @@ export class Enemy extends Definable {
     throw new Error(this.getAccessorErrorMessage("punch"));
   }
 
+  public get spawnDirection(): XDirection {
+    return this._spawnDirection;
+  }
+
   public get stunDuration(): number {
     if (this._stunDuration !== null) {
       return this._stunDuration;
     }
     throw new Error(this.getAccessorErrorMessage("stunDuration"));
+  }
+
+  public get swoop(): Swoop {
+    if (this._swoop !== null) {
+      return this._swoop;
+    }
+    throw new Error(this.getAccessorErrorMessage("swoop"));
   }
 
   public get tookDamageAt(): number {
@@ -155,6 +138,10 @@ export class Enemy extends Definable {
 
   public set facingDirection(facingDirection: XDirection) {
     this._facingDirection = facingDirection;
+  }
+
+  public set hasAttacked(hasAttacked: boolean) {
+    this._hasAttacked = hasAttacked;
   }
 
   public set hp(hp: number) {
@@ -189,6 +176,10 @@ export class Enemy extends Definable {
     this._stunDuration = stunDuration;
   }
 
+  public set swoop(swoop: Swoop | null) {
+    this._swoop = swoop;
+  }
+
   public set tookDamageAt(tookDamageAt: number) {
     this._tookDamageAt = tookDamageAt;
   }
@@ -207,6 +198,10 @@ export class Enemy extends Definable {
 
   public hasPunch(): boolean {
     return this._punch !== null;
+  }
+
+  public hasSwoop(): boolean {
+    return this._swoop !== null;
   }
 
   public hasTookDamageAt(): boolean {

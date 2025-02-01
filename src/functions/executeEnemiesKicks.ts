@@ -54,6 +54,7 @@ export const executeEnemiesKicks = (): void => {
       for (const entityCollidable of collisionData.entityCollidables) {
         switch (entityCollidable.type) {
           case "player":
+            enemy.hasAttacked = true;
             damagePlayer(enemyKickDamage, playerKickedStunDuration);
             break;
         }

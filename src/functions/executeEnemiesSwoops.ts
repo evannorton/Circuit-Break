@@ -9,28 +9,28 @@ import { Enemy } from "../classes/Enemy";
 import { XDirection } from "../types/Direction";
 import {
   baseEnemyHitboxWidth,
-  enemyPunchDamage,
+  enemySwoopDamage,
   entityHitboxHeight,
-  playerPunchedStunDuration,
-  punchBeforeDuration,
-  punchHitboxWidth,
+  playerSwoopedStunDuration,
+  swoopBeforeDuration,
+  swoopHitboxWidth,
 } from "../constants";
 import { damagePlayer } from "./damagePlayer";
 import { getDefinables } from "definables";
 
-export const executeEnemiesPunches = (): void => {
+export const executeEnemiesSwoops = (): void => {
   for (const enemy of getDefinables(Enemy).values()) {
     if (
-      enemy.hasPunch() &&
-      enemy.punch.wasExecuted === false &&
-      getCurrentTime() - enemy.punch.createdAt >= punchBeforeDuration
+      enemy.hasSwoop() &&
+      enemy.swoop.wasExecuted === false &&
+      getCurrentTime() - enemy.swoop.createdAt >= swoopBeforeDuration
     ) {
       const enemyPosition: EntityPosition = getEntityPosition(enemy.id);
       let position: EntityPosition | undefined;
       switch (enemy.facingDirection) {
         case XDirection.Left:
           position = {
-            x: enemyPosition.x - punchHitboxWidth,
+            x: enemyPosition.x - swoopHitboxWidth,
             y: enemyPosition.y,
           };
           break;
@@ -41,12 +41,12 @@ export const executeEnemiesPunches = (): void => {
           };
           break;
       }
-      enemy.punch.wasExecuted = true;
+      enemy.swoop.wasExecuted = true;
       const collisionData: CollisionData = getRectangleCollisionData({
         entityTypes: ["player"],
         rectangle: {
           height: entityHitboxHeight,
-          width: punchHitboxWidth,
+          width: swoopHitboxWidth,
           x: position.x,
           y: position.y,
         },
@@ -55,7 +55,7 @@ export const executeEnemiesPunches = (): void => {
         switch (entityCollidable.type) {
           case "player":
             enemy.hasAttacked = true;
-            damagePlayer(enemyPunchDamage, playerPunchedStunDuration);
+            damagePlayer(enemySwoopDamage, playerSwoopedStunDuration);
             break;
         }
       }
