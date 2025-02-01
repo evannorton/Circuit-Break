@@ -17,7 +17,6 @@ export const run = (): void => {
   createUI();
   goToLevel(levelID);
   createCollisionBoundaries();
-  applyAudioSourceVolume("music/chill", { volume: 0 });
   playAudioSource("music/main", {
     loopPoint: 70730,
     volumeChannelID: musicVolumeChannelID,
@@ -26,6 +25,7 @@ export const run = (): void => {
     loopPoint: 70730,
     volumeChannelID: musicVolumeChannelID,
   });
+  applyAudioSourceVolume("music/chill", { volume: 0 });
   state.setValues({
     titleStartedAt: getCurrentTime(),
   });
