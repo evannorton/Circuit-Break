@@ -42,6 +42,7 @@ export const executeEnemiesKicks = (): void => {
           break;
       }
       enemy.kick.wasExecuted = true;
+      enemy.hasAttacked = true;
       const collisionData: CollisionData = getRectangleCollisionData({
         entityTypes: ["player"],
         rectangle: {
@@ -54,7 +55,6 @@ export const executeEnemiesKicks = (): void => {
       for (const entityCollidable of collisionData.entityCollidables) {
         switch (entityCollidable.type) {
           case "player":
-            enemy.hasAttacked = true;
             damagePlayer(enemyKickDamage, playerKickedStunDuration);
             break;
         }

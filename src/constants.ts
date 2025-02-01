@@ -1,7 +1,7 @@
 import { PowerLevel } from "./types/PowerLevel";
 
 export const titleFadeDuration: number = 1500;
-export const renderHitboxes: boolean = true;
+export const renderHitboxes: boolean = false;
 export const playerMovementXSpeed: number = 80;
 export const playerMovementYSpeed: number = (playerMovementXSpeed * 2) / 3;
 export const baseEnemyMovementXSpeed: number = 40;
@@ -26,7 +26,7 @@ export const jumpDuration: number = 500;
 export const landDuration: number = 167;
 export const punchBeforeDuration: number = 83;
 export const kickBeforeDuration: number = 167;
-export const swoopBeforeDuration: number = 100;
+export const swoopBeforeDuration: number = 200;
 export const highKickBeforeDuration: number = 200;
 export const swoopAfterDuration: number = 150;
 export const punchAfterDuration: number = 167;
@@ -44,7 +44,7 @@ export const swoopHitboxWidth: number = 15;
 export const entityHitboxHeight: number = 5;
 export const playerDamageDuration: number = 50;
 export const enemyDamageDuration: number = 50;
-export const playerSwoopedStunDuration: number = 200;
+export const playerSwoopedStunDuration: number = 100;
 export const playerPunchedStunDuration: number = 250;
 export const playerKickedStunDuration: number = 333;
 export const enemyPunchedStunDuration: number = 500;
@@ -90,3 +90,4 @@ export const powerLevels: PowerLevel[] = [
     unlockName: "High Kick",
   },
 ];
+export const flyingEnemiesStartAt: number = 20000;

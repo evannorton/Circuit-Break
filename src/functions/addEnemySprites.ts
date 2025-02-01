@@ -13,6 +13,8 @@ import {
   kickBeforeDuration,
   punchAfterDuration,
   punchBeforeDuration,
+  swoopAfterDuration,
+  swoopBeforeDuration,
 } from "../constants";
 import { getDefinable } from "definables";
 import { isEnemyKicking } from "./isEnemyKicking";
@@ -687,6 +689,56 @@ export const addEnemySprites = (enemyID: string): void => {
       addEntitySprite(enemyID, {
         spriteID: createSprite({
           animationID: (): string => {
+            if (
+              enemy.hasSwoop() &&
+              getCurrentTime() - enemy.swoop.createdAt >= swoopBeforeDuration &&
+              getCurrentTime() - enemy.swoop.createdAt <
+                swoopBeforeDuration + swoopAfterDuration
+            ) {
+              return "swoop";
+            }
+            return "default";
+          },
+          animations: [
+            {
+              frames: [
+                {
+                  height: baseEnemySpriteHeight,
+                  sourceHeight: baseEnemySpriteHeight,
+                  sourceWidth: baseEnemySpriteWidth,
+                  sourceX: baseEnemySpriteWidth * 3,
+                  sourceY: 0,
+                  width: baseEnemySpriteWidth,
+                },
+              ],
+              id: "default",
+            },
+            {
+              frames: [
+                {
+                  height: baseEnemySpriteHeight,
+                  sourceHeight: baseEnemySpriteHeight,
+                  sourceWidth: baseEnemySpriteWidth,
+                  sourceX: baseEnemySpriteWidth * 2,
+                  sourceY: 0,
+                  width: baseEnemySpriteWidth,
+                },
+              ],
+              id: "swoop",
+            },
+          ],
+          imagePath: "shadow",
+        }),
+        x: -18,
+        y: (): number => {
+          const flyingOffset: number =
+            -flyingEnemySpriteHeight - entityHitboxHeight - 24;
+          return flyingOffset;
+        },
+      });
+      addEntitySprite(enemyID, {
+        spriteID: createSprite({
+          animationID: (): string => {
             switch (enemy.facingDirection) {
               case XDirection.Left:
                 return "left";
@@ -727,6 +779,21 @@ export const addEnemySprites = (enemyID: string): void => {
         y: (): number => {
           const flyingOffset: number =
             -flyingEnemySpriteHeight - entityHitboxHeight - 24;
+          if (
+            enemy.hasSwoop() &&
+            getCurrentTime() - enemy.swoop.createdAt >= swoopBeforeDuration &&
+            getCurrentTime() - enemy.swoop.createdAt <
+              swoopBeforeDuration + swoopAfterDuration
+          ) {
+            const x: number =
+              (getCurrentTime() -
+                (enemy.swoop.createdAt + swoopBeforeDuration)) /
+              (swoopAfterDuration / 2);
+            const swoopHeight: number = 18;
+            return (
+              flyingOffset + Math.floor(swoopHeight * (1 - Math.pow(x - 1, 2)))
+            );
+          }
           return flyingOffset;
         },
       });

@@ -43,8 +43,8 @@ export const doEnemiesBehavior = (): void => {
       const xVelocity: number | undefined =
         enemy.type === EnemyType.Flying && enemy.hasAttacked
           ? enemy.spawnDirection === XDirection.Left
-            ? -(enemyMovementXSpeed * 4)
-            : enemyMovementXSpeed * 4
+            ? -(enemyMovementXSpeed * 3)
+            : enemyMovementXSpeed * 3
           : isEnemyPunching(enemy.id) ||
               isEnemyKicking(enemy.id) ||
               isEnemyStunned(enemy.id)

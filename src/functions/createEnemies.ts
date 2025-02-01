@@ -1,7 +1,11 @@
 import { Enemy, EnemyType } from "../classes/Enemy";
 import { EntityPosition, getCurrentTime, getGameWidth } from "pixel-pigeon";
 import { XDirection } from "../types/Direction";
-import { baseEnemyHitboxWidth, enemySpawnTime } from "../constants";
+import {
+  baseEnemyHitboxWidth,
+  enemySpawnTime,
+  flyingEnemiesStartAt,
+} from "../constants";
 import { state } from "../state";
 
 export const createEnemies = (): void => {
@@ -40,7 +44,7 @@ export const createEnemies = (): void => {
           : XDirection.Left,
       type: EnemyType.Base,
     });
-    if (currentTime - state.values.gameStartedAt > 20000) {
+    if (currentTime - state.values.gameStartedAt > flyingEnemiesStartAt) {
       new Enemy({
         position: oppositePosition,
         spawnDirection:
