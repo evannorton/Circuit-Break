@@ -7,7 +7,7 @@ import {
   setEntityZIndex,
 } from "pixel-pigeon";
 import { createDestructible } from "./functions/createDestructible";
-import { createEnemy } from "./functions/createEnemy";
+import { createEnemies } from "./functions/createEnemies";
 import { doEnemiesBehavior } from "./functions/doEnemiesBehavior";
 import { executeEnemiesKicks } from "./functions/executeEnemiesKicks";
 import { executeEnemiesPunches } from "./functions/executeEnemiesPunches";
@@ -30,11 +30,14 @@ import { state } from "./state";
 export const tick = (): void => {
   const currentTime: number = getCurrentTime();
   if (isGameOngoing()) {
+    if (state.values.gameStartedAt === null) {
+      throw new Error("Game started at is null.");
+    }
     if (state.values.playerEntityID === null) {
       throw new Error("Player entity ID is null.");
     }
-    // Create enemy
-    createEnemy();
+    // Create enemies
+    createEnemies();
     // Create destructible if we don't already have one
     if (state.values.destructible === null) {
       createDestructible();
