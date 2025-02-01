@@ -15,7 +15,7 @@ import { titleFadeDuration } from "../../constants";
 export const createTitleScreen = (): void => {
   const width: number = getGameWidth();
   const height: number = getGameHeight();
-  const nothingDuration: number = 1000;
+  const nothingDuration: number = 500;
   const logoDuration: number = 2000;
   const buttonSlideDuration: number = 500;
   const opacity = (): number => {
