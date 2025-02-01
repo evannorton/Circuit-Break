@@ -3,38 +3,28 @@ import {
   EntityPosition,
   createEntity,
   createQuadrilateral,
-  createSprite,
-  getCurrentTime,
   removeEntity,
 } from "pixel-pigeon";
 import { Kick } from "../types/Kick";
-import { Punch, PunchHand } from "../types/Punch";
+import { Punch } from "../types/Punch";
 import { XDirection, YDirection } from "../types/Direction";
+import { addEnemySprites } from "../functions/addEnemySprites";
 import {
-  enemyHitboxWidth,
-  enemySpriteHeight,
-  enemySpriteWidth,
+  baseEnemyHitboxWidth,
   entityHitboxHeight,
-  jumpDuration,
-  kickAfterDuration,
-  kickBeforeDuration,
   levelID,
-  punchAfterDuration,
-  punchBeforeDuration,
   renderHitboxes,
 } from "../constants";
-import { isEnemyKicking } from "../functions/isEnemyKicking";
-import { isEnemyMoving } from "../functions/isEnemyMoving";
-import { isEnemyPunching } from "../functions/isEnemyPunching";
-import { isEnemyStunned } from "../functions/isEnemyStunned";
-import { isEnemyTakingKnockback } from "../functions/isEnemyTakingKnockback";
 
-interface EnemyOptions {
-  position: EntityPosition;
+export enum EnemyType {
+  Base = "base",
+  Flying = "flying",
 }
-
+export interface EnemyOptions {
+  position: EntityPosition;
+  type: EnemyType;
+}
 export class Enemy extends Definable {
-  private readonly _entityID: string;
   private _hp: number = 6;
   private _facingDirection: XDirection = XDirection.Left;
   private _kick: Kick | null = null;
@@ -45,6 +35,7 @@ export class Enemy extends Definable {
   private _punch: Punch | null = null;
   private _stunDuration: number | null = null;
   private _tookDamageAt: number | null = null;
+  private readonly _type: EnemyType;
   public constructor(options: EnemyOptions) {
     const entityID: string = createEntity({
       collidableEntityTypes: ["boundary", "destructible", "player", "enemy"],
@@ -58,14 +49,14 @@ export class Enemy extends Definable {
               quadrilateralID: createQuadrilateral({
                 color: "#e03c28",
                 height: 1,
-                width: enemyHitboxWidth,
+                width: baseEnemyHitboxWidth,
               }),
             },
             {
               quadrilateralID: createQuadrilateral({
                 color: "#e03c28",
                 height: 1,
-                width: enemyHitboxWidth,
+                width: baseEnemyHitboxWidth,
               }),
               y: entityHitboxHeight - 1,
             },
@@ -82,674 +73,16 @@ export class Enemy extends Definable {
                 height: entityHitboxHeight,
                 width: 1,
               }),
-              x: enemyHitboxWidth - 1,
+              x: baseEnemyHitboxWidth - 1,
             },
           ]
         : undefined,
-      sprites: [
-        {
-          spriteID: createSprite({
-            animationID: "default",
-            animations: [
-              {
-                frames: [
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: 0,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "default",
-              },
-              {
-                frames: [
-                  {
-                    duration: jumpDuration / 5,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth,
-                    sourceY: 0,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: jumpDuration / 5,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 2,
-                    sourceY: 0,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: jumpDuration / 5,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 3,
-                    sourceY: 0,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: jumpDuration / 5,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 2,
-                    sourceY: 0,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth,
-                    sourceY: 0,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "jump",
-              },
-            ],
-            imagePath: "shadow",
-          }),
-          x: (): number => {
-            switch (this._facingDirection) {
-              case XDirection.Left:
-                return -18;
-              case XDirection.Right:
-                return -17;
-            }
-          },
-          y: -enemySpriteHeight + entityHitboxHeight + 7,
-        },
-        {
-          spriteID: createSprite({
-            animationID: (): string => {
-              switch (this._facingDirection) {
-                case XDirection.Left:
-                  if (isEnemyPunching(this._id)) {
-                    if (
-                      getCurrentTime() - this.punch.createdAt <
-                      punchBeforeDuration
-                    ) {
-                      return "charge-punch-left";
-                    }
-                    if (this.punch.hand === PunchHand.Left) {
-                      return "punch-left-left";
-                    }
-                    return "punch-left-right";
-                  }
-                  if (isEnemyKicking(this._id)) {
-                    if (
-                      getCurrentTime() - this.kick.createdAt <
-                      kickBeforeDuration
-                    ) {
-                      return "charge-kick-left";
-                    }
-                    return "kick-left";
-                  }
-                  if (
-                    isEnemyTakingKnockback(this._id) ||
-                    isEnemyStunned(this._id)
-                  ) {
-                    return "stunned-left";
-                  }
-                  if (isEnemyMoving(this._id)) {
-                    return "walk-left";
-                  }
-                  return "idle-left";
-                case XDirection.Right:
-                  if (isEnemyPunching(this._id)) {
-                    if (
-                      getCurrentTime() - this.punch.createdAt <
-                      punchBeforeDuration
-                    ) {
-                      return "charge-punch-right";
-                    }
-                    if (this.punch.hand === PunchHand.Left) {
-                      return "punch-right-left";
-                    }
-                    return "punch-right-right";
-                  }
-                  if (isEnemyKicking(this._id)) {
-                    if (
-                      getCurrentTime() - this.kick.createdAt <
-                      kickBeforeDuration
-                    ) {
-                      return "charge-kick-right";
-                    }
-                    return "kick-right";
-                  }
-                  if (
-                    isEnemyTakingKnockback(this._id) ||
-                    isEnemyStunned(this._id)
-                  ) {
-                    return "stunned-right";
-                  }
-                  if (isEnemyMoving(this._id)) {
-                    return "walk-right";
-                  }
-                  return "idle-right";
-              }
-            },
-            animations: [
-              {
-                frames: [
-                  {
-                    duration: 200,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: enemySpriteHeight * 17,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth,
-                    sourceY: enemySpriteHeight * 17,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 200,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 2,
-                    sourceY: enemySpriteHeight * 17,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 3,
-                    sourceY: enemySpriteHeight * 17,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "idle-left",
-              },
-              {
-                frames: [
-                  {
-                    duration: 200,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: 0,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth,
-                    sourceY: 0,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 200,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 2,
-                    sourceY: 0,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 2,
-                    sourceY: 0,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "idle-right",
-              },
-              {
-                frames: [
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: enemySpriteHeight * 19,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth,
-                    sourceY: enemySpriteHeight * 19,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 2,
-                    sourceY: enemySpriteHeight * 19,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 3,
-                    sourceY: enemySpriteHeight * 19,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 4,
-                    sourceY: enemySpriteHeight * 19,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 5,
-                    sourceY: enemySpriteHeight * 19,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "walk-left",
-              },
-              {
-                frames: [
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: enemySpriteHeight * 2,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth,
-                    sourceY: enemySpriteHeight * 2,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 2,
-                    sourceY: enemySpriteHeight * 2,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 3,
-                    sourceY: enemySpriteHeight * 2,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 4,
-                    sourceY: enemySpriteHeight * 2,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: 100,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 5,
-                    sourceY: enemySpriteHeight * 2,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "walk-right",
-              },
-              {
-                frames: [
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: enemySpriteHeight * 29,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "jump-left",
-              },
-              {
-                frames: [
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: enemySpriteHeight * 12,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "jump-right",
-              },
-              {
-                frames: [
-                  {
-                    duration: punchAfterDuration / 3,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: enemySpriteHeight * 21,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: punchAfterDuration / 3,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth,
-                    sourceY: enemySpriteHeight * 21,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 2,
-                    sourceY: enemySpriteHeight * 21,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "punch-left-right",
-              },
-              {
-                frames: [
-                  {
-                    duration: punchAfterDuration / 3,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: enemySpriteHeight * 22,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: punchAfterDuration / 3,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth,
-                    sourceY: enemySpriteHeight * 22,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 2,
-                    sourceY: enemySpriteHeight * 22,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "punch-left-left",
-              },
-              {
-                frames: [
-                  {
-                    duration: punchAfterDuration / 3,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: enemySpriteHeight * 5,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: punchAfterDuration / 3,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth,
-                    sourceY: enemySpriteHeight * 5,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 2,
-                    sourceY: enemySpriteHeight * 5,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "punch-right-right",
-              },
-              {
-                frames: [
-                  {
-                    duration: punchAfterDuration / 3,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: enemySpriteHeight * 4,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: punchAfterDuration / 3,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth,
-                    sourceY: enemySpriteHeight * 4,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 2,
-                    sourceY: enemySpriteHeight * 4,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "punch-right-left",
-              },
-              {
-                frames: [
-                  {
-                    duration: kickAfterDuration / 3,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: enemySpriteHeight * 24,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: kickAfterDuration / 3,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth,
-                    sourceY: enemySpriteHeight * 24,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 2,
-                    sourceY: enemySpriteHeight * 24,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "kick-left",
-              },
-              {
-                frames: [
-                  {
-                    duration: kickAfterDuration / 3,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: enemySpriteHeight * 7,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    duration: kickAfterDuration / 3,
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth,
-                    sourceY: enemySpriteHeight * 7,
-                    width: enemySpriteWidth,
-                  },
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth * 2,
-                    sourceY: enemySpriteHeight * 7,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "kick-right",
-              },
-              {
-                frames: [
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: enemySpriteHeight * 23,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "charge-punch-left",
-              },
-              {
-                frames: [
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: enemySpriteHeight * 6,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "charge-punch-right",
-              },
-              {
-                frames: [
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: enemySpriteHeight * 23,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "charge-kick-left",
-              },
-              {
-                frames: [
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: 0,
-                    sourceY: enemySpriteHeight * 6,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "charge-kick-right",
-              },
-              {
-                frames: [
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth,
-                    sourceY: enemySpriteHeight * 33,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "stunned-left",
-              },
-              {
-                frames: [
-                  {
-                    height: enemySpriteHeight,
-                    sourceHeight: enemySpriteHeight,
-                    sourceWidth: enemySpriteWidth,
-                    sourceX: enemySpriteWidth,
-                    sourceY: enemySpriteHeight * 16,
-                    width: enemySpriteWidth,
-                  },
-                ],
-                id: "stunned-right",
-              },
-            ],
-            imagePath: "enemy",
-          }),
-          x: (): number => {
-            switch (this._facingDirection) {
-              case XDirection.Left:
-                return -34;
-              case XDirection.Right:
-                return -17;
-            }
-          },
-          y: (): number => {
-            const baseOffset: number =
-              -enemySpriteHeight + entityHitboxHeight + 7;
-            return baseOffset;
-          },
-        },
-      ],
       type: "enemy",
-      width: enemyHitboxWidth,
+      width: baseEnemyHitboxWidth,
     });
     super(entityID);
-    this._entityID = entityID;
+    this._type = options.type;
+    addEnemySprites(this._id);
   }
 
   public get facingDirection(): XDirection {
@@ -816,6 +149,10 @@ export class Enemy extends Definable {
     throw new Error(this.getAccessorErrorMessage("tookDamageAt"));
   }
 
+  public get type(): EnemyType {
+    return this._type;
+  }
+
   public set facingDirection(facingDirection: XDirection) {
     this._facingDirection = facingDirection;
   }
@@ -878,6 +215,6 @@ export class Enemy extends Definable {
 
   public remove(): void {
     super.remove();
-    removeEntity(this._entityID);
+    removeEntity(this._id);
   }
 }

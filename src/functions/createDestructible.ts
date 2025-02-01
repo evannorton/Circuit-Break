@@ -11,13 +11,13 @@ import {
 import { Enemy } from "../classes/Enemy";
 import { XDirection } from "../types/Direction";
 import {
+  baseEnemyHitboxWidth,
   destructibleHitboxWidth,
   destructibleIdleFrameDuration,
   destructibleRisingFrameDuration,
   destructibleRisingFrames,
   destructibleSpriteHeight,
   destructibleSpriteWidth,
-  enemyHitboxWidth,
   entityHitboxHeight,
   levelID,
   maxY,
@@ -54,7 +54,7 @@ const getDestructibleX = (attempt: number): number | null => {
     const enemyPosition: EntityPosition = getEntityPosition(enemy.id);
     unsafeXs.push([
       enemyPosition.x - destructibleHitboxWidth,
-      enemyPosition.x + enemyHitboxWidth,
+      enemyPosition.x + baseEnemyHitboxWidth,
     ]);
   }
   if (

@@ -15,6 +15,8 @@ import { titleFadeDuration } from "../../constants";
 export const createTitleScreen = (): void => {
   const width: number = getGameWidth();
   const height: number = getGameHeight();
+  const nothingDuration: number = 1000;
+  const logoDuration: number = 2000;
   const buttonSlideDuration: number = 500;
   const opacity = (): number => {
     if (state.values.titleAdvancedAt === null) {
@@ -141,7 +143,7 @@ export const createTitleScreen = (): void => {
         }
         const time: number =
           getCurrentTime() -
-          (state.values.titleStartedAt + buttonSlideDuration);
+          (state.values.titleStartedAt + buttonSlideDuration + logoDuration);
         const percent: number = Math.min(time / characterSlideDuration, 1);
         let total: number = Math.floor(percent * width) + 20;
         if (total > width + 10) {
@@ -202,7 +204,8 @@ export const createTitleScreen = (): void => {
             "An attempt was made to render the title screen logo without a start time",
           );
         }
-        const time: number = getCurrentTime() - state.values.titleStartedAt;
+        const time: number =
+          getCurrentTime() - (state.values.titleStartedAt + nothingDuration);
         const percent: number = Math.min(time / logoSlideDuration, 1);
         let total: number = Math.floor(percent * height) + 20;
         if (total > height + 10) {
@@ -247,7 +250,9 @@ export const createTitleScreen = (): void => {
           getCurrentTime() -
           (state.values.titleStartedAt +
             characterSlideDuration +
-            logoSlideDuration);
+            logoSlideDuration +
+            logoDuration +
+            nothingDuration);
         const finalX: number = 117;
         const bounceX: number = 10;
         const percent: number = Math.min(time / buttonSlideDuration, 1);
@@ -276,7 +281,11 @@ export const createTitleScreen = (): void => {
         return (
           state.values.gameStartedAt === null &&
           getCurrentTime() - state.values.titleStartedAt >=
-            buttonSlideDuration + characterSlideDuration + logoSlideDuration &&
+            buttonSlideDuration +
+              characterSlideDuration +
+              logoSlideDuration +
+              logoDuration +
+              nothingDuration &&
           state.values.titleAdvancedAt === null
         );
       },

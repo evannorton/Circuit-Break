@@ -7,15 +7,15 @@ import {
 } from "pixel-pigeon";
 import { Enemy } from "../classes/Enemy";
 import { XDirection } from "../types/Direction";
-import { damagePlayer } from "./damagePlayer";
 import {
-  enemyHitboxWidth,
+  baseEnemyHitboxWidth,
   enemyKickDamage,
   entityHitboxHeight,
   kickBeforeDuration,
   kickHitboxWidth,
   playerKickedStunDuration,
 } from "../constants";
+import { damagePlayer } from "./damagePlayer";
 import { getDefinables } from "definables";
 
 export const executeEnemiesKicks = (): void => {
@@ -36,7 +36,7 @@ export const executeEnemiesKicks = (): void => {
           break;
         case XDirection.Right:
           position = {
-            x: enemyPosition.x + enemyHitboxWidth,
+            x: enemyPosition.x + baseEnemyHitboxWidth,
             y: enemyPosition.y,
           };
           break;

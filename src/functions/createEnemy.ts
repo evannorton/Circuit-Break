@@ -1,7 +1,7 @@
-import { Enemy } from "../classes/Enemy";
+import { Enemy, EnemyType } from "../classes/Enemy";
 import { EntityPosition, getCurrentTime, getGameWidth } from "pixel-pigeon";
 import { XDirection } from "../types/Direction";
-import { enemyHitboxWidth, enemySpawnTime } from "../constants";
+import { baseEnemyHitboxWidth, enemySpawnTime } from "../constants";
 import { state } from "../state";
 
 export const createEnemy = (): void => {
@@ -14,7 +14,7 @@ export const createEnemy = (): void => {
     const offset: number = 32;
     const x: number =
       state.values.lastEnemyDirection === XDirection.Left
-        ? -enemyHitboxWidth - offset
+        ? -baseEnemyHitboxWidth - offset
         : getGameWidth() + offset;
     const y: number = 100;
     const position: EntityPosition = {
@@ -23,6 +23,7 @@ export const createEnemy = (): void => {
     };
     new Enemy({
       position,
+      type: EnemyType.Base,
     });
     state.setValues({
       lastEnemyDirection:
