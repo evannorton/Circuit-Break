@@ -15,6 +15,7 @@ import { titleFadeDuration } from "../../constants";
 export const createTitleScreen = (): void => {
   const width: number = getGameWidth();
   const height: number = getGameHeight();
+  const buttonSlideDuration: number = 500;
   const opacity = (): number => {
     if (state.values.titleAdvancedAt === null) {
       return 1;
@@ -138,7 +139,9 @@ export const createTitleScreen = (): void => {
           }
           return offset[0];
         }
-        const time: number = getCurrentTime() - state.values.titleStartedAt;
+        const time: number =
+          getCurrentTime() -
+          (state.values.titleStartedAt + buttonSlideDuration);
         const percent: number = Math.min(time / characterSlideDuration, 1);
         let total: number = Math.floor(percent * width) + 20;
         if (total > width + 10) {
@@ -171,10 +174,50 @@ export const createTitleScreen = (): void => {
     imagePath: "title/character",
     opacity,
   });
+  // Logo
+  const logoSlideDuration: number = 500;
+  createSprite({
+    animationID: "default",
+    animations: [
+      {
+        frames: [
+          {
+            height,
+            sourceHeight: height,
+            sourceWidth: width,
+            sourceX: 0,
+            sourceY: 0,
+            width,
+          },
+        ],
+        id: "default",
+      },
+    ],
+    coordinates: {
+      condition: (): boolean => state.values.gameStartedAt === null,
+      x: 0,
+      y: (): number => {
+        if (state.values.titleStartedAt === null) {
+          throw new Error(
+            "An attempt was made to render the title screen logo without a start time",
+          );
+        }
+        const time: number = getCurrentTime() - state.values.titleStartedAt;
+        const percent: number = Math.min(time / logoSlideDuration, 1);
+        let total: number = Math.floor(percent * height) + 20;
+        if (total > height + 10) {
+          const diff: number = total - (height + 10);
+          total -= diff * 2;
+        }
+        return height - total;
+      },
+    },
+    imagePath: "title/logo",
+    opacity,
+  });
   // Button
   const buttonWidth: number = 90;
   const buttonHeight: number = 41;
-  const buttonSlideDuration: number = 500;
   createSprite({
     animationID: "default",
     animations: [
@@ -202,7 +245,9 @@ export const createTitleScreen = (): void => {
         }
         const time: number =
           getCurrentTime() -
-          (state.values.titleStartedAt + characterSlideDuration);
+          (state.values.titleStartedAt +
+            characterSlideDuration +
+            logoSlideDuration);
         const finalX: number = 117;
         const bounceX: number = 10;
         const percent: number = Math.min(time / buttonSlideDuration, 1);
@@ -231,7 +276,7 @@ export const createTitleScreen = (): void => {
         return (
           state.values.gameStartedAt === null &&
           getCurrentTime() - state.values.titleStartedAt >=
-            buttonSlideDuration + characterSlideDuration &&
+            buttonSlideDuration + characterSlideDuration + logoSlideDuration &&
           state.values.titleAdvancedAt === null
         );
       },
