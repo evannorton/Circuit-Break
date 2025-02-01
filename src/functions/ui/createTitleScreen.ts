@@ -79,7 +79,7 @@ export const createTitleScreen = (): void => {
     }
   }
   // Character
-  const characterSlideDuration: number = 1000;
+  const characterSlideDuration: number = 500;
   const characterFrameCount: number = 8;
   const characterBreakDuration: number = 3500;
   const characterFrames: CreateSpriteOptionsAnimationFrame[] = [];
@@ -140,7 +140,12 @@ export const createTitleScreen = (): void => {
         }
         const time: number = getCurrentTime() - state.values.titleStartedAt;
         const percent: number = Math.min(time / characterSlideDuration, 1);
-        return Math.floor(getGameWidth() - percent * getGameWidth());
+        let total: number = Math.floor(percent * width) + 20;
+        if (total > width + 10) {
+          const diff: number = total - (width + 10);
+          total -= diff * 2;
+        }
+        return width - total;
       },
       y: (): number => {
         if (state.values.titleAdvancedAt !== null) {
@@ -169,7 +174,7 @@ export const createTitleScreen = (): void => {
   // Button
   const buttonWidth: number = 90;
   const buttonHeight: number = 41;
-  const buttonSlideDuration: number = 750;
+  const buttonSlideDuration: number = 500;
   createSprite({
     animationID: "default",
     animations: [
