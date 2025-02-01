@@ -19,11 +19,11 @@ export const run = (): void => {
   createCollisionBoundaries();
   applyAudioSourceVolume("music/chill", { volume: 0 });
   playAudioSource("music/main", {
-    loopPoint: 70073,
+    loopPoint: 70730,
     volumeChannelID: musicVolumeChannelID,
   });
   playAudioSource("music/chill", {
-    loopPoint: 70073,
+    loopPoint: 70730,
     volumeChannelID: musicVolumeChannelID,
   });
   state.setValues({
