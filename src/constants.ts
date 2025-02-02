@@ -90,4 +90,4 @@ export const powerLevels: PowerLevel[] = [
     unlockName: "High Kick",
   },
 ];
-export const flyingEnemiesStartAt: number = 20000;
+export const flyingEnemiesStartAt: number = 30000;

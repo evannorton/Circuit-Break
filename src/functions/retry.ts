@@ -44,10 +44,10 @@ export const retry = (): void => {
     enemy.remove();
   }
   startGame();
+  applyAudioSourceVolume("music/main", { volume: 0.5 });
   fadeOutAudioSourceVolume("music/chill", {
     duration: 1000,
   });
-  applyAudioSourceVolume("music/main", { volume: 1 });
   fadeInAudioSourceVolume("music/main", {
     duration: 1000,
   });

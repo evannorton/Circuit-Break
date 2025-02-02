@@ -4,9 +4,11 @@ import {
   fadeOutAudioSourceVolume,
   getCurrentTime,
   moveEntity,
+  playAudioSource,
 } from "pixel-pigeon";
 import { isPlayerStunned } from "./isPlayerStunned";
 import { isPlayerTakingDamage } from "./isPlayerTakingDamage";
+import { sfxVolumeChannelID } from "../volumeChannels";
 import { state } from "../state";
 
 export const damagePlayer = (damage: number, stunDuration: number): void => {
@@ -35,7 +37,7 @@ export const damagePlayer = (damage: number, stunDuration: number): void => {
       fadeOutAudioSourceVolume("music/main", {
         duration: 1000,
       });
-      applyAudioSourceVolume("music/chill", { volume: 1 });
+      applyAudioSourceVolume("music/chill", { volume: 0.5 });
       fadeInAudioSourceVolume("music/chill", {
         duration: 1000,
       });

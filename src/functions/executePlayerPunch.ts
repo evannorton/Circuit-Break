@@ -4,7 +4,9 @@ import {
   getCurrentTime,
   getEntityPosition,
   getRectangleCollisionData,
+  playAudioSource,
 } from "pixel-pigeon";
+import { PunchHand } from "../types/Punch";
 import { XDirection } from "../types/Direction";
 import { damageDestructible } from "./damageDestructible";
 import { damageEnemy } from "./damageEnemy";
@@ -20,6 +22,7 @@ import {
   punchHitboxWidth,
 } from "../constants";
 import { isPlayerJumping } from "./isPlayerJumping";
+import { sfxVolumeChannelID } from "../volumeChannels";
 import { state } from "../state";
 
 export const executePlayerPunch = (): void => {
@@ -55,6 +58,14 @@ export const executePlayerPunch = (): void => {
         break;
     }
     state.values.playerPunch.wasExecuted = true;
+    playAudioSource(
+      state.values.playerPunch.hand === PunchHand.Left
+        ? "sfx/punch-1"
+        : "sfx/punch-2",
+      {
+        volumeChannelID: sfxVolumeChannelID,
+      },
+    );
     const collisionData: CollisionData = getRectangleCollisionData({
       entityTypes: ["destructible", "enemy-base", "enemy-flying"],
       rectangle: {

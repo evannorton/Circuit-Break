@@ -4,6 +4,7 @@ import {
   getCurrentTime,
   getEntityPosition,
   getRectangleCollisionData,
+  playAudioSource,
 } from "pixel-pigeon";
 import { Enemy } from "../classes/Enemy";
 import { XDirection } from "../types/Direction";
@@ -17,6 +18,7 @@ import {
 } from "../constants";
 import { damagePlayer } from "./damagePlayer";
 import { getDefinables } from "definables";
+import { sfxVolumeChannelID } from "../volumeChannels";
 
 export const executeEnemiesKicks = (): void => {
   for (const enemy of getDefinables(Enemy).values()) {
@@ -41,6 +43,9 @@ export const executeEnemiesKicks = (): void => {
           };
           break;
       }
+      playAudioSource("sfx/kick", {
+        volumeChannelID: sfxVolumeChannelID,
+      });
       enemy.kick.wasExecuted = true;
       enemy.hasAttacked = true;
       const collisionData: CollisionData = getRectangleCollisionData({

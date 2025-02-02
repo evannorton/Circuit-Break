@@ -4,8 +4,10 @@ import {
   getCurrentTime,
   getEntityPosition,
   getRectangleCollisionData,
+  playAudioSource,
 } from "pixel-pigeon";
 import { Enemy } from "../classes/Enemy";
+import { PunchHand } from "../types/Punch";
 import { XDirection } from "../types/Direction";
 import {
   baseEnemyHitboxWidth,
@@ -17,6 +19,7 @@ import {
 } from "../constants";
 import { damagePlayer } from "./damagePlayer";
 import { getDefinables } from "definables";
+import { sfxVolumeChannelID } from "../volumeChannels";
 
 export const executeEnemiesPunches = (): void => {
   for (const enemy of getDefinables(Enemy).values()) {
@@ -41,6 +44,14 @@ export const executeEnemiesPunches = (): void => {
           };
           break;
       }
+      playAudioSource(
+        enemy.hasPunch() && enemy.punch.hand === PunchHand.Left
+          ? "sfx/punch-1"
+          : "sfx/punch-2",
+        {
+          volumeChannelID: sfxVolumeChannelID,
+        },
+      );
       enemy.punch.wasExecuted = true;
       enemy.hasAttacked = true;
       const collisionData: CollisionData = getRectangleCollisionData({
