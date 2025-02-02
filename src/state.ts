@@ -10,6 +10,7 @@ interface StateSchema {
   defeatAdvancedAt: number | null;
   destructible: Destructible | null;
   facingDirection: XDirection;
+  enemiesStartedAt: number | null;
   gameEndedAt: number | null;
   gameStartedAt: number | null;
   jumpedAt: number | null;
@@ -33,6 +34,7 @@ interface StateSchema {
 export const state: State<StateSchema> = new State<StateSchema>({
   defeatAdvancedAt: null,
   destructible: null,
+  enemiesStartedAt: null,
   facingDirection: XDirection.Right,
   gameEndedAt: null,
   gameStartedAt: null,

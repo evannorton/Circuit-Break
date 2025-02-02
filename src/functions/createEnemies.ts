@@ -11,7 +11,7 @@ import { state } from "../state";
 export const createEnemies = (): void => {
   const currentTime: number = getCurrentTime();
   if (
-    state.values.power > 0 &&
+    state.values.enemiesStartedAt !== null &&
     (state.values.spawnedEnemyAt === null ||
       currentTime - state.values.spawnedEnemyAt >= enemySpawnTime)
   ) {
@@ -44,7 +44,7 @@ export const createEnemies = (): void => {
           : XDirection.Left,
       type: EnemyType.Base,
     });
-    if (currentTime - state.values.gameStartedAt > flyingEnemiesStartAt) {
+    if (currentTime - state.values.enemiesStartedAt > flyingEnemiesStartAt) {
       new Enemy({
         position: oppositePosition,
         spawnDirection:

@@ -32,6 +32,11 @@ export const damageDestructible = (
         playerHP: Math.min(state.values.playerHP + 1, playerMaxHP),
         power: state.values.power + 1,
       });
+      if (state.values.enemiesStartedAt === null) {
+        state.setValues({
+          enemiesStartedAt: currentTime,
+        });
+      }
       const newPowerLevelIndex: number | null = getPowerLevelIndex();
       if (newPowerLevelIndex !== powerLevelIndex) {
         state.setValues({

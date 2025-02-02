@@ -23,6 +23,7 @@ export const retry = (): void => {
   state.setValues({
     defeatAdvancedAt: null,
     destructible: null,
+    enemiesStartedAt: null,
     facingDirection: XDirection.Right,
     gameEndedAt: null,
     jumpedAt: null,
