@@ -76,18 +76,8 @@ export const powerLevels: PowerLevel[] = [
   },
   {
     amount: 5,
-    unlockImagePath: "unlocks/high-kick",
-    unlockName: "High Kick",
-  },
-  {
-    amount: 10,
-    unlockImagePath: "unlocks/high-kick",
-    unlockName: "High Kick",
-  },
-  {
-    amount: 20,
-    unlockImagePath: "unlocks/high-kick",
-    unlockName: "High Kick",
+    unlockImagePath: "unlocks/x-wave",
+    unlockName: "X-Wave",
   },
 ];
 export const flyingEnemiesStartAt: number = 30000;

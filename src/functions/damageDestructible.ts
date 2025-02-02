@@ -1,5 +1,5 @@
 import { getCurrentTime, removeEntity } from "pixel-pigeon";
-import { getPowerLevelIndex } from "./getPowerLevel";
+import { getPowerLevelIndex } from "./getPowerLevelIndex";
 import { isDestructibleRising } from "./isDestructibleRising";
 import { isDestructibleTakingDamage } from "./isDestructibleTakingDamage";
 import { playerMaxHP } from "../constants";

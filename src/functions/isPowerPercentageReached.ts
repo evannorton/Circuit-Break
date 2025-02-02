@@ -1,5 +1,5 @@
 import { PowerLevel } from "../types/PowerLevel";
-import { getPowerLevelIndex } from "./getPowerLevel";
+import { getPowerLevelIndex } from "./getPowerLevelIndex";
 import { powerLevels } from "../constants";
 import { state } from "../state";
 

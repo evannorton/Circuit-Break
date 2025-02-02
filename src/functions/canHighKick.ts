@@ -4,7 +4,7 @@ import {
   punchBeforeDuration,
 } from "../constants";
 import { getCurrentTime } from "pixel-pigeon";
-import { getPowerLevelIndex } from "./getPowerLevel";
+import { getPowerLevelIndex } from "./getPowerLevelIndex";
 import { state } from "../state";
 
 export const canHighKick = (): boolean => {

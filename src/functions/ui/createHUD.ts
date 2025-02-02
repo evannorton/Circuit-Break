@@ -7,7 +7,7 @@ import {
   getGameWidth,
 } from "pixel-pigeon";
 import { PowerLevel } from "../../types/PowerLevel";
-import { getPowerLevelIndex } from "../getPowerLevel";
+import { getPowerLevelIndex } from "../getPowerLevelIndex";
 import { heartsAmount, powerLevels } from "../../constants";
 import { isGameOngoing } from "../isGameOngoing";
 import { isPowerPercentageReached } from "../isPowerPercentageReached";
@@ -124,11 +124,12 @@ export const createHUD = (): void => {
       y: 1,
     },
     imagePath: (): string => {
-      const powerLevelIndex: number | null = getPowerLevelIndex();
+      let powerLevelIndex: number | null = getPowerLevelIndex();
       if (powerLevelIndex === null) {
-        throw new Error("No power level index found");
+        powerLevelIndex = powerLevels.length;
       }
-      const powerLevel: PowerLevel | undefined = powerLevels[powerLevelIndex];
+      const powerLevel: PowerLevel | undefined =
+        powerLevels[powerLevelIndex - 1];
       if (typeof powerLevel === "undefined") {
         throw new Error("No power level found");
       }
@@ -154,11 +155,12 @@ export const createHUD = (): void => {
     },
     horizontalAlignment: "center",
     text: (): CreateLabelOptionsText => {
-      const powerLevelIndex: number | null = getPowerLevelIndex();
+      let powerLevelIndex: number | null = getPowerLevelIndex();
       if (powerLevelIndex === null) {
-        throw new Error("No power level index found");
+        powerLevelIndex = powerLevels.length;
       }
-      const powerLevel: PowerLevel | undefined = powerLevels[powerLevelIndex];
+      const powerLevel: PowerLevel | undefined =
+        powerLevels[powerLevelIndex - 1];
       if (typeof powerLevel === "undefined") {
         throw new Error("No power level found");
       }
