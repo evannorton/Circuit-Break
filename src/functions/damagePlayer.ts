@@ -4,11 +4,9 @@ import {
   fadeOutAudioSourceVolume,
   getCurrentTime,
   moveEntity,
-  playAudioSource,
 } from "pixel-pigeon";
 import { isPlayerStunned } from "./isPlayerStunned";
 import { isPlayerTakingDamage } from "./isPlayerTakingDamage";
-import { sfxVolumeChannelID } from "../volumeChannels";
 import { state } from "../state";
 
 export const damagePlayer = (damage: number, stunDuration: number): void => {
