@@ -23,6 +23,7 @@ import { isPlayerKicking } from "./functions/isPlayerKicking";
 import { isPlayerLanding } from "./functions/isPlayerLanding";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
 import { isPlayerStunned } from "./functions/isPlayerStunned";
+import { landHadoukens } from "./functions/landHadoukens";
 import { levelID, titleFadeDuration } from "./constants";
 import { movePlayer } from "./functions/movePlayer";
 import { retry } from "./functions/retry";
@@ -75,6 +76,8 @@ export const tick = (): void => {
     executeEnemiesSwoops();
     // Enemies behavior
     doEnemiesBehavior();
+    // Land hadoukens
+    landHadoukens();
     // Y-sort characters
     [
       ...getEntityIDs({

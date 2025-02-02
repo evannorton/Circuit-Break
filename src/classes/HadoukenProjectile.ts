@@ -1,16 +1,22 @@
 import { Definable } from "definables";
 import {
+  EntityCollidable,
   EntityPosition,
+  OverlapData,
   createEntity,
   createQuadrilateral,
   createSprite,
   removeEntity,
 } from "pixel-pigeon";
 import { XDirection } from "../types/Direction";
+import { damageDestructible } from "../functions/damageDestructible";
+import { damageEnemy } from "../functions/damageEnemy";
 import {
+  enemyHadoukenedStunDuration,
   entityHitboxHeight,
   hadoukenHitboxWidth,
   levelID,
+  playerHadoukenDamage,
   renderHitboxes,
 } from "../constants";
 
@@ -24,6 +30,34 @@ export class HadoukenProjectile extends Definable {
       height: entityHitboxHeight,
       layerID: "Characters",
       levelID,
+      onOverlap: (overlapData: OverlapData): void => {
+        const hitEntityCollidable: EntityCollidable | undefined =
+          overlapData.entityCollidables.find(
+            (entityCollidable: EntityCollidable): boolean =>
+              entityCollidable.type === "enemy-base" ||
+              entityCollidable.type === "destructible",
+          );
+        if (typeof hitEntityCollidable !== "undefined") {
+          switch (hitEntityCollidable.type) {
+            case "destructible":
+              damageDestructible(
+                playerHadoukenDamage,
+                enemyHadoukenedStunDuration,
+              );
+              break;
+            case "enemy-base":
+              damageEnemy(
+                hitEntityCollidable.entityID,
+                playerHadoukenDamage,
+                enemyHadoukenedStunDuration,
+                true,
+                0,
+              );
+              break;
+          }
+          this.remove();
+        }
+      },
       position: options.position,
       quadrilaterals: renderHitboxes
         ? [
