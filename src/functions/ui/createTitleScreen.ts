@@ -7,7 +7,9 @@ import {
   getCurrentTime,
   getGameHeight,
   getGameWidth,
+  playAudioSource,
 } from "pixel-pigeon";
+import { sfxVolumeChannelID } from "../../volumeChannels";
 import { startInputCollectionID } from "../../input";
 import { state } from "../../state";
 import { titleFadeDuration } from "../../constants";
@@ -294,6 +296,9 @@ export const createTitleScreen = (): void => {
     },
     height: buttonHeight,
     onClick: (): void => {
+      playAudioSource("sfx/glass-break", {
+        volumeChannelID: sfxVolumeChannelID,
+      });
       state.setValues({
         titleAdvancedAt: getCurrentTime(),
       });
@@ -333,6 +338,9 @@ export const createTitleScreen = (): void => {
     condition: (): boolean => state.values.gameStartedAt === null,
     inputCollectionID: startInputCollectionID,
     onInput: (): void => {
+      playAudioSource("sfx/glass-break", {
+        volumeChannelID: sfxVolumeChannelID,
+      });
       state.setValues({
         titleAdvancedAt: getCurrentTime(),
       });
