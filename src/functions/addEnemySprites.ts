@@ -36,6 +36,19 @@ const getBaseEnemyImagePath = (): string => {
   }
   return "enemies/base-enemy-4";
 };
+const getFlyingEnemyImagePath = (): string => {
+  const randomNumber: number = Math.random() * 4;
+  if (randomNumber < 1) {
+    return "enemies/flying-enemy-1";
+  }
+  if (randomNumber < 2) {
+    return "enemies/flying-enemy-2";
+  }
+  if (randomNumber < 3) {
+    return "enemies/flying-enemy-3";
+  }
+  return "enemies/flying-enemy-4";
+};
 
 export const addEnemySprites = (enemyID: string): void => {
   const enemy: Enemy = getDefinable(Enemy, enemyID);
@@ -788,7 +801,7 @@ export const addEnemySprites = (enemyID: string): void => {
               id: "right",
             },
           ],
-          imagePath: "enemies/flying-enemy",
+          imagePath: getFlyingEnemyImagePath(),
         }),
         y: (): number => {
           const flyingOffset: number =
