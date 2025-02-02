@@ -25,12 +25,14 @@ export const flyingEnemyHitboxWidth: number = 27;
 export const jumpDuration: number = 500;
 export const landDuration: number = 167;
 export const punchBeforeDuration: number = 83;
+export const hadoukenBeforeDuration: number = 250;
 export const kickBeforeDuration: number = 167;
 export const swoopBeforeDuration: number = 200;
 export const highKickBeforeDuration: number = 200;
 export const swoopAfterDuration: number = 150;
 export const punchAfterDuration: number = 167;
 export const kickAfterDuration: number = 250;
+export const hadoukenAfterDuration: number = 334;
 export const highKickAfterDuration: number = 300;
 export const destructibleHitboxWidth: number = 10;
 export const destructibleSpriteWidth: number = 16;
@@ -49,11 +51,13 @@ export const playerPunchedStunDuration: number = 250;
 export const playerKickedStunDuration: number = 333;
 export const enemyPunchedStunDuration: number = 500;
 export const enemyKickedStunDuration: number = 667;
+export const enemyHadoukenedStunDuration: number = 500;
 export const enemyHighKickedStunDuration: number = 667;
 export const enemyJumpPunchedStunDuration: number = 883;
 export const enemyJumpKickedStunDuration: number = 1000;
 export const playerPunchDamage: number = 1;
 export const playerKickDamage: number = 1.5;
+export const playerHadoukenDamage: number = 1;
 export const playerHighKickDamage: number = 1.5;
 export const enemyPunchDamage: number = 1;
 export const enemyKickDamage: number = 1;
@@ -70,14 +74,15 @@ export const highKickKnockbackDuration: number = 375;
 export const knockbackVelocity: number = 175;
 export const powerLevels: PowerLevel[] = [
   {
-    amount: 2,
+    amount: 1,
     unlockImagePath: "unlocks/high-kick",
     unlockName: "High Kick",
   },
   {
-    amount: 5,
+    amount: 1,
     unlockImagePath: "unlocks/x-wave",
     unlockName: "X-Wave",
   },
 ];
 export const flyingEnemiesStartAt: number = 30000;
+export const directionComboThreshold: number = 500;

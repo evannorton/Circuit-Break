@@ -10,10 +10,7 @@ import { state } from "../state";
 export const canHighKick = (): boolean => {
   if (state.values.playerPunch !== null) {
     const powerLevelIndex: number | null = getPowerLevelIndex();
-    if (powerLevelIndex === null) {
-      throw new Error("Power level index is null.");
-    }
-    if (powerLevelIndex >= 1) {
+    if (powerLevelIndex === null || powerLevelIndex >= 1) {
       const currentTime: number = getCurrentTime();
       const punchOverAt: number =
         state.values.playerPunch.createdAt +

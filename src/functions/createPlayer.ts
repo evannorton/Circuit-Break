@@ -9,6 +9,8 @@ import { PunchHand } from "../types/Punch";
 import { XDirection } from "../types/Direction";
 import {
   entityHitboxHeight,
+  hadoukenAfterDuration,
+  hadoukenBeforeDuration,
   highKickAfterDuration,
   highKickBeforeDuration,
   jumpDuration,
@@ -23,6 +25,7 @@ import {
   punchBeforeDuration,
   renderHitboxes,
 } from "../constants";
+import { isPlayerHadoukening } from "./isPlayerHadoukening";
 import { isPlayerHighKicking } from "./isPlayerHighKicking";
 import { isPlayerJumping } from "./isPlayerJumping";
 import { isPlayerKicking } from "./isPlayerKicking";
@@ -205,6 +208,20 @@ export const createPlayer = (): void => {
                     }
                     return "kick-left";
                   }
+                  if (isPlayerHadoukening()) {
+                    if (state.values.playerHadouken === null) {
+                      throw new Error(
+                        "Player is hadoukening but createdAt is null",
+                      );
+                    }
+                    if (
+                      getCurrentTime() - state.values.playerHadouken.createdAt <
+                      hadoukenBeforeDuration
+                    ) {
+                      return "charge-hadouken-left";
+                    }
+                    return "hadouken-left";
+                  }
                   if (isPlayerPunching()) {
                     if (state.values.playerPunch === null) {
                       throw new Error(
@@ -278,6 +295,20 @@ export const createPlayer = (): void => {
                       return "jump-kick-right";
                     }
                     return "kick-right";
+                  }
+                  if (isPlayerHadoukening()) {
+                    if (state.values.playerHadouken === null) {
+                      throw new Error(
+                        "Player is hadoukening but createdAt is null",
+                      );
+                    }
+                    if (
+                      getCurrentTime() - state.values.playerHadouken.createdAt <
+                      hadoukenBeforeDuration
+                    ) {
+                      return "charge-hadouken-right";
+                    }
+                    return "hadouken-right";
                   }
                   if (isPlayerPunching()) {
                     if (state.values.playerPunch === null) {
@@ -1198,6 +1229,112 @@ export const createPlayer = (): void => {
                   },
                 ],
                 id: "stunned-right",
+              },
+              {
+                frames: [
+                  {
+                    duration: hadoukenBeforeDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 20,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: hadoukenBeforeDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
+                    sourceY: playerSpriteHeight * 20,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 3,
+                    sourceY: playerSpriteHeight * 20,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "charge-hadouken-left",
+              },
+              {
+                frames: [
+                  {
+                    duration: hadoukenBeforeDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth,
+                    sourceY: playerSpriteHeight * 3,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    duration: hadoukenBeforeDuration / 3,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 2,
+                    sourceY: playerSpriteHeight * 3,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 3,
+                    sourceY: playerSpriteHeight * 3,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "charge-hadouken-right",
+              },
+              {
+                frames: [
+                  {
+                    duration: hadoukenAfterDuration / 2,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 4,
+                    sourceY: playerSpriteHeight * 20,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 5,
+                    sourceY: playerSpriteHeight * 20,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "hadouken-left",
+              },
+              {
+                frames: [
+                  {
+                    duration: hadoukenAfterDuration / 2,
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 4,
+                    sourceY: playerSpriteHeight * 3,
+                    width: playerSpriteWidth,
+                  },
+                  {
+                    height: playerSpriteHeight,
+                    sourceHeight: playerSpriteHeight,
+                    sourceWidth: playerSpriteWidth,
+                    sourceX: playerSpriteWidth * 5,
+                    sourceY: playerSpriteHeight * 3,
+                    width: playerSpriteWidth,
+                  },
+                ],
+                id: "hadouken-right",
               },
             ],
             imagePath: "player",

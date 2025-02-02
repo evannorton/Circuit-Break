@@ -10,7 +10,10 @@ import {
 import { PunchHand } from "./types/Punch";
 import { XDirection, YDirection } from "./types/Direction";
 import { canHighKick } from "./functions/canHighKick";
+import { directionComboThreshold } from "./constants";
+import { getPowerLevelIndex } from "./functions/getPowerLevelIndex";
 import { isGameOngoing } from "./functions/isGameOngoing";
+import { isPlayerHadoukening } from "./functions/isPlayerHadoukening";
 import { isPlayerHighKicking } from "./functions/isPlayerHighKicking";
 import { isPlayerJumping } from "./functions/isPlayerJumping";
 import { isPlayerKicking } from "./functions/isPlayerKicking";
@@ -127,6 +130,7 @@ createInputPressHandler({
     isPlayerLanding() === false &&
     isPlayerPunching() === false &&
     isPlayerKicking() === false &&
+    isPlayerHadoukening() === false &&
     isPlayerHighKicking() === false,
   inputCollectionID: jumpInputCollectionID,
   onInput: (): void => {
@@ -141,6 +145,7 @@ createInputPressHandler({
     isPlayerLanding() === false &&
     isPlayerPunching() === false &&
     isPlayerKicking() === false &&
+    isPlayerHadoukening() === false &&
     isPlayerHighKicking() === false,
   inputCollectionID: punchInputCollectionID,
   onInput: (): void => {
@@ -161,17 +166,41 @@ createInputPressHandler({
       });
     } else {
       moveEntity(state.values.playerEntityID, {});
-      state.setValues({
-        playerPunch: {
-          createdAt: getCurrentTime(),
-          hand:
-            state.values.playerPunch?.hand === PunchHand.Left
-              ? PunchHand.Right
-              : PunchHand.Left,
-          isJumping: false,
-          wasExecuted: false,
-        },
-      });
+      const powerLevelIndex: number | null = getPowerLevelIndex();
+      if (
+        state.values.lastComboDirection !== null &&
+        getCurrentTime() - state.values.lastComboDirection.pressedAt <
+          directionComboThreshold &&
+        (powerLevelIndex === null || powerLevelIndex >= 2) &&
+        ((state.values.comboDirectionSequence[
+          state.values.comboDirectionSequence.length - 2
+        ] === YDirection.Down &&
+          state.values.comboDirectionSequence[
+            state.values.comboDirectionSequence.length - 1
+          ] === XDirection.Right) ||
+          state.values.comboDirectionSequence[
+            state.values.comboDirectionSequence.length - 1
+          ] === XDirection.Left)
+      ) {
+        state.setValues({
+          playerHadouken: {
+            createdAt: getCurrentTime(),
+            wasExecuted: false,
+          },
+        });
+      } else {
+        state.setValues({
+          playerPunch: {
+            createdAt: getCurrentTime(),
+            hand:
+              state.values.playerPunch?.hand === PunchHand.Left
+                ? PunchHand.Right
+                : PunchHand.Left,
+            isJumping: false,
+            wasExecuted: false,
+          },
+        });
+      }
     }
   },
 });
@@ -181,6 +210,7 @@ createInputPressHandler({
     isPlayerLanding() === false &&
     isPlayerPunching() === false &&
     isPlayerKicking() === false &&
+    isPlayerHadoukening() === false &&
     isPlayerHighKicking() === false,
   inputCollectionID: kickInputCollectionID,
   onInput: (): void => {
@@ -212,5 +242,93 @@ createInputPressHandler({
         });
       }
     }
+  },
+});
+createInputPressHandler({
+  inputCollectionID: moveLeftInputCollectionID,
+  onInput: (): void => {
+    const comboDirectionSequence: (XDirection | YDirection)[] =
+      state.values.comboDirectionSequence;
+    if (
+      state.values.lastComboDirection !== null &&
+      getCurrentTime() - state.values.lastComboDirection.pressedAt >=
+        directionComboThreshold
+    ) {
+      comboDirectionSequence.length = 0;
+    }
+    comboDirectionSequence.push(XDirection.Left);
+    state.setValues({
+      comboDirectionSequence,
+      lastComboDirection: {
+        direction: XDirection.Left,
+        pressedAt: getCurrentTime(),
+      },
+    });
+  },
+});
+createInputPressHandler({
+  inputCollectionID: moveRightInputCollectionID,
+  onInput: (): void => {
+    const comboDirectionSequence: (XDirection | YDirection)[] =
+      state.values.comboDirectionSequence;
+    if (
+      state.values.lastComboDirection !== null &&
+      getCurrentTime() - state.values.lastComboDirection.pressedAt >=
+        directionComboThreshold
+    ) {
+      comboDirectionSequence.length = 0;
+    }
+    comboDirectionSequence.push(XDirection.Right);
+    state.setValues({
+      comboDirectionSequence,
+      lastComboDirection: {
+        direction: XDirection.Right,
+        pressedAt: getCurrentTime(),
+      },
+    });
+  },
+});
+createInputPressHandler({
+  inputCollectionID: moveUpInputCollectionID,
+  onInput: (): void => {
+    const comboDirectionSequence: (XDirection | YDirection)[] =
+      state.values.comboDirectionSequence;
+    if (
+      state.values.lastComboDirection !== null &&
+      getCurrentTime() - state.values.lastComboDirection.pressedAt >=
+        directionComboThreshold
+    ) {
+      comboDirectionSequence.length = 0;
+    }
+    comboDirectionSequence.push(YDirection.Up);
+    state.setValues({
+      comboDirectionSequence,
+      lastComboDirection: {
+        direction: YDirection.Up,
+        pressedAt: getCurrentTime(),
+      },
+    });
+  },
+});
+createInputPressHandler({
+  inputCollectionID: moveDownInputCollectionID,
+  onInput: (): void => {
+    const comboDirectionSequence: (XDirection | YDirection)[] =
+      state.values.comboDirectionSequence;
+    if (
+      state.values.lastComboDirection !== null &&
+      getCurrentTime() - state.values.lastComboDirection.pressedAt >=
+        directionComboThreshold
+    ) {
+      comboDirectionSequence.length = 0;
+    }
+    comboDirectionSequence.push(YDirection.Down);
+    state.setValues({
+      comboDirectionSequence,
+      lastComboDirection: {
+        direction: YDirection.Down,
+        pressedAt: getCurrentTime(),
+      },
+    });
   },
 });

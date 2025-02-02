@@ -21,17 +21,20 @@ export const retry = (): void => {
     removeEntity(state.values.destructible.baseEntityID);
   }
   state.setValues({
+    comboDirectionSequence: [],
     defeatAdvancedAt: null,
     destructible: null,
     enemiesStartedAt: null,
     facingDirection: XDirection.Right,
     gameEndedAt: null,
     jumpedAt: null,
+    lastComboDirection: null,
     lastEnemyDirection: null,
     movingXDirection: null,
     movingYDirection: null,
     playerEntityID: null,
     playerHP: playerMaxHP,
+    playerHadouken: null,
     playerHighKick: null,
     playerKick: null,
     playerPunch: null,
