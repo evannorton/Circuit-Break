@@ -2,6 +2,7 @@ import { getCurrentTime, removeEntity } from "pixel-pigeon";
 import { getPowerLevelIndex } from "./getPowerLevel";
 import { isDestructibleRising } from "./isDestructibleRising";
 import { isDestructibleTakingDamage } from "./isDestructibleTakingDamage";
+import { playerMaxHP } from "../constants";
 import { state } from "../state";
 
 export const damageDestructible = (
@@ -28,6 +29,7 @@ export const damageDestructible = (
       removeEntity(state.values.destructible.baseEntityID);
       state.setValues({
         destructible: null,
+        playerHP: Math.min(state.values.playerHP + 1, playerMaxHP),
         power: state.values.power + 1,
       });
       const newPowerLevelIndex: number | null = getPowerLevelIndex();
