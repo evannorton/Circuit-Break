@@ -74,12 +74,12 @@ export const highKickKnockbackDuration: number = 375;
 export const knockbackVelocity: number = 175;
 export const powerLevels: PowerLevel[] = [
   {
-    amount: 1,
+    amount: 2,
     unlockImagePath: "unlocks/high-kick",
     unlockName: "High Kick",
   },
   {
-    amount: 1,
+    amount: 5,
     unlockImagePath: "unlocks/x-wave",
     unlockName: "X-Wave",
   },
