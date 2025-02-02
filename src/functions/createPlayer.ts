@@ -41,7 +41,12 @@ export const createPlayer = (): void => {
   };
   state.setValues({
     playerEntityID: createEntity({
-      collidableEntityTypes: ["boundary", "destructible", "enemy-base"],
+      collidableEntityTypes: [
+        "boundary",
+        "destructible",
+        "enemy-base",
+        "enemy-shooting",
+      ],
       collidesWithMap: true,
       height: entityHitboxHeight,
       layerID: "Characters",

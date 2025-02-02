@@ -11,6 +11,7 @@ import { createEnemies } from "./functions/createEnemies";
 import { doEnemiesBehavior } from "./functions/doEnemiesBehavior";
 import { executeEnemiesKicks } from "./functions/executeEnemiesKicks";
 import { executeEnemiesPunches } from "./functions/executeEnemiesPunches";
+import { executeEnemiesShoots } from "./functions/executeEnemiesShoots";
 import { executeEnemiesSwoops } from "./functions/executeEnemiesSwoops";
 import { executePlayerHadouken } from "./functions/executePlayerHadouken";
 import { executePlayerHighKick } from "./functions/executePlayerHighKick";
@@ -24,6 +25,7 @@ import { isPlayerLanding } from "./functions/isPlayerLanding";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
 import { isPlayerStunned } from "./functions/isPlayerStunned";
 import { landHadoukens } from "./functions/landHadoukens";
+import { landShootProjectiles } from "./functions/landShootProjectiles";
 import { levelID, titleFadeDuration } from "./constants";
 import { movePlayer } from "./functions/movePlayer";
 import { retry } from "./functions/retry";
@@ -74,10 +76,14 @@ export const tick = (): void => {
     executeEnemiesKicks();
     // Execute enemies swoops
     executeEnemiesSwoops();
+    // Execute enemies shoots
+    executeEnemiesShoots();
     // Enemies behavior
     doEnemiesBehavior();
     // Land hadoukens
     landHadoukens();
+    // Land shoot projectiles
+    landShootProjectiles();
     // Y-sort characters
     [
       ...getEntityIDs({

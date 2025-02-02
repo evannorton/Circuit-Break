@@ -4,6 +4,9 @@ export const titleFadeDuration: number = 1500;
 export const renderHitboxes: boolean = true;
 export const playerMovementXSpeed: number = 80;
 export const playerMovementYSpeed: number = (playerMovementXSpeed * 2) / 3;
+export const shootingEnemyMovementXSpeed: number = 30;
+export const shootingEnemyMovementYSpeed: number =
+  (shootingEnemyMovementXSpeed * 2) / 3;
 export const baseEnemyMovementXSpeed: number = 40;
 export const baseEnemyMovementYSpeed: number =
   (baseEnemyMovementXSpeed * 2) / 3;
@@ -19,6 +22,9 @@ export const playerHitboxWidth: number = 29;
 export const baseEnemySpriteHeight: number = 64;
 export const baseEnemySpriteWidth: number = 80;
 export const baseEnemyHitboxWidth: number = 29;
+export const shootingEnemySpriteHeight: number = 64;
+export const shootingEnemySpriteWidth: number = 80;
+export const shootingEnemyHitboxWidth: number = 29;
 export const flyingEnemySpriteHeight: number = 29;
 export const flyingEnemySpriteWidth: number = 27;
 export const flyingEnemyHitboxWidth: number = 27;
@@ -26,6 +32,7 @@ export const jumpDuration: number = 500;
 export const landDuration: number = 167;
 export const punchBeforeDuration: number = 83;
 export const hadoukenBeforeDuration: number = 250;
+export const shootBeforeDuration: number = 250;
 export const kickBeforeDuration: number = 167;
 export const swoopBeforeDuration: number = 200;
 export const highKickBeforeDuration: number = 200;
@@ -33,6 +40,7 @@ export const swoopAfterDuration: number = 150;
 export const punchAfterDuration: number = 167;
 export const kickAfterDuration: number = 250;
 export const hadoukenAfterDuration: number = 334;
+export const shootAfterDuration: number = 334;
 export const highKickAfterDuration: number = 300;
 export const destructibleHitboxWidth: number = 10;
 export const destructibleSpriteWidth: number = 16;
@@ -49,6 +57,7 @@ export const enemyDamageDuration: number = 50;
 export const playerSwoopedStunDuration: number = 100;
 export const playerPunchedStunDuration: number = 250;
 export const playerKickedStunDuration: number = 333;
+export const playerShotStunDuration: number = 250;
 export const enemyPunchedStunDuration: number = 500;
 export const enemyKickedStunDuration: number = 667;
 export const enemyHadoukenedStunDuration: number = 500;
@@ -84,6 +93,10 @@ export const powerLevels: PowerLevel[] = [
     unlockName: "X-Wave",
   },
 ];
-export const flyingEnemiesStartAt: number = 30000;
+export const baseEnemiesStartAt: number = 0;
+export const shootingEnemiesStartAt: number = 30000;
+export const flyingEnemiesStartAt: number = 60000;
 export const directionComboThreshold: number = 500;
 export const hadoukenHitboxWidth: number = 18;
+export const enemyShootDamage: number = 1;
+export const shootHitboxWidth: number = 5;

@@ -5,6 +5,7 @@ import {
   entityHitboxHeight,
   flyingEnemyHitboxWidth,
   renderHitboxes,
+  shootingEnemyHitboxWidth,
 } from "../constants";
 import { getDefinable } from "definables";
 
@@ -18,6 +19,9 @@ export const addEnemyQuadrilaterals = (enemyID: string): void => {
         break;
       case EnemyType.Flying:
         hitboxWidth = flyingEnemyHitboxWidth;
+        break;
+      case EnemyType.Shooting:
+        hitboxWidth = shootingEnemyHitboxWidth;
         break;
     }
     addEntityQuadrilateral(enemyID, {

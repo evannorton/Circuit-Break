@@ -35,6 +35,7 @@ export class HadoukenProjectile extends Definable {
           overlapData.entityCollidables.find(
             (entityCollidable: EntityCollidable): boolean =>
               entityCollidable.type === "enemy-base" ||
+              entityCollidable.type === "enemy-shooting" ||
               entityCollidable.type === "destructible",
           );
         if (typeof hitEntityCollidable !== "undefined") {
@@ -46,6 +47,15 @@ export class HadoukenProjectile extends Definable {
               );
               break;
             case "enemy-base":
+              damageEnemy(
+                hitEntityCollidable.entityID,
+                playerHadoukenDamage,
+                enemyHadoukenedStunDuration,
+                true,
+                0,
+              );
+              break;
+            case "enemy-shooting":
               damageEnemy(
                 hitEntityCollidable.entityID,
                 playerHadoukenDamage,

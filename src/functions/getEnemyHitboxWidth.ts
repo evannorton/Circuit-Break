@@ -1,5 +1,9 @@
 import { EnemyType } from "../classes/Enemy";
-import { baseEnemyHitboxWidth, flyingEnemyHitboxWidth } from "../constants";
+import {
+  baseEnemyHitboxWidth,
+  flyingEnemyHitboxWidth,
+  shootingEnemyHitboxWidth,
+} from "../constants";
 
 export const getEnemyHitboxWidth = (enemyType: EnemyType): number => {
   switch (enemyType) {
@@ -7,5 +11,7 @@ export const getEnemyHitboxWidth = (enemyType: EnemyType): number => {
       return baseEnemyHitboxWidth;
     case EnemyType.Flying:
       return flyingEnemyHitboxWidth;
+    case EnemyType.Shooting:
+      return shootingEnemyHitboxWidth;
   }
 };

@@ -2,6 +2,7 @@ import { Definable } from "definables";
 import { EntityPosition, createEntity, removeEntity } from "pixel-pigeon";
 import { Kick } from "../types/Kick";
 import { Punch } from "../types/Punch";
+import { Shoot } from "../types/Shoot";
 import { Swoop } from "../types/Swoop";
 import { XDirection, YDirection } from "../types/Direction";
 import { addEnemyQuadrilaterals } from "../functions/addEnemyQuadrilaterals";
@@ -14,6 +15,7 @@ import { getEnemyMaxHP } from "../functions/getEnemyMaxHP";
 export enum EnemyType {
   Base = "base",
   Flying = "flying",
+  Shooting = "shooting",
 }
 export interface EnemyOptions {
   position: EntityPosition;
@@ -30,6 +32,7 @@ export class Enemy extends Definable {
   private _movingXDirection: XDirection | null = null;
   private _movingYDirection: YDirection | null = null;
   private _punch: Punch | null = null;
+  private _shoot: Shoot | null = null;
   private readonly _spawnDirection: XDirection;
   private _stunDuration: number | null = null;
   private _swoop: Swoop | null = null;
@@ -107,6 +110,13 @@ export class Enemy extends Definable {
     throw new Error(this.getAccessorErrorMessage("punch"));
   }
 
+  public get shoot(): Shoot {
+    if (this._shoot !== null) {
+      return this._shoot;
+    }
+    throw new Error(this.getAccessorErrorMessage("shoot"));
+  }
+
   public get spawnDirection(): XDirection {
     return this._spawnDirection;
   }
@@ -172,6 +182,10 @@ export class Enemy extends Definable {
     this._punch = punch;
   }
 
+  public set shoot(shoot: Shoot | null) {
+    this._shoot = shoot;
+  }
+
   public set stunDuration(stunDuration: number) {
     this._stunDuration = stunDuration;
   }
@@ -198,6 +212,10 @@ export class Enemy extends Definable {
 
   public hasPunch(): boolean {
     return this._punch !== null;
+  }
+
+  public hasShoot(): boolean {
+    return this._shoot !== null;
   }
 
   public hasSwoop(): boolean {

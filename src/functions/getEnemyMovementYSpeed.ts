@@ -12,5 +12,7 @@ export const getEnemyMovementYSpeed = (enemyID: string): number => {
       return baseEnemyMovementYSpeed;
     case EnemyType.Flying:
       return flyingEnemyMovementYSpeed;
+    case EnemyType.Shooting:
+      return baseEnemyMovementYSpeed;
   }
 };

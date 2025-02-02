@@ -56,7 +56,12 @@ export const executePlayerHighKick = (): void => {
       volumeChannelID: sfxVolumeChannelID,
     });
     const collisionData: CollisionData = getRectangleCollisionData({
-      entityTypes: ["destructible", "enemy-base", "enemy-flying"],
+      entityTypes: [
+        "destructible",
+        "enemy-base",
+        "enemy-shooting",
+        "enemy-flying",
+      ],
       rectangle: {
         height: entityHitboxHeight,
         width: highKickHitboxWidth,
@@ -68,6 +73,7 @@ export const executePlayerHighKick = (): void => {
       if (
         entityCollidable.type === "destructible" ||
         entityCollidable.type === "enemy-base" ||
+        entityCollidable.type === "enemy-shooting" ||
         entityCollidable.type === "enemy-flying"
       ) {
         switch (entityCollidable.type) {
@@ -78,6 +84,7 @@ export const executePlayerHighKick = (): void => {
             );
             break;
           case "enemy-base":
+          case "enemy-shooting":
           case "enemy-flying": {
             damageEnemy(
               entityCollidable.entityID,

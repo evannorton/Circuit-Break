@@ -2,9 +2,11 @@ import { Enemy, EnemyType } from "../classes/Enemy";
 import { EntityPosition, getCurrentTime, getGameWidth } from "pixel-pigeon";
 import { XDirection } from "../types/Direction";
 import {
+  baseEnemiesStartAt,
   baseEnemyHitboxWidth,
   enemySpawnTime,
   flyingEnemiesStartAt,
+  shootingEnemiesStartAt,
 } from "../constants";
 import { state } from "../state";
 
@@ -32,21 +34,30 @@ export const createEnemies = (): void => {
       x,
       y,
     };
-    const oppositePosition: EntityPosition = {
+    const flyingEnemyPosition: EntityPosition = {
       x: oppositeX,
       y,
     };
-    new Enemy({
-      position,
-      spawnDirection:
-        state.values.lastEnemyDirection === XDirection.Left
-          ? XDirection.Right
-          : XDirection.Left,
-      type: EnemyType.Base,
-    });
-    if (currentTime - state.values.enemiesStartedAt > flyingEnemiesStartAt) {
+    const shootingEnemyPosition: EntityPosition = {
+      x,
+      y: y + 40,
+    };
+    let didSpawn: boolean = false;
+    if (currentTime - state.values.enemiesStartedAt > baseEnemiesStartAt) {
+      didSpawn = true;
       new Enemy({
-        position: oppositePosition,
+        position,
+        spawnDirection:
+          state.values.lastEnemyDirection === XDirection.Left
+            ? XDirection.Right
+            : XDirection.Left,
+        type: EnemyType.Base,
+      });
+    }
+    if (currentTime - state.values.enemiesStartedAt > flyingEnemiesStartAt) {
+      didSpawn = true;
+      new Enemy({
+        position: flyingEnemyPosition,
         spawnDirection:
           state.values.lastEnemyDirection === XDirection.Left
             ? XDirection.Left
@@ -54,12 +65,25 @@ export const createEnemies = (): void => {
         type: EnemyType.Flying,
       });
     }
-    state.setValues({
-      lastEnemyDirection:
-        state.values.lastEnemyDirection === XDirection.Left
-          ? XDirection.Right
-          : XDirection.Left,
-      spawnedEnemyAt: currentTime,
-    });
+    if (currentTime - state.values.enemiesStartedAt > shootingEnemiesStartAt) {
+      didSpawn = true;
+      new Enemy({
+        position: shootingEnemyPosition,
+        spawnDirection:
+          state.values.lastEnemyDirection === XDirection.Left
+            ? XDirection.Right
+            : XDirection.Left,
+        type: EnemyType.Shooting,
+      });
+    }
+    if (didSpawn) {
+      state.setValues({
+        lastEnemyDirection:
+          state.values.lastEnemyDirection === XDirection.Left
+            ? XDirection.Right
+            : XDirection.Left,
+        spawnedEnemyAt: currentTime,
+      });
+    }
   }
 };

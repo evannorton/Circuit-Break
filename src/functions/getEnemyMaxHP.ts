@@ -6,5 +6,7 @@ export const getEnemyMaxHP = (enemyType: EnemyType): number => {
       return 6;
     case EnemyType.Flying:
       return 1;
+    case EnemyType.Shooting:
+      return 4;
   }
 };

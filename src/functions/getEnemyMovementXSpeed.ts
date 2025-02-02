@@ -2,6 +2,7 @@ import { Enemy, EnemyType } from "../classes/Enemy";
 import {
   baseEnemyMovementXSpeed,
   flyingEnemyMovementXSpeed,
+  shootingEnemyMovementXSpeed,
 } from "../constants";
 import { getDefinable } from "definables";
 
@@ -12,5 +13,7 @@ export const getEnemyMovementXSpeed = (enemyID: string): number => {
       return baseEnemyMovementXSpeed;
     case EnemyType.Flying:
       return flyingEnemyMovementXSpeed;
+    case EnemyType.Shooting:
+      return shootingEnemyMovementXSpeed;
   }
 };
