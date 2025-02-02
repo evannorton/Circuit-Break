@@ -23,6 +23,20 @@ import { isEnemyPunching } from "./isEnemyPunching";
 import { isEnemyStunned } from "./isEnemyStunned";
 import { isEnemyTakingKnockback } from "./isEnemyTakingKnockback";
 
+const getBaseEnemyImagePath = (): string => {
+  const randomNumber: number = Math.random() * 4;
+  if (randomNumber < 1) {
+    return "enemies/base-enemy-1";
+  }
+  if (randomNumber < 2) {
+    return "enemies/base-enemy-2";
+  }
+  if (randomNumber < 3) {
+    return "enemies/base-enemy-3";
+  }
+  return "enemies/base-enemy-4";
+};
+
 export const addEnemySprites = (enemyID: string): void => {
   const enemy: Enemy = getDefinable(Enemy, enemyID);
   switch (enemy.type) {
@@ -668,7 +682,7 @@ export const addEnemySprites = (enemyID: string): void => {
               id: "stunned-right",
             },
           ],
-          imagePath: "base-enemy",
+          imagePath: getBaseEnemyImagePath(),
         }),
         x: (): number => {
           switch (enemy.facingDirection) {
@@ -774,7 +788,7 @@ export const addEnemySprites = (enemyID: string): void => {
               id: "right",
             },
           ],
-          imagePath: "flying-enemy",
+          imagePath: "enemies/flying-enemy",
         }),
         y: (): number => {
           const flyingOffset: number =
