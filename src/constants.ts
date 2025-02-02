@@ -1,7 +1,7 @@
 import { PowerLevel } from "./types/PowerLevel";
 
 export const titleFadeDuration: number = 1500;
-export const renderHitboxes: boolean = false;
+export const renderHitboxes: boolean = true;
 export const playerMovementXSpeed: number = 80;
 export const playerMovementYSpeed: number = (playerMovementXSpeed * 2) / 3;
 export const baseEnemyMovementXSpeed: number = 40;
@@ -86,3 +86,4 @@ export const powerLevels: PowerLevel[] = [
 ];
 export const flyingEnemiesStartAt: number = 30000;
 export const directionComboThreshold: number = 500;
+export const hadoukenHitboxWidth: number = 18;

@@ -1,6 +1,16 @@
+import {
+  EntityPosition,
+  getCurrentTime,
+  getEntityPosition,
+  moveEntity,
+} from "pixel-pigeon";
+import { HadoukenProjectile } from "../classes/HadoukenProjectile";
 import { XDirection } from "../types/Direction";
-import { getCurrentTime } from "pixel-pigeon";
-import { hadoukenBeforeDuration } from "../constants";
+import {
+  hadoukenBeforeDuration,
+  hadoukenHitboxWidth,
+  playerHitboxWidth,
+} from "../constants";
 import { state } from "../state";
 
 export const executePlayerHadouken = (): void => {
@@ -15,12 +25,38 @@ export const executePlayerHadouken = (): void => {
     getCurrentTime() - state.values.playerHadouken.createdAt >=
       hadoukenBeforeDuration
   ) {
+    const playerPosition: EntityPosition = getEntityPosition(
+      state.values.playerEntityID,
+    );
+    let position: EntityPosition | undefined;
     switch (state.values.facingDirection) {
       case XDirection.Left:
-        console.log("shoot hadouk lef");
+        position = {
+          x: playerPosition.x - hadoukenHitboxWidth,
+          y: playerPosition.y,
+        };
         break;
       case XDirection.Right:
-        console.log("shoot hadouk right");
+        position = {
+          x: playerPosition.x + playerHitboxWidth,
+          y: playerPosition.y,
+        };
+        break;
+    }
+    const hadoukenProjectile: HadoukenProjectile = new HadoukenProjectile({
+      position,
+      spawnDirection: state.values.facingDirection,
+    });
+    switch (state.values.facingDirection) {
+      case XDirection.Left:
+        moveEntity(hadoukenProjectile.id, {
+          xVelocity: -120,
+        });
+        break;
+      case XDirection.Right:
+        moveEntity(hadoukenProjectile.id, {
+          xVelocity: 120,
+        });
         break;
     }
     state.values.playerHadouken.wasExecuted = true;
