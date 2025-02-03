@@ -33,7 +33,12 @@ export const doEnemiesBehavior = (): void => {
     const enemyMovementXSpeed: number = getEnemyMovementXSpeed(enemy.id);
     const enemyMovementYSpeed: number = getEnemyMovementYSpeed(enemy.id);
     const enemyPosition: EntityPosition = getEntityPosition(enemy.id);
-    const xOffset: number = enemy.type === EnemyType.Shooting ? 112 : 0;
+    const xOffset: number =
+      enemy.type === EnemyType.Boss
+        ? 4
+        : enemy.type === EnemyType.Shooting
+          ? 112
+          : 0;
     const isLeftFarFromPlayer: boolean =
       enemyPosition.x - playerPosition.x > playerHitboxWidth + 3 + xOffset;
     const isRightFarFromPlayer: boolean =
