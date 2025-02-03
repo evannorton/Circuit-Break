@@ -1419,7 +1419,7 @@ export const addEnemySprites = (enemyID: string): void => {
             {
               frames: [
                 {
-                  duration: pummelBeforeDuration / 4,
+                  duration: pummelBeforeDuration / 8,
                   height: bossEnemySpriteHeight,
                   sourceHeight: bossEnemySpriteHeight,
                   sourceWidth: bossEnemySpriteWidth,
@@ -1428,7 +1428,7 @@ export const addEnemySprites = (enemyID: string): void => {
                   width: bossEnemySpriteWidth,
                 },
                 {
-                  duration: pummelBeforeDuration / 4,
+                  duration: pummelBeforeDuration / 8,
                   height: bossEnemySpriteHeight,
                   sourceHeight: bossEnemySpriteHeight,
                   sourceWidth: bossEnemySpriteWidth,
@@ -1437,7 +1437,7 @@ export const addEnemySprites = (enemyID: string): void => {
                   width: bossEnemySpriteWidth,
                 },
                 {
-                  duration: pummelBeforeDuration / 4,
+                  duration: pummelBeforeDuration / 8,
                   height: bossEnemySpriteHeight,
                   sourceHeight: bossEnemySpriteHeight,
                   sourceWidth: bossEnemySpriteWidth,
@@ -1446,6 +1446,7 @@ export const addEnemySprites = (enemyID: string): void => {
                   width: bossEnemySpriteWidth,
                 },
                 {
+                  duration: pummelBeforeDuration / 8,
                   height: bossEnemySpriteHeight,
                   sourceHeight: bossEnemySpriteHeight,
                   sourceWidth: bossEnemySpriteWidth,
@@ -1459,7 +1460,7 @@ export const addEnemySprites = (enemyID: string): void => {
             {
               frames: [
                 {
-                  duration: pummelBeforeDuration / 4,
+                  duration: pummelBeforeDuration / 8,
                   height: bossEnemySpriteHeight,
                   sourceHeight: bossEnemySpriteHeight,
                   sourceWidth: bossEnemySpriteWidth,
@@ -1468,7 +1469,7 @@ export const addEnemySprites = (enemyID: string): void => {
                   width: bossEnemySpriteWidth,
                 },
                 {
-                  duration: pummelBeforeDuration / 4,
+                  duration: pummelBeforeDuration / 8,
                   height: bossEnemySpriteHeight,
                   sourceHeight: bossEnemySpriteHeight,
                   sourceWidth: bossEnemySpriteWidth,
@@ -1477,7 +1478,7 @@ export const addEnemySprites = (enemyID: string): void => {
                   width: bossEnemySpriteWidth,
                 },
                 {
-                  duration: pummelBeforeDuration / 4,
+                  duration: pummelBeforeDuration / 8,
                   height: bossEnemySpriteHeight,
                   sourceHeight: bossEnemySpriteHeight,
                   sourceWidth: bossEnemySpriteWidth,
@@ -1486,6 +1487,7 @@ export const addEnemySprites = (enemyID: string): void => {
                   width: bossEnemySpriteWidth,
                 },
                 {
+                  duration: pummelBeforeDuration / 8,
                   height: bossEnemySpriteHeight,
                   sourceHeight: bossEnemySpriteHeight,
                   sourceWidth: bossEnemySpriteWidth,

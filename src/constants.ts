@@ -30,7 +30,7 @@ export const shootingEnemySpriteWidth: number = 80;
 export const shootingEnemyHitboxWidth: number = 29;
 export const bossEnemySpriteHeight: number = 64;
 export const bossEnemySpriteWidth: number = 80;
-export const bossEnemyHitboxWidth: number = 29;
+export const bossEnemyHitboxWidth: number = 33;
 export const flyingEnemySpriteHeight: number = 29;
 export const flyingEnemySpriteWidth: number = 27;
 export const flyingEnemyHitboxWidth: number = 27;
@@ -59,7 +59,7 @@ export const kickHitboxWidth: number = 21;
 export const highKickHitboxWidth: number = 22;
 export const jumpKickHitboxWidth: number = 23;
 export const swoopHitboxWidth: number = 15;
-export const pummelHitboxWidth: number = 25;
+export const pummelHitboxWidth: number = 23;
 export const entityHitboxHeight: number = 5;
 export const playerDamageDuration: number = 50;
 export const enemyDamageDuration: number = 50;
@@ -104,10 +104,10 @@ export const powerLevels: PowerLevel[] = [
     unlockName: "X-Wave",
   },
 ];
-export const baseEnemiesStartAt: number = 111111110;
+export const baseEnemiesStartAt: number = 0;
 export const shootingEnemiesStartAt: number = 30000;
 export const flyingEnemiesStartAt: number = 60000;
-export const bossEnemyStartsAt: number = 0;
+export const bossEnemyStartsAt: number = 90000;
 export const directionComboThreshold: number = 500;
 export const hadoukenHitboxWidth: number = 18;
 export const enemyShootDamage: number = 1;
