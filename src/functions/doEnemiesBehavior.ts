@@ -12,6 +12,7 @@ import { getDefinables } from "definables";
 import { getEnemyMovementXSpeed } from "./getEnemyMovementXSpeed";
 import { getEnemyMovementYSpeed } from "./getEnemyMovementYSpeed";
 import { isEnemyKicking } from "./isEnemyKicking";
+import { isEnemyPummeling } from "./isEnemyPummeling";
 import { isEnemyPunching } from "./isEnemyPunching";
 import { isEnemyShooting } from "./isEnemyShooting";
 import { isEnemyStunned } from "../functions/isEnemyStunned";
@@ -48,6 +49,7 @@ export const doEnemiesBehavior = (): void => {
             ? -(enemyMovementXSpeed * 3)
             : enemyMovementXSpeed * 3
           : isEnemyPunching(enemy.id) ||
+              isEnemyPummeling(enemy.id) ||
               isEnemyKicking(enemy.id) ||
               isEnemyStunned(enemy.id) ||
               isEnemyShooting(enemy.id)
@@ -61,6 +63,7 @@ export const doEnemiesBehavior = (): void => {
         enemy.type === EnemyType.Flying && enemy.hasAttacked
           ? 0
           : isEnemyPunching(enemy.id) ||
+              isEnemyPummeling(enemy.id) ||
               isEnemyKicking(enemy.id) ||
               isEnemyStunned(enemy.id) ||
               isEnemyShooting(enemy.id)
@@ -103,6 +106,7 @@ export const doEnemiesBehavior = (): void => {
       isEnemyStunned(enemy.id) === false &&
       isEnemyTakingKnockback(enemy.id) === false &&
       isEnemyPunching(enemy.id) === false &&
+      isEnemyPummeling(enemy.id) === false &&
       isEnemyKicking(enemy.id) === false &&
       isEnemyShooting(enemy.id) === false &&
       (enemy.type !== EnemyType.Flying || enemy.hasAttacked === false) &&
@@ -131,6 +135,12 @@ export const doEnemiesBehavior = (): void => {
               wasExecuted: false,
             };
           }
+          break;
+        case EnemyType.Boss:
+          enemy.pummel = {
+            createdAt: getCurrentTime(),
+            wasExecuted: false,
+          };
           break;
         case EnemyType.Flying:
           enemy.swoop = {

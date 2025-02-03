@@ -45,6 +45,7 @@ export const createPlayer = (): void => {
         "boundary",
         "destructible",
         "enemy-base",
+        "enemy-boss",
         "enemy-shooting",
       ],
       collidesWithMap: true,

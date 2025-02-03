@@ -70,6 +70,7 @@ export const executePlayerPunch = (): void => {
       entityTypes: [
         "destructible",
         "enemy-base",
+        "enemy-boss",
         "enemy-shooting",
         "enemy-flying",
       ],
@@ -89,6 +90,7 @@ export const executePlayerPunch = (): void => {
           );
           break;
         case "enemy-base":
+        case "enemy-boss":
         case "enemy-shooting":
         case "enemy-flying": {
           if (entityCollidable.type === "enemy-flying") {

@@ -4,10 +4,12 @@ import { XDirection } from "../types/Direction";
 import {
   baseEnemiesStartAt,
   baseEnemyHitboxWidth,
+  bossEnemyStartsAt,
   enemySpawnTime,
   flyingEnemiesStartAt,
   shootingEnemiesStartAt,
 } from "../constants";
+import { getDefinables } from "definables";
 import { state } from "../state";
 
 export const createEnemies = (): void => {
@@ -42,8 +44,35 @@ export const createEnemies = (): void => {
       x,
       y: y + 40,
     };
+    const bossEnemyPosition: EntityPosition = {
+      x: oppositeX,
+      y: y + 40,
+    };
     let didSpawn: boolean = false;
-    if (currentTime - state.values.enemiesStartedAt > baseEnemiesStartAt) {
+    let baseEnemyCount: number = 0;
+    let flyingEnemyCount: number = 0;
+    let shootingEnemyCount: number = 0;
+    let bossEnemyCount: number = 0;
+    for (const enemy of getDefinables(Enemy).values()) {
+      switch (enemy.type) {
+        case EnemyType.Base:
+          baseEnemyCount++;
+          break;
+        case EnemyType.Flying:
+          flyingEnemyCount++;
+          break;
+        case EnemyType.Shooting:
+          shootingEnemyCount++;
+          break;
+        case EnemyType.Boss:
+          bossEnemyCount++;
+          break;
+      }
+    }
+    if (
+      currentTime - state.values.enemiesStartedAt > baseEnemiesStartAt &&
+      baseEnemyCount < 2
+    ) {
       didSpawn = true;
       new Enemy({
         position,
@@ -54,7 +83,10 @@ export const createEnemies = (): void => {
         type: EnemyType.Base,
       });
     }
-    if (currentTime - state.values.enemiesStartedAt > flyingEnemiesStartAt) {
+    if (
+      currentTime - state.values.enemiesStartedAt > flyingEnemiesStartAt &&
+      flyingEnemyCount < 2
+    ) {
       didSpawn = true;
       new Enemy({
         position: flyingEnemyPosition,
@@ -65,7 +97,10 @@ export const createEnemies = (): void => {
         type: EnemyType.Flying,
       });
     }
-    if (currentTime - state.values.enemiesStartedAt > shootingEnemiesStartAt) {
+    if (
+      currentTime - state.values.enemiesStartedAt > shootingEnemiesStartAt &&
+      shootingEnemyCount < 2
+    ) {
       didSpawn = true;
       new Enemy({
         position: shootingEnemyPosition,
@@ -74,6 +109,20 @@ export const createEnemies = (): void => {
             ? XDirection.Right
             : XDirection.Left,
         type: EnemyType.Shooting,
+      });
+    }
+    if (
+      currentTime - state.values.enemiesStartedAt > bossEnemyStartsAt &&
+      bossEnemyCount < 1
+    ) {
+      didSpawn = true;
+      new Enemy({
+        position: bossEnemyPosition,
+        spawnDirection:
+          state.values.lastEnemyDirection === XDirection.Left
+            ? XDirection.Right
+            : XDirection.Left,
+        type: EnemyType.Boss,
       });
     }
     if (didSpawn) {

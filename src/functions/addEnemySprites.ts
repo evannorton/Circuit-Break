@@ -5,12 +5,16 @@ import { addEntitySprite, createSprite, getCurrentTime } from "pixel-pigeon";
 import {
   baseEnemySpriteHeight,
   baseEnemySpriteWidth,
+  bossEnemySpriteHeight,
+  bossEnemySpriteWidth,
   entityHitboxHeight,
   flyingEnemySpriteHeight,
   flyingEnemySpriteWidth,
   jumpDuration,
   kickAfterDuration,
   kickBeforeDuration,
+  pummelAfterDuration,
+  pummelBeforeDuration,
   punchAfterDuration,
   punchBeforeDuration,
   shootBeforeDuration,
@@ -22,6 +26,7 @@ import {
 import { getDefinable } from "definables";
 import { isEnemyKicking } from "./isEnemyKicking";
 import { isEnemyMoving } from "./isEnemyMoving";
+import { isEnemyPummeling } from "./isEnemyPummeling";
 import { isEnemyPunching } from "./isEnemyPunching";
 import { isEnemyShooting } from "./isEnemyShooting";
 import { isEnemyStunned } from "./isEnemyStunned";
@@ -713,6 +718,825 @@ export const addEnemySprites = (enemyID: string): void => {
           const baseOffset: number =
             -baseEnemySpriteHeight + entityHitboxHeight + 7;
           return baseOffset;
+        },
+      });
+      break;
+    case EnemyType.Boss:
+      addEntitySprite(enemyID, {
+        spriteID: createSprite({
+          animationID: "default",
+          animations: [
+            {
+              frames: [
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: 0,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "default",
+            },
+            {
+              frames: [
+                {
+                  duration: jumpDuration / 5,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: 0,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: jumpDuration / 5,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: 0,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: jumpDuration / 5,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 3,
+                  sourceY: 0,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: jumpDuration / 5,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: 0,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: 0,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "jump",
+            },
+          ],
+          imagePath: "shadow",
+        }),
+        x: (): number => {
+          switch (enemy.facingDirection) {
+            case XDirection.Left:
+              return -18;
+            case XDirection.Right:
+              return -17;
+          }
+        },
+        y: -bossEnemySpriteHeight + entityHitboxHeight + 7,
+      });
+      addEntitySprite(enemyID, {
+        spriteID: createSprite({
+          animationID: (): string => {
+            switch (enemy.facingDirection) {
+              case XDirection.Left:
+                if (isEnemyPunching(enemy.id)) {
+                  if (
+                    getCurrentTime() - enemy.punch.createdAt <
+                    punchBeforeDuration
+                  ) {
+                    return "charge-punch-left";
+                  }
+                  if (enemy.punch.hand === PunchHand.Left) {
+                    return "punch-left-left";
+                  }
+                  return "punch-left-right";
+                }
+                if (isEnemyKicking(enemy.id)) {
+                  if (
+                    getCurrentTime() - enemy.kick.createdAt <
+                    kickBeforeDuration
+                  ) {
+                    return "charge-kick-left";
+                  }
+                  return "kick-left";
+                }
+                if (isEnemyPummeling(enemy.id)) {
+                  if (
+                    getCurrentTime() - enemy.pummel.createdAt <
+                    pummelBeforeDuration
+                  ) {
+                    return "charge-pummel-left";
+                  }
+                  return "pummel-left";
+                }
+                if (
+                  isEnemyTakingKnockback(enemy.id) ||
+                  isEnemyStunned(enemy.id)
+                ) {
+                  return "stunned-left";
+                }
+                if (isEnemyMoving(enemy.id)) {
+                  return "walk-left";
+                }
+                return "idle-left";
+              case XDirection.Right:
+                if (isEnemyPunching(enemy.id)) {
+                  if (
+                    getCurrentTime() - enemy.punch.createdAt <
+                    punchBeforeDuration
+                  ) {
+                    return "charge-punch-right";
+                  }
+                  if (enemy.punch.hand === PunchHand.Left) {
+                    return "punch-right-left";
+                  }
+                  return "punch-right-right";
+                }
+                if (isEnemyKicking(enemy.id)) {
+                  if (
+                    getCurrentTime() - enemy.kick.createdAt <
+                    kickBeforeDuration
+                  ) {
+                    return "charge-kick-right";
+                  }
+                  return "kick-right";
+                }
+                if (isEnemyPummeling(enemy.id)) {
+                  if (
+                    getCurrentTime() - enemy.pummel.createdAt <
+                    pummelBeforeDuration
+                  ) {
+                    return "charge-pummel-right";
+                  }
+                  return "pummel-right";
+                }
+                if (
+                  isEnemyTakingKnockback(enemy.id) ||
+                  isEnemyStunned(enemy.id)
+                ) {
+                  return "stunned-right";
+                }
+                if (isEnemyMoving(enemy.id)) {
+                  return "walk-right";
+                }
+                return "idle-right";
+            }
+          },
+          animations: [
+            {
+              frames: [
+                {
+                  duration: 200,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 17,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 17,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 200,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 17,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 3,
+                  sourceY: bossEnemySpriteHeight * 17,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "idle-left",
+            },
+            {
+              frames: [
+                {
+                  duration: 200,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: 0,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: 0,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 200,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: 0,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: 0,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "idle-right",
+            },
+            {
+              frames: [
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 19,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 19,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 19,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 3,
+                  sourceY: bossEnemySpriteHeight * 19,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 4,
+                  sourceY: bossEnemySpriteHeight * 19,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 5,
+                  sourceY: bossEnemySpriteHeight * 19,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "walk-left",
+            },
+            {
+              frames: [
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 2,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 2,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 2,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 3,
+                  sourceY: bossEnemySpriteHeight * 2,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 4,
+                  sourceY: bossEnemySpriteHeight * 2,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: 100,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 5,
+                  sourceY: bossEnemySpriteHeight * 2,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "walk-right",
+            },
+            {
+              frames: [
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 29,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "jump-left",
+            },
+            {
+              frames: [
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 12,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "jump-right",
+            },
+            {
+              frames: [
+                {
+                  duration: punchAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 21,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: punchAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 21,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 21,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "punch-left-right",
+            },
+            {
+              frames: [
+                {
+                  duration: punchAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 22,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: punchAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 22,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 22,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "punch-left-left",
+            },
+            {
+              frames: [
+                {
+                  duration: punchAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 5,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: punchAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 5,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 5,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "punch-right-right",
+            },
+            {
+              frames: [
+                {
+                  duration: punchAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 4,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: punchAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 4,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 4,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "punch-right-left",
+            },
+            {
+              frames: [
+                {
+                  duration: kickAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 24,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: kickAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 24,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 24,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "kick-left",
+            },
+            {
+              frames: [
+                {
+                  duration: kickAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 7,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: kickAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 7,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 7,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "kick-right",
+            },
+            {
+              frames: [
+                {
+                  duration: pummelAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 21,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: pummelAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 21,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 21,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "pummel-left",
+            },
+            {
+              frames: [
+                {
+                  duration: pummelAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 4,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: pummelAfterDuration / 3,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 4,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 4,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "pummel-right",
+            },
+            {
+              frames: [
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: baseEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 23,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "charge-punch-left",
+            },
+            {
+              frames: [
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 6,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "charge-punch-right",
+            },
+            {
+              frames: [
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 23,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "charge-kick-left",
+            },
+            {
+              frames: [
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 6,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "charge-kick-right",
+            },
+            {
+              frames: [
+                {
+                  duration: pummelBeforeDuration / 4,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 20,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: pummelBeforeDuration / 4,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 20,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: pummelBeforeDuration / 4,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 20,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 20,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "charge-pummel-left",
+            },
+            {
+              frames: [
+                {
+                  duration: pummelBeforeDuration / 4,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 3,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: pummelBeforeDuration / 4,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 3,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: pummelBeforeDuration / 4,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 3,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 3,
+                  sourceY: bossEnemySpriteHeight * 3,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "charge-pummel-right",
+            },
+            {
+              frames: [
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 33,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "stunned-left",
+            },
+            {
+              frames: [
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 16,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "stunned-right",
+            },
+          ],
+          imagePath: "enemies/boss-enemy",
+        }),
+        x: (): number => {
+          switch (enemy.facingDirection) {
+            case XDirection.Left:
+              return -34;
+            case XDirection.Right:
+              return -17;
+          }
+        },
+        y: (): number => {
+          const bossOffset: number =
+            -bossEnemySpriteHeight + entityHitboxHeight + 7;
+          return bossOffset;
         },
       });
       break;

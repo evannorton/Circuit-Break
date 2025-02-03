@@ -10,6 +10,7 @@ import { createDestructible } from "./functions/createDestructible";
 import { createEnemies } from "./functions/createEnemies";
 import { doEnemiesBehavior } from "./functions/doEnemiesBehavior";
 import { executeEnemiesKicks } from "./functions/executeEnemiesKicks";
+import { executeEnemiesPummels } from "./functions/executeEnemiesPummels";
 import { executeEnemiesPunches } from "./functions/executeEnemiesPunches";
 import { executeEnemiesShoots } from "./functions/executeEnemiesShoots";
 import { executeEnemiesSwoops } from "./functions/executeEnemiesSwoops";
@@ -72,6 +73,8 @@ export const tick = (): void => {
     executePlayerHighKick();
     // Execute enemies punches
     executeEnemiesPunches();
+    // Execute enemies pummels
+    executeEnemiesPummels();
     // Execute enemies kicks
     executeEnemiesKicks();
     // Execute enemies swoops

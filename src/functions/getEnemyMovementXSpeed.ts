@@ -1,6 +1,7 @@
 import { Enemy, EnemyType } from "../classes/Enemy";
 import {
   baseEnemyMovementXSpeed,
+  bossEnemyMovementXSpeed,
   flyingEnemyMovementXSpeed,
   shootingEnemyMovementXSpeed,
 } from "../constants";
@@ -11,6 +12,8 @@ export const getEnemyMovementXSpeed = (enemyID: string): number => {
   switch (enemy.type) {
     case EnemyType.Base:
       return baseEnemyMovementXSpeed;
+    case EnemyType.Boss:
+      return bossEnemyMovementXSpeed;
     case EnemyType.Flying:
       return flyingEnemyMovementXSpeed;
     case EnemyType.Shooting:

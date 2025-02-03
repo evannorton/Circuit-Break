@@ -8,6 +8,16 @@ export const getEnemyCollidableEntities = (enemyType: EnemyType): string[] => {
         "destructible",
         "player",
         "enemy-base",
+        "enemy-boss",
+        "enemy-shooting",
+      ];
+    case EnemyType.Boss:
+      return [
+        "boundary",
+        "destructible",
+        "player",
+        "enemy-base",
+        "enemy-boss",
         "enemy-shooting",
       ];
     case EnemyType.Flying:
@@ -18,6 +28,7 @@ export const getEnemyCollidableEntities = (enemyType: EnemyType): string[] => {
         "destructible",
         "player",
         "enemy-base",
+        "enemy-boss",
         "enemy-shooting",
       ];
   }

@@ -59,6 +59,7 @@ export const executePlayerHighKick = (): void => {
       entityTypes: [
         "destructible",
         "enemy-base",
+        "enemy-boss",
         "enemy-shooting",
         "enemy-flying",
       ],
@@ -73,6 +74,7 @@ export const executePlayerHighKick = (): void => {
       if (
         entityCollidable.type === "destructible" ||
         entityCollidable.type === "enemy-base" ||
+        entityCollidable.type === "enemy-boss" ||
         entityCollidable.type === "enemy-shooting" ||
         entityCollidable.type === "enemy-flying"
       ) {
@@ -84,6 +86,7 @@ export const executePlayerHighKick = (): void => {
             );
             break;
           case "enemy-base":
+          case "enemy-boss":
           case "enemy-shooting":
           case "enemy-flying": {
             damageEnemy(

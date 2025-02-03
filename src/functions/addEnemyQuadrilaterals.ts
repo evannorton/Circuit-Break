@@ -2,6 +2,7 @@ import { Enemy, EnemyType } from "../classes/Enemy";
 import { addEntityQuadrilateral, createQuadrilateral } from "pixel-pigeon";
 import {
   baseEnemyHitboxWidth,
+  bossEnemyHitboxWidth,
   entityHitboxHeight,
   flyingEnemyHitboxWidth,
   renderHitboxes,
@@ -16,6 +17,9 @@ export const addEnemyQuadrilaterals = (enemyID: string): void => {
     switch (enemy.type) {
       case EnemyType.Base:
         hitboxWidth = baseEnemyHitboxWidth;
+        break;
+      case EnemyType.Boss:
+        hitboxWidth = bossEnemyHitboxWidth;
         break;
       case EnemyType.Flying:
         hitboxWidth = flyingEnemyHitboxWidth;

@@ -1,6 +1,7 @@
 import { Definable } from "definables";
 import { EntityPosition, createEntity, removeEntity } from "pixel-pigeon";
 import { Kick } from "../types/Kick";
+import { Pummel } from "../types/Pummel";
 import { Punch } from "../types/Punch";
 import { Shoot } from "../types/Shoot";
 import { Swoop } from "../types/Swoop";
@@ -14,6 +15,7 @@ import { getEnemyMaxHP } from "../functions/getEnemyMaxHP";
 
 export enum EnemyType {
   Base = "base",
+  Boss = "boss",
   Flying = "flying",
   Shooting = "shooting",
 }
@@ -31,6 +33,7 @@ export class Enemy extends Definable {
   private _knockbackVelocity: number | null = null;
   private _movingXDirection: XDirection | null = null;
   private _movingYDirection: YDirection | null = null;
+  private _pummel: Pummel | null = null;
   private _punch: Punch | null = null;
   private _shoot: Shoot | null = null;
   private readonly _spawnDirection: XDirection;
@@ -101,6 +104,13 @@ export class Enemy extends Definable {
       return this._movingYDirection;
     }
     throw new Error(this.getAccessorErrorMessage("movingYDirection"));
+  }
+
+  public get pummel(): Pummel {
+    if (this._pummel !== null) {
+      return this._pummel;
+    }
+    throw new Error(this.getAccessorErrorMessage("pummel"));
   }
 
   public get punch(): Punch {
@@ -178,6 +188,10 @@ export class Enemy extends Definable {
     this._movingYDirection = movingYDirection;
   }
 
+  public set pummel(pummel: Pummel | null) {
+    this._pummel = pummel;
+  }
+
   public set punch(punch: Punch | null) {
     this._punch = punch;
   }
@@ -208,6 +222,10 @@ export class Enemy extends Definable {
 
   public hasMovingYDirection(): boolean {
     return this._movingYDirection !== null;
+  }
+
+  public hasPummel(): boolean {
+    return this._pummel !== null;
   }
 
   public hasPunch(): boolean {
