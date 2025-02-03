@@ -1,8 +1,11 @@
+import { Enemy, EnemyType } from "./classes/Enemy";
 import {
   EntityPosition,
   getCurrentTime,
   getEntityIDs,
   getEntityPosition,
+  getGameHeight,
+  getGameWidth,
   moveEntity,
   setEntityZIndex,
 } from "pixel-pigeon";
@@ -18,6 +21,12 @@ import { executePlayerHadouken } from "./functions/executePlayerHadouken";
 import { executePlayerHighKick } from "./functions/executePlayerHighKick";
 import { executePlayerKick } from "./functions/executePlayerKick";
 import { executePlayerPunch } from "./functions/executePlayerPunch";
+import {
+  flyingEnemyHitboxWidth,
+  levelID,
+  titleFadeDuration,
+} from "./constants";
+import { getDefinables } from "definables";
 import { isGameOngoing } from "./functions/isGameOngoing";
 import { isPlayerHadoukening } from "./functions/isPlayerHadoukening";
 import { isPlayerHighKicking } from "./functions/isPlayerHighKicking";
@@ -27,7 +36,6 @@ import { isPlayerPunching } from "./functions/isPlayerPunching";
 import { isPlayerStunned } from "./functions/isPlayerStunned";
 import { landHadoukens } from "./functions/landHadoukens";
 import { landShootProjectiles } from "./functions/landShootProjectiles";
-import { levelID, titleFadeDuration } from "./constants";
 import { movePlayer } from "./functions/movePlayer";
 import { retry } from "./functions/retry";
 import { startGame } from "./functions/startGame";
@@ -87,6 +95,20 @@ export const tick = (): void => {
     landHadoukens();
     // Land shoot projectiles
     landShootProjectiles();
+    // Clear flying enemies
+    for (const enemy of getDefinables(Enemy).values()) {
+      if (enemy.type === EnemyType.Flying && enemy.hasAttacked) {
+        const enemyPosition: EntityPosition = getEntityPosition(enemy.id);
+        if (
+          enemyPosition.x < flyingEnemyHitboxWidth ||
+          enemyPosition.x > getGameWidth() ||
+          enemyPosition.y < flyingEnemyHitboxWidth ||
+          enemyPosition.y > getGameHeight()
+        ) {
+          enemy.remove();
+        }
+      }
+    }
     // Y-sort characters
     [
       ...getEntityIDs({

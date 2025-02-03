@@ -5,6 +5,7 @@ import {
   createInputTickHandler,
   getCurrentTime,
   moveEntity,
+  playAudioSource,
   takeScreenshot,
 } from "pixel-pigeon";
 import { PunchHand } from "./types/Punch";
@@ -19,6 +20,7 @@ import { isPlayerJumping } from "./functions/isPlayerJumping";
 import { isPlayerKicking } from "./functions/isPlayerKicking";
 import { isPlayerLanding } from "./functions/isPlayerLanding";
 import { isPlayerPunching } from "./functions/isPlayerPunching";
+import { sfxVolumeChannelID } from "./volumeChannels";
 import { state } from "./state";
 
 const screenshotInputCollectionID: string = createInputCollection({
@@ -134,6 +136,9 @@ createInputPressHandler({
     isPlayerHighKicking() === false,
   inputCollectionID: jumpInputCollectionID,
   onInput: (): void => {
+    playAudioSource("sfx/jump", {
+      volumeChannelID: sfxVolumeChannelID,
+    });
     state.setValues({
       jumpedAt: getCurrentTime(),
     });

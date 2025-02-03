@@ -4,6 +4,7 @@ import {
   getCurrentTime,
   getEntityPosition,
   moveEntity,
+  playAudioSource,
 } from "pixel-pigeon";
 import { PunchHand } from "../types/Punch";
 import { XDirection, YDirection } from "../types/Direction";
@@ -17,6 +18,7 @@ import { isEnemyPunching } from "./isEnemyPunching";
 import { isEnemyShooting } from "./isEnemyShooting";
 import { isEnemyStunned } from "../functions/isEnemyStunned";
 import { isEnemyTakingKnockback } from "./isEnemyTakingKnockback";
+import { sfxVolumeChannelID } from "../volumeChannels";
 import { state } from "../state";
 
 export const doEnemiesBehavior = (): void => {
@@ -77,13 +79,15 @@ export const doEnemiesBehavior = (): void => {
         xVelocity,
         yVelocity,
       });
-      if (playerPosition.x > enemyPosition.x) {
-        enemy.facingDirection = XDirection.Right;
-        enemy.movingXDirection = XDirection.Right;
-      }
-      if (playerPosition.x < enemyPosition.x) {
-        enemy.facingDirection = XDirection.Left;
-        enemy.movingXDirection = XDirection.Left;
+      if (enemy.type !== EnemyType.Flying || enemy.hasAttacked === false) {
+        if (playerPosition.x > enemyPosition.x) {
+          enemy.facingDirection = XDirection.Right;
+          enemy.movingXDirection = XDirection.Right;
+        }
+        if (playerPosition.x < enemyPosition.x) {
+          enemy.facingDirection = XDirection.Left;
+          enemy.movingXDirection = XDirection.Left;
+        }
       }
       if (xVelocity === 0) {
         enemy.movingXDirection = null;
@@ -141,6 +145,9 @@ export const doEnemiesBehavior = (): void => {
             createdAt: getCurrentTime(),
             wasExecuted: false,
           };
+          playAudioSource("sfx/wind-up", {
+            volumeChannelID: sfxVolumeChannelID,
+          });
           break;
         case EnemyType.Flying:
           enemy.swoop = {

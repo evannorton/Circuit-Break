@@ -46,7 +46,7 @@ export const retry = (): void => {
     power: 0,
     spawnedEnemyAt: null,
     titleAdvancedAt: state.values.titleAdvancedAt,
-    titleStartedAt: null,
+    titleStartedAt: state.values.titleStartedAt,
     unlockDisplayedAt: null,
   };
   state.setValues(initialValues);

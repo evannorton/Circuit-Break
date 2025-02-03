@@ -72,7 +72,7 @@ export const createEnemies = (): void => {
     }
     if (
       currentTime - state.values.enemiesStartedAt > baseEnemiesStartAt &&
-      baseEnemyCount < 2
+      baseEnemyCount < 1
     ) {
       didSpawn = true;
       new Enemy({
@@ -86,7 +86,7 @@ export const createEnemies = (): void => {
     }
     if (
       currentTime - state.values.enemiesStartedAt > flyingEnemiesStartAt &&
-      flyingEnemyCount < 2
+      flyingEnemyCount < 1
     ) {
       didSpawn = true;
       new Enemy({
@@ -100,7 +100,7 @@ export const createEnemies = (): void => {
     }
     if (
       currentTime - state.values.enemiesStartedAt > shootingEnemiesStartAt &&
-      shootingEnemyCount < 2
+      shootingEnemyCount < 1
     ) {
       didSpawn = true;
       new Enemy({

@@ -3,6 +3,7 @@ import {
   getCurrentTime,
   getEntityPosition,
   moveEntity,
+  playAudioSource,
 } from "pixel-pigeon";
 import { HadoukenProjectile } from "../classes/HadoukenProjectile";
 import { XDirection } from "../types/Direction";
@@ -11,6 +12,7 @@ import {
   hadoukenHitboxWidth,
   playerHitboxWidth,
 } from "../constants";
+import { sfxVolumeChannelID } from "../volumeChannels";
 import { state } from "../state";
 
 export const executePlayerHadouken = (): void => {
@@ -60,5 +62,8 @@ export const executePlayerHadouken = (): void => {
         break;
     }
     state.values.playerHadouken.wasExecuted = true;
+    playAudioSource("sfx/x-wave", {
+      volumeChannelID: sfxVolumeChannelID,
+    });
   }
 };

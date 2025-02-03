@@ -4,6 +4,7 @@ import {
   getCurrentTime,
   getEntityPosition,
   moveEntity,
+  playAudioSource,
 } from "pixel-pigeon";
 import { ShootProjectile } from "../classes/ShootProjectile";
 import { XDirection } from "../types/Direction";
@@ -13,6 +14,7 @@ import {
   shootHitboxWidth,
 } from "../constants";
 import { getDefinables } from "definables";
+import { sfxVolumeChannelID } from "../volumeChannels";
 
 export const executeEnemiesShoots = (): void => {
   for (const enemy of getDefinables(Enemy).values()) {
@@ -37,6 +39,9 @@ export const executeEnemiesShoots = (): void => {
           };
           break;
       }
+      playAudioSource("sfx/shoot", {
+        volumeChannelID: sfxVolumeChannelID,
+      });
       enemy.shoot.wasExecuted = true;
       enemy.hasAttacked = true;
       const shootProjectile: ShootProjectile = new ShootProjectile({

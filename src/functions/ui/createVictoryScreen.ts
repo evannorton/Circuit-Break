@@ -76,6 +76,8 @@ export const createVictoryScreen = (): void => {
   for (const creditsEntry of creditsEntries) {
     createButton({
       coordinates: {
+        condition: (): boolean =>
+          state.values.didWin && state.values.gameEndedAt !== null,
         x: creditsEntry.x,
         y: creditsEntry.y,
       },
