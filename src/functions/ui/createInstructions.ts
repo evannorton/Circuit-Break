@@ -100,7 +100,7 @@ export const createInstructions = (): void => {
     horizontalAlignment: "left",
     maxWidth: textMaxWidth,
     text: {
-      value: "- C key/B button for heavy attack.",
+      value: "- C key/Y button for heavy attack.",
     },
   });
 };
