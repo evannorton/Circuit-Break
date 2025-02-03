@@ -55,8 +55,8 @@ export const createVictoryScreen = (): void => {
       height: 18,
       url: "https://twitter.com/bampikku",
       width: 124,
-      x: 1,
-      y: 176,
+      x: 2,
+      y: 196,
     },
     {
       height: 18,
@@ -71,6 +71,13 @@ export const createVictoryScreen = (): void => {
       width: 160,
       x: 221,
       y: 195,
+    },
+    {
+      height: 18,
+      url: "https://youtube.com/@ragchomp",
+      width: 79,
+      x: 2,
+      y: 176,
     },
   ];
   for (const creditsEntry of creditsEntries) {
