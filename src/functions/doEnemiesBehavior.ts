@@ -16,6 +16,7 @@ import { isEnemyKicking } from "./isEnemyKicking";
 import { isEnemyPummeling } from "./isEnemyPummeling";
 import { isEnemyPunching } from "./isEnemyPunching";
 import { isEnemyShooting } from "./isEnemyShooting";
+import { isEnemySlamming } from "./isEnemySlamming";
 import { isEnemyStunned } from "../functions/isEnemyStunned";
 import { isEnemyTakingKnockback } from "./isEnemyTakingKnockback";
 import { sfxVolumeChannelID } from "../volumeChannels";
@@ -57,6 +58,7 @@ export const doEnemiesBehavior = (): void => {
             : enemyMovementXSpeed * 3
           : isEnemyPunching(enemy.id) ||
               isEnemyPummeling(enemy.id) ||
+              isEnemySlamming(enemy.id) ||
               isEnemyKicking(enemy.id) ||
               isEnemyStunned(enemy.id) ||
               isEnemyShooting(enemy.id)
@@ -71,6 +73,7 @@ export const doEnemiesBehavior = (): void => {
           ? 0
           : isEnemyPunching(enemy.id) ||
               isEnemyPummeling(enemy.id) ||
+              isEnemySlamming(enemy.id) ||
               isEnemyKicking(enemy.id) ||
               isEnemyStunned(enemy.id) ||
               isEnemyShooting(enemy.id)
@@ -116,6 +119,7 @@ export const doEnemiesBehavior = (): void => {
       isEnemyTakingKnockback(enemy.id) === false &&
       isEnemyPunching(enemy.id) === false &&
       isEnemyPummeling(enemy.id) === false &&
+      isEnemySlamming(enemy.id) === false &&
       isEnemyKicking(enemy.id) === false &&
       isEnemyShooting(enemy.id) === false &&
       (enemy.type !== EnemyType.Flying || enemy.hasAttacked === false) &&
@@ -146,13 +150,23 @@ export const doEnemiesBehavior = (): void => {
           }
           break;
         case EnemyType.Boss:
-          enemy.pummel = {
-            createdAt: getCurrentTime(),
-            wasExecuted: false,
-          };
-          playAudioSource("sfx/wind-up", {
-            volumeChannelID: sfxVolumeChannelID,
-          });
+          if (Math.random() < 0.5) {
+            enemy.pummel = {
+              createdAt: getCurrentTime(),
+              wasExecuted: false,
+            };
+            playAudioSource("sfx/wind-up", {
+              volumeChannelID: sfxVolumeChannelID,
+            });
+          } else {
+            enemy.slam = {
+              createdAt: getCurrentTime(),
+              wasExecuted: false,
+            };
+            playAudioSource("sfx/wind-up", {
+              volumeChannelID: sfxVolumeChannelID,
+            });
+          }
           break;
         case EnemyType.Flying:
           enemy.swoop = {

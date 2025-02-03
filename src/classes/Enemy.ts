@@ -4,6 +4,7 @@ import { Kick } from "../types/Kick";
 import { Pummel } from "../types/Pummel";
 import { Punch } from "../types/Punch";
 import { Shoot } from "../types/Shoot";
+import { Slam } from "../types/Slam";
 import { Swoop } from "../types/Swoop";
 import { XDirection, YDirection } from "../types/Direction";
 import { addEnemyQuadrilaterals } from "../functions/addEnemyQuadrilaterals";
@@ -36,6 +37,7 @@ export class Enemy extends Definable {
   private _pummel: Pummel | null = null;
   private _punch: Punch | null = null;
   private _shoot: Shoot | null = null;
+  private _slam: Slam | null = null;
   private readonly _spawnDirection: XDirection;
   private _stunDuration: number | null = null;
   private _swoop: Swoop | null = null;
@@ -127,6 +129,13 @@ export class Enemy extends Definable {
     throw new Error(this.getAccessorErrorMessage("shoot"));
   }
 
+  public get slam(): Slam {
+    if (this._slam !== null) {
+      return this._slam;
+    }
+    throw new Error(this.getAccessorErrorMessage("slam"));
+  }
+
   public get spawnDirection(): XDirection {
     return this._spawnDirection;
   }
@@ -200,6 +209,10 @@ export class Enemy extends Definable {
     this._shoot = shoot;
   }
 
+  public set slam(slam: Slam | null) {
+    this._slam = slam;
+  }
+
   public set stunDuration(stunDuration: number) {
     this._stunDuration = stunDuration;
   }
@@ -234,6 +247,10 @@ export class Enemy extends Definable {
 
   public hasShoot(): boolean {
     return this._shoot !== null;
+  }
+
+  public hasSlam(): boolean {
+    return this._slam !== null;
   }
 
   public hasSwoop(): boolean {

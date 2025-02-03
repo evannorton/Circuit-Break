@@ -16,6 +16,7 @@ import { executeEnemiesKicks } from "./functions/executeEnemiesKicks";
 import { executeEnemiesPummels } from "./functions/executeEnemiesPummels";
 import { executeEnemiesPunches } from "./functions/executeEnemiesPunches";
 import { executeEnemiesShoots } from "./functions/executeEnemiesShoots";
+import { executeEnemiesSlams } from "./functions/executeEnemiesSlams";
 import { executeEnemiesSwoops } from "./functions/executeEnemiesSwoops";
 import { executePlayerHadouken } from "./functions/executePlayerHadouken";
 import { executePlayerHighKick } from "./functions/executePlayerHighKick";
@@ -83,6 +84,8 @@ export const tick = (): void => {
     executeEnemiesPunches();
     // Execute enemies pummels
     executeEnemiesPummels();
+    // Execute enemies slams
+    executeEnemiesSlams();
     // Execute enemies kicks
     executeEnemiesKicks();
     // Execute enemies swoops

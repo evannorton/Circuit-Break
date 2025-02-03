@@ -20,6 +20,8 @@ import {
   shootBeforeDuration,
   shootingEnemySpriteHeight,
   shootingEnemySpriteWidth,
+  slamAfterDuration,
+  slamBeforeDuration,
   swoopAfterDuration,
   swoopBeforeDuration,
 } from "../constants";
@@ -29,6 +31,7 @@ import { isEnemyMoving } from "./isEnemyMoving";
 import { isEnemyPummeling } from "./isEnemyPummeling";
 import { isEnemyPunching } from "./isEnemyPunching";
 import { isEnemyShooting } from "./isEnemyShooting";
+import { isEnemySlamming } from "./isEnemySlamming";
 import { isEnemyStunned } from "./isEnemyStunned";
 import { isEnemyTakingKnockback } from "./isEnemyTakingKnockback";
 
@@ -860,6 +863,15 @@ export const addEnemySprites = (enemyID: string): void => {
                   }
                   return "pummel-left";
                 }
+                if (isEnemySlamming(enemy.id)) {
+                  if (
+                    getCurrentTime() - enemy.slam.createdAt <
+                    slamBeforeDuration
+                  ) {
+                    return "charge-slam-left";
+                  }
+                  return "slam-left";
+                }
                 if (
                   isEnemyTakingKnockback(enemy.id) ||
                   isEnemyStunned(enemy.id)
@@ -900,6 +912,15 @@ export const addEnemySprites = (enemyID: string): void => {
                     return "charge-pummel-right";
                   }
                   return "pummel-right";
+                }
+                if (isEnemySlamming(enemy.id)) {
+                  if (
+                    getCurrentTime() - enemy.slam.createdAt <
+                    slamBeforeDuration
+                  ) {
+                    return "charge-slam-right";
+                  }
+                  return "slam-right";
                 }
                 if (
                   isEnemyTakingKnockback(enemy.id) ||
@@ -1391,6 +1412,122 @@ export const addEnemySprites = (enemyID: string): void => {
             {
               frames: [
                 {
+                  duration: slamAfterDuration / 6,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 23,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: slamAfterDuration / 6,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 23,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: slamAfterDuration / 6,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 23,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: slamAfterDuration / 6,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 3,
+                  sourceY: bossEnemySpriteHeight * 23,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: slamAfterDuration / 6,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 4,
+                  sourceY: bossEnemySpriteHeight * 23,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 5,
+                  sourceY: bossEnemySpriteHeight * 23,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "slam-left",
+            },
+            {
+              frames: [
+                {
+                  duration: slamAfterDuration / 6,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 6,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: slamAfterDuration / 6,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 6,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: slamAfterDuration / 6,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 6,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: slamAfterDuration / 6,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 3,
+                  sourceY: bossEnemySpriteHeight * 6,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: slamAfterDuration / 6,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 4,
+                  sourceY: bossEnemySpriteHeight * 6,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 5,
+                  sourceY: bossEnemySpriteHeight * 6,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "slam-right",
+            },
+            {
+              frames: [
+                {
                   height: bossEnemySpriteHeight,
                   sourceHeight: baseEnemySpriteHeight,
                   sourceWidth: bossEnemySpriteWidth,
@@ -1521,6 +1658,88 @@ export const addEnemySprites = (enemyID: string): void => {
                 },
               ],
               id: "charge-pummel-right",
+            },
+            {
+              frames: [
+                {
+                  duration: slamBeforeDuration / 8,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 22,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: slamBeforeDuration / 8,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 22,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: slamBeforeDuration / 8,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 22,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: slamBeforeDuration / 8,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 22,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "charge-slam-left",
+            },
+            {
+              frames: [
+                {
+                  duration: slamBeforeDuration / 8,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight * 5,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: slamBeforeDuration / 8,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth,
+                  sourceY: bossEnemySpriteHeight * 5,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: slamBeforeDuration / 8,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 2,
+                  sourceY: bossEnemySpriteHeight * 5,
+                  width: bossEnemySpriteWidth,
+                },
+                {
+                  duration: slamBeforeDuration / 8,
+                  height: bossEnemySpriteHeight,
+                  sourceHeight: bossEnemySpriteHeight,
+                  sourceWidth: bossEnemySpriteWidth,
+                  sourceX: bossEnemySpriteWidth * 3,
+                  sourceY: bossEnemySpriteHeight * 5,
+                  width: bossEnemySpriteWidth,
+                },
+              ],
+              id: "charge-slam-right",
             },
             {
               frames: [
