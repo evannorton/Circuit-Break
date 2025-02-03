@@ -104,10 +104,10 @@ export const powerLevels: PowerLevel[] = [
     unlockName: "X-Wave",
   },
 ];
-export const baseEnemiesStartAt: number = 111111110;
+export const baseEnemiesStartAt: number = 0;
 export const shootingEnemiesStartAt: number = 30000;
 export const flyingEnemiesStartAt: number = 60000;
-export const bossEnemyStartsAt: number = 0;
+export const bossEnemyStartsAt: number = 90000;
 export const directionComboThreshold: number = 500;
 export const hadoukenHitboxWidth: number = 18;
 export const enemyShootDamage: number = 1;
