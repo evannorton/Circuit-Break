@@ -48,7 +48,7 @@ export const createVictoryScreen = (): void => {
       height: 18,
       url: "https://evanmmo.com",
       width: 110,
-      x: 173,
+      x: 137,
       y: 2,
     },
     {
