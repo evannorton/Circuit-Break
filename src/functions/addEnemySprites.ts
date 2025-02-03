@@ -751,7 +751,16 @@ export const addEnemySprites = (enemyID: string): void => {
     case EnemyType.Boss:
       addEntitySprite(enemyID, {
         spriteID: createSprite({
-          animationID: "default",
+          animationID: (): string => {
+            if (
+              isEnemyMoving(enemy.id) ||
+              (isEnemySlamming(enemy.id) &&
+                getCurrentTime() - enemy.slam.createdAt >= slamBeforeDuration)
+            ) {
+              return "walking";
+            }
+            return "default";
+          },
           animations: [
             {
               frames: [
@@ -769,51 +778,15 @@ export const addEnemySprites = (enemyID: string): void => {
             {
               frames: [
                 {
-                  duration: jumpDuration / 5,
                   height: bossEnemySpriteHeight,
                   sourceHeight: bossEnemySpriteHeight,
                   sourceWidth: bossEnemySpriteWidth,
-                  sourceX: bossEnemySpriteWidth,
-                  sourceY: 0,
-                  width: bossEnemySpriteWidth,
-                },
-                {
-                  duration: jumpDuration / 5,
-                  height: bossEnemySpriteHeight,
-                  sourceHeight: bossEnemySpriteHeight,
-                  sourceWidth: bossEnemySpriteWidth,
-                  sourceX: bossEnemySpriteWidth * 2,
-                  sourceY: 0,
-                  width: bossEnemySpriteWidth,
-                },
-                {
-                  duration: jumpDuration / 5,
-                  height: bossEnemySpriteHeight,
-                  sourceHeight: bossEnemySpriteHeight,
-                  sourceWidth: bossEnemySpriteWidth,
-                  sourceX: bossEnemySpriteWidth * 3,
-                  sourceY: 0,
-                  width: bossEnemySpriteWidth,
-                },
-                {
-                  duration: jumpDuration / 5,
-                  height: bossEnemySpriteHeight,
-                  sourceHeight: bossEnemySpriteHeight,
-                  sourceWidth: bossEnemySpriteWidth,
-                  sourceX: bossEnemySpriteWidth * 2,
-                  sourceY: 0,
-                  width: bossEnemySpriteWidth,
-                },
-                {
-                  height: bossEnemySpriteHeight,
-                  sourceHeight: bossEnemySpriteHeight,
-                  sourceWidth: bossEnemySpriteWidth,
-                  sourceX: bossEnemySpriteWidth,
-                  sourceY: 0,
+                  sourceX: 0,
+                  sourceY: bossEnemySpriteHeight,
                   width: bossEnemySpriteWidth,
                 },
               ],
-              id: "jump",
+              id: "walking",
             },
           ],
           imagePath: "shadow",
@@ -821,8 +794,22 @@ export const addEnemySprites = (enemyID: string): void => {
         x: (): number => {
           switch (enemy.facingDirection) {
             case XDirection.Left:
+              if (
+                isEnemyMoving(enemy.id) ||
+                (isEnemySlamming(enemy.id) &&
+                  getCurrentTime() - enemy.slam.createdAt >= slamBeforeDuration)
+              ) {
+                return -28;
+              }
               return -18;
             case XDirection.Right:
+              if (
+                isEnemyMoving(enemy.id) ||
+                (isEnemySlamming(enemy.id) &&
+                  getCurrentTime() - enemy.slam.createdAt >= slamBeforeDuration)
+              ) {
+                return -15;
+              }
               return -17;
           }
         },
