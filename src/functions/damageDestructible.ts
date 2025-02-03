@@ -1,8 +1,9 @@
+import { PowerLevel, PowerLevelType } from "../types/PowerLevel";
 import { getCurrentTime, removeEntity } from "pixel-pigeon";
 import { getPowerLevelIndex } from "./getPowerLevelIndex";
 import { isDestructibleRising } from "./isDestructibleRising";
 import { isDestructibleTakingDamage } from "./isDestructibleTakingDamage";
-import { playerMaxHP } from "../constants";
+import { powerLevels } from "../constants";
 import { state } from "../state";
 
 export const damageDestructible = (
@@ -29,7 +30,7 @@ export const damageDestructible = (
       removeEntity(state.values.destructible.baseEntityID);
       state.setValues({
         destructible: null,
-        playerHP: Math.min(state.values.playerHP + 2, playerMaxHP),
+        playerHP: Math.min(state.values.playerHP + 2, state.values.playerMaxHP),
         power: state.values.power + 1,
       });
       if (state.values.enemiesStartedAt === null) {
@@ -42,6 +43,22 @@ export const damageDestructible = (
         state.setValues({
           unlockDisplayedAt: currentTime,
         });
+        const powerLevel: PowerLevel | undefined =
+          powerLevels[(newPowerLevelIndex ?? powerLevels.length) - 1];
+        if (typeof powerLevel === "undefined") {
+          throw new Error("No power level found");
+        }
+        if (powerLevel.type === PowerLevelType.Health) {
+          state.setValues({
+            playerMaxHP: state.values.playerMaxHP + 2,
+          });
+          state.setValues({
+            playerHP: Math.min(
+              state.values.playerHP + 2,
+              state.values.playerMaxHP,
+            ),
+          });
+        }
       }
     }
   }

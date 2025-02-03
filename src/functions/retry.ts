@@ -8,7 +8,7 @@ import {
   removeEntity,
 } from "pixel-pigeon";
 import { getDefinables } from "definables";
-import { playerMaxHP } from "../constants";
+import { playerStartMaxHP } from "../constants";
 import { startGame } from "./startGame";
 
 export const retry = (): void => {
@@ -36,10 +36,11 @@ export const retry = (): void => {
     movingXDirection: null,
     movingYDirection: null,
     playerEntityID: null,
-    playerHP: playerMaxHP,
+    playerHP: playerStartMaxHP,
     playerHadouken: null,
     playerHighKick: null,
     playerKick: null,
+    playerMaxHP: playerStartMaxHP,
     playerPunch: null,
     playerStunDuration: null,
     playerTookDamageAt: null,

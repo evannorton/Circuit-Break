@@ -1,4 +1,4 @@
-import { PowerLevel } from "./types/PowerLevel";
+import { PowerLevel, PowerLevelType } from "./types/PowerLevel";
 
 export const titleFadeDuration: number = 1500;
 export const renderHitboxes: boolean = false;
@@ -86,7 +86,8 @@ export const enemySpawnTime: number = 10000;
 export const destructibleRisingFrames: number = 17;
 export const destructibleRisingFrameDuration: number = 100;
 export const destructibleIdleFrameDuration: number = 100;
-export const playerMaxHP: number = 12;
+export const playerStartMaxHP: number = 8;
+export const playerEndMaxHP: number = 12;
 export const heartsAmount: number = 6;
 export const jumpHeight: number = 18;
 export const comboThreshold: number = 250;
@@ -94,14 +95,24 @@ export const highKickKnockbackDuration: number = 375;
 export const knockbackVelocity: number = 175;
 export const powerLevels: PowerLevel[] = [
   {
+    amount: 1,
+    type: PowerLevelType.Health,
+    unlockImagePath: "unlocks/health",
+  },
+  {
     amount: 2,
+    type: PowerLevelType.Ability,
     unlockImagePath: "unlocks/high-kick",
-    unlockName: "High Kick",
+  },
+  {
+    amount: 2,
+    type: PowerLevelType.Health,
+    unlockImagePath: "unlocks/health",
   },
   {
     amount: 5,
+    type: PowerLevelType.Ability,
     unlockImagePath: "unlocks/x-wave",
-    unlockName: "X-Wave",
   },
 ];
 export const baseEnemiesStartAt: number = 0;

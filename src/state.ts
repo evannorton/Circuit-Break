@@ -6,7 +6,7 @@ import { Kick } from "./types/Kick";
 import { Punch } from "./types/Punch";
 import { State } from "pixel-pigeon";
 import { XDirection, YDirection } from "./types/Direction";
-import { playerMaxHP } from "./constants";
+import { playerStartMaxHP } from "./constants";
 
 export interface StateSchema {
   bossSpawnedAt: number | null;
@@ -28,6 +28,7 @@ export interface StateSchema {
   playerHadouken: Hadouken | null;
   playerHighKick: HighKick | null;
   playerKick: Kick | null;
+  playerMaxHP: number;
   playerPunch: Punch | null;
   playerStunDuration: number | null;
   playerTookDamageAt: number | null;
@@ -53,10 +54,11 @@ export const state: State<StateSchema> = new State<StateSchema>({
   movingXDirection: null,
   movingYDirection: null,
   playerEntityID: null,
-  playerHP: playerMaxHP,
+  playerHP: playerStartMaxHP,
   playerHadouken: null,
   playerHighKick: null,
   playerKick: null,
+  playerMaxHP: playerStartMaxHP,
   playerPunch: null,
   playerStunDuration: null,
   playerTookDamageAt: null,

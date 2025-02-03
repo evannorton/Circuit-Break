@@ -60,8 +60,21 @@ export const createHUD = (): void => {
         },
       ],
       coordinates: {
-        condition: (): boolean => isGameOngoing(),
-        x: (): number => x + 9 + i * 8,
+        condition: (): boolean =>
+          isGameOngoing() && (i + 1) * 2 <= state.values.playerMaxHP,
+        x: (): number => {
+          let offset: number = 0;
+          if (state.values.playerMaxHP === 10) {
+            offset += 4;
+          }
+          if (state.values.playerMaxHP === 8) {
+            offset += 8;
+          }
+          if (state.values.playerMaxHP === 6) {
+            offset += 12;
+          }
+          return offset + x + 9 + i * 8;
+        },
         y: y + 12,
       },
       imagePath: (): string => {

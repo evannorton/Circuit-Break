@@ -176,7 +176,7 @@ createInputPressHandler({
         state.values.lastComboDirection !== null &&
         getCurrentTime() - state.values.lastComboDirection.pressedAt <
           directionComboThreshold &&
-        (powerLevelIndex === null || powerLevelIndex >= 2) &&
+        (powerLevelIndex === null || powerLevelIndex >= 4) &&
         ((state.values.comboDirectionSequence[
           state.values.comboDirectionSequence.length - 2
         ] === YDirection.Down &&
