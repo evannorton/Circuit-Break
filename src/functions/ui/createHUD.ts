@@ -1,12 +1,14 @@
-import { PowerLevel } from "../../types/PowerLevel";
 import {
+  CreateLabelOptionsText,
+  createLabel,
   createQuadrilateral,
   createSprite,
   getCurrentTime,
   getGameWidth,
 } from "pixel-pigeon";
+import { PowerLevel } from "../../types/PowerLevel";
+import { bossEnemyStartsAt, heartsAmount, powerLevels } from "../../constants";
 import { getPowerLevelIndex } from "../getPowerLevelIndex";
-import { heartsAmount, powerLevels } from "../../constants";
 import { isGameOngoing } from "../isGameOngoing";
 import { isPowerPercentageReached } from "../isPowerPercentageReached";
 import { state } from "../../state";
@@ -132,7 +134,7 @@ export const createHUD = (): void => {
     coordinates: {
       condition: unlockCondition,
       x: Math.floor(getGameWidth() / 2 - unlockWidth / 2),
-      y: 1,
+      y: 11,
     },
     imagePath: (): string => {
       let powerLevelIndex: number | null = getPowerLevelIndex();
@@ -156,6 +158,33 @@ export const createHUD = (): void => {
         return 1 - diff / 1000;
       }
       return 1;
+    },
+  });
+  // Timer
+  const getSeconds = (): number => {
+    if (state.values.enemiesStartedAt === null) {
+      throw new Error("Enemies started at is null");
+    }
+    const totalTime: number = bossEnemyStartsAt;
+    const passedTime: number = getCurrentTime() - state.values.enemiesStartedAt;
+    const remainingTime: number = totalTime - passedTime;
+    return Math.ceil(remainingTime / 1000);
+  };
+  createLabel({
+    color: "#ffffff",
+    coordinates: {
+      condition: (): boolean =>
+        isGameOngoing() &&
+        state.values.bossSpawnedAt === null &&
+        state.values.enemiesStartedAt !== null &&
+        getSeconds() >= 0,
+      x: Math.floor(getGameWidth() / 2),
+      y: 2,
+    },
+    horizontalAlignment: "center",
+    text: (): CreateLabelOptionsText => {
+      const value: string = `Final wave: ${getSeconds()}`;
+      return { value };
     },
   });
 };
