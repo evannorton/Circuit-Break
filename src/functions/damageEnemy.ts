@@ -1,6 +1,7 @@
 import { Enemy } from "../classes/Enemy";
+import { endGame } from "./endGame";
 import { getCurrentTime, getEntityPosition } from "pixel-pigeon";
-import { getDefinable } from "definables";
+import { getDefinable, getDefinablesCount } from "definables";
 import { isEnemyStunned } from "./isEnemyStunned";
 import { isEnemyTakingDamage } from "./isEnemyTakingDamage";
 import { isEnemyTakingKnockback } from "./isEnemyTakingKnockback";
@@ -38,6 +39,12 @@ export const damageEnemy = (
     enemy.punch = null;
     if (enemy.hp <= 0) {
       enemy.remove();
+      if (
+        state.values.bossSpawnedAt !== null &&
+        getDefinablesCount(Enemy) === 0
+      ) {
+        endGame(true);
+      }
     }
   }
 };

@@ -31,6 +31,7 @@ export const createDefeatScreen = (): void => {
     ],
     coordinates: {
       condition: (): boolean =>
+        state.values.didWin === false &&
         state.values.gameEndedAt !== null &&
         state.values.defeatAdvancedAt === null,
       x: 0,
@@ -57,6 +58,7 @@ export const createDefeatScreen = (): void => {
     ],
     coordinates: {
       condition: (): boolean =>
+        state.values.didWin === false &&
         state.values.gameEndedAt !== null &&
         state.values.defeatAdvancedAt !== null,
       x: 0,
@@ -67,6 +69,7 @@ export const createDefeatScreen = (): void => {
   createButton({
     coordinates: {
       condition: (): boolean =>
+        state.values.didWin === false &&
         state.values.gameEndedAt !== null &&
         state.values.defeatAdvancedAt === null,
       x: 151,
@@ -81,7 +84,10 @@ export const createDefeatScreen = (): void => {
     width: 90,
   });
   createInputPressHandler({
-    condition: (): boolean => state.values.gameEndedAt !== null,
+    condition: (): boolean =>
+      state.values.didWin === false &&
+      state.values.gameEndedAt !== null &&
+      state.values.defeatAdvancedAt === null,
     inputCollectionID: startInputCollectionID,
     onInput: (): void => {
       state.setValues({

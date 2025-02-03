@@ -8,10 +8,12 @@ import { State } from "pixel-pigeon";
 import { XDirection, YDirection } from "./types/Direction";
 import { playerMaxHP } from "./constants";
 
-interface StateSchema {
+export interface StateSchema {
+  bossSpawnedAt: number | null;
   comboDirectionSequence: (XDirection | YDirection)[];
   defeatAdvancedAt: number | null;
   destructible: Destructible | null;
+  didWin: boolean;
   facingDirection: XDirection;
   enemiesStartedAt: number | null;
   gameEndedAt: number | null;
@@ -35,11 +37,12 @@ interface StateSchema {
   titleStartedAt: number | null;
   unlockDisplayedAt: number | null;
 }
-
 export const state: State<StateSchema> = new State<StateSchema>({
+  bossSpawnedAt: null,
   comboDirectionSequence: [],
   defeatAdvancedAt: null,
   destructible: null,
+  didWin: false,
   enemiesStartedAt: null,
   facingDirection: XDirection.Right,
   gameEndedAt: null,

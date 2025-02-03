@@ -1,10 +1,5 @@
-import {
-  applyAudioSourceVolume,
-  fadeInAudioSourceVolume,
-  fadeOutAudioSourceVolume,
-  getCurrentTime,
-  moveEntity,
-} from "pixel-pigeon";
+import { endGame } from "./endGame";
+import { getCurrentTime, moveEntity } from "pixel-pigeon";
 import { isPlayerStunned } from "./isPlayerStunned";
 import { isPlayerTakingDamage } from "./isPlayerTakingDamage";
 import { state } from "../state";
@@ -33,16 +28,7 @@ export const damagePlayer = (damage: number, stunDuration: number): void => {
       playerPunch: null,
     });
     if (state.values.playerHP <= 0) {
-      fadeOutAudioSourceVolume("music/main", {
-        duration: 1000,
-      });
-      applyAudioSourceVolume("music/chill", { volume: 0.5 });
-      fadeInAudioSourceVolume("music/chill", {
-        duration: 1000,
-      });
-      state.setValues({
-        gameEndedAt: currentTime,
-      });
+      endGame(false);
     }
   }
 };

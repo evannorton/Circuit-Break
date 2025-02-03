@@ -15,6 +15,7 @@ import { state } from "../state";
 export const createEnemies = (): void => {
   const currentTime: number = getCurrentTime();
   if (
+    state.values.bossSpawnedAt === null &&
     state.values.enemiesStartedAt !== null &&
     (state.values.spawnedEnemyAt === null ||
       currentTime - state.values.spawnedEnemyAt >= enemySpawnTime)
@@ -123,6 +124,9 @@ export const createEnemies = (): void => {
             ? XDirection.Right
             : XDirection.Left,
         type: EnemyType.Boss,
+      });
+      state.setValues({
+        bossSpawnedAt: currentTime,
       });
     }
     if (didSpawn) {

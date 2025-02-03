@@ -1,4 +1,5 @@
 import { Enemy } from "../classes/Enemy";
+import { StateSchema, state } from "../state";
 import { XDirection } from "../types/Direction";
 import {
   applyAudioSourceVolume,
@@ -9,7 +10,6 @@ import {
 import { getDefinables } from "definables";
 import { playerMaxHP } from "../constants";
 import { startGame } from "./startGame";
-import { state } from "../state";
 
 export const retry = (): void => {
   if (state.values.playerEntityID === null) {
@@ -20,13 +20,16 @@ export const retry = (): void => {
     removeEntity(state.values.destructible.batteryEntityID);
     removeEntity(state.values.destructible.baseEntityID);
   }
-  state.setValues({
+  const initialValues: StateSchema = {
+    bossSpawnedAt: null,
     comboDirectionSequence: [],
     defeatAdvancedAt: null,
     destructible: null,
+    didWin: false,
     enemiesStartedAt: null,
     facingDirection: XDirection.Right,
     gameEndedAt: null,
+    gameStartedAt: null,
     jumpedAt: null,
     lastComboDirection: null,
     lastEnemyDirection: null,
@@ -42,8 +45,11 @@ export const retry = (): void => {
     playerTookDamageAt: null,
     power: 0,
     spawnedEnemyAt: null,
+    titleAdvancedAt: state.values.titleAdvancedAt,
+    titleStartedAt: null,
     unlockDisplayedAt: null,
-  });
+  };
+  state.setValues(initialValues);
   for (const enemy of getDefinables(Enemy).values()) {
     enemy.remove();
   }
