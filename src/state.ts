@@ -9,12 +9,16 @@ import { XDirection, YDirection } from "./types/Direction";
 import { playerStartMaxHP } from "./constants";
 
 export interface StateSchema {
-  bossSpawnedAt: number | null;
   comboDirectionSequence: (XDirection | YDirection)[];
   defeatAdvancedAt: number | null;
   destructible: Destructible | null;
   didWin: boolean;
   facingDirection: XDirection;
+  finalWaveBaseEnemySpawnedAt: number | null;
+  finalWaveBossEnemySpawnedAt: number | null;
+  finalWaveFlyingEnemySpawnedAt: number | null;
+  finalWaveShootingEnemySpawnedAt: number | null;
+  firstWaveClearedAt: number | null;
   enemiesStartedAt: number | null;
   gameEndedAt: number | null;
   gameStartedAt: number | null;
@@ -39,13 +43,17 @@ export interface StateSchema {
   unlockDisplayedAt: number | null;
 }
 export const state: State<StateSchema> = new State<StateSchema>({
-  bossSpawnedAt: null,
   comboDirectionSequence: [],
   defeatAdvancedAt: null,
   destructible: null,
   didWin: false,
   enemiesStartedAt: null,
   facingDirection: XDirection.Right,
+  finalWaveBaseEnemySpawnedAt: null,
+  finalWaveBossEnemySpawnedAt: null,
+  finalWaveFlyingEnemySpawnedAt: null,
+  finalWaveShootingEnemySpawnedAt: null,
+  firstWaveClearedAt: null,
   gameEndedAt: null,
   gameStartedAt: null,
   jumpedAt: null,

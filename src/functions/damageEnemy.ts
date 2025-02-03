@@ -40,7 +40,7 @@ export const damageEnemy = (
     if (enemy.hp <= 0) {
       enemy.remove();
       if (
-        state.values.bossSpawnedAt !== null &&
+        state.values.finalWaveBossEnemySpawnedAt !== null &&
         getDefinablesCount(Enemy) === 0
       ) {
         endGame(true);

@@ -1,24 +1,15 @@
 import { Enemy, EnemyType } from "../classes/Enemy";
 import { EntityPosition, getCurrentTime, getGameWidth } from "pixel-pigeon";
 import { XDirection } from "../types/Direction";
-import {
-  baseEnemiesStartAt,
-  baseEnemyHitboxWidth,
-  enemySpawnTime,
-  finalWaveStartsAt,
-  flyingEnemiesStartAt,
-  shootingEnemiesStartAt,
-} from "../constants";
-import { getDefinables } from "definables";
+import { baseEnemyHitboxWidth, finalWaveStartsAt } from "../constants";
 import { state } from "../state";
 
-export const createEnemies = (): void => {
+export const createFinalWave = (): void => {
   const currentTime: number = getCurrentTime();
   if (
     state.values.enemiesStartedAt !== null &&
-    (state.values.spawnedEnemyAt === null ||
-      currentTime - state.values.spawnedEnemyAt >= enemySpawnTime) &&
-    getCurrentTime() - state.values.enemiesStartedAt < finalWaveStartsAt
+    currentTime - state.values.enemiesStartedAt > finalWaveStartsAt &&
+    state.values.firstWaveClearedAt !== null
   ) {
     if (state.values.gameStartedAt === null) {
       throw new Error("Game started at is null.");
@@ -45,27 +36,14 @@ export const createEnemies = (): void => {
       x,
       y: y + 40,
     };
+    const bossEnemyPosition: EntityPosition = {
+      x: oppositeX,
+      y: y + 40,
+    };
     let didSpawn: boolean = false;
-    let baseEnemyCount: number = 0;
-    let flyingEnemyCount: number = 0;
-    let shootingEnemyCount: number = 0;
-    for (const enemy of getDefinables(Enemy).values()) {
-      switch (enemy.type) {
-        case EnemyType.Base:
-          baseEnemyCount++;
-          break;
-        case EnemyType.Flying:
-          flyingEnemyCount++;
-          break;
-        case EnemyType.Shooting:
-          shootingEnemyCount++;
-          break;
-      }
-    }
-    if (
-      currentTime - state.values.enemiesStartedAt > baseEnemiesStartAt &&
-      baseEnemyCount < 1
-    ) {
+    const plebDelay: number = 0;
+    const bossDelay: number = 5000;
+    if (state.values.finalWaveBaseEnemySpawnedAt === null) {
       didSpawn = true;
       new Enemy({
         position,
@@ -75,24 +53,12 @@ export const createEnemies = (): void => {
             : XDirection.Left,
         type: EnemyType.Base,
       });
+      state.setValues({ finalWaveBaseEnemySpawnedAt: currentTime });
     }
     if (
-      currentTime - state.values.enemiesStartedAt > flyingEnemiesStartAt &&
-      flyingEnemyCount < 1
-    ) {
-      didSpawn = true;
-      new Enemy({
-        position: flyingEnemyPosition,
-        spawnDirection:
-          state.values.lastEnemyDirection === XDirection.Left
-            ? XDirection.Left
-            : XDirection.Right,
-        type: EnemyType.Flying,
-      });
-    }
-    if (
-      currentTime - state.values.enemiesStartedAt > shootingEnemiesStartAt &&
-      shootingEnemyCount < 1
+      state.values.finalWaveShootingEnemySpawnedAt === null &&
+      state.values.finalWaveBaseEnemySpawnedAt !== null &&
+      currentTime - state.values.finalWaveBaseEnemySpawnedAt >= plebDelay
     ) {
       didSpawn = true;
       new Enemy({
@@ -103,6 +69,39 @@ export const createEnemies = (): void => {
             : XDirection.Left,
         type: EnemyType.Shooting,
       });
+      state.setValues({ finalWaveShootingEnemySpawnedAt: currentTime });
+    }
+    if (
+      state.values.finalWaveFlyingEnemySpawnedAt === null &&
+      state.values.finalWaveShootingEnemySpawnedAt !== null &&
+      currentTime - state.values.finalWaveShootingEnemySpawnedAt >= plebDelay
+    ) {
+      didSpawn = true;
+      new Enemy({
+        position: flyingEnemyPosition,
+        spawnDirection:
+          state.values.lastEnemyDirection === XDirection.Left
+            ? XDirection.Left
+            : XDirection.Right,
+        type: EnemyType.Flying,
+      });
+      state.setValues({ finalWaveFlyingEnemySpawnedAt: currentTime });
+    }
+    if (
+      state.values.finalWaveBossEnemySpawnedAt === null &&
+      state.values.finalWaveFlyingEnemySpawnedAt !== null &&
+      currentTime - state.values.finalWaveFlyingEnemySpawnedAt >= bossDelay
+    ) {
+      didSpawn = true;
+      new Enemy({
+        position: bossEnemyPosition,
+        spawnDirection:
+          state.values.lastEnemyDirection === XDirection.Left
+            ? XDirection.Right
+            : XDirection.Left,
+        type: EnemyType.Boss,
+      });
+      state.setValues({ finalWaveBossEnemySpawnedAt: currentTime });
     }
     if (didSpawn) {
       state.setValues({

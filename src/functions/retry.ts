@@ -21,13 +21,17 @@ export const retry = (): void => {
     removeEntity(state.values.destructible.baseEntityID);
   }
   const initialValues: StateSchema = {
-    bossSpawnedAt: null,
     comboDirectionSequence: [],
     defeatAdvancedAt: null,
     destructible: null,
     didWin: false,
     enemiesStartedAt: null,
     facingDirection: XDirection.Right,
+    finalWaveBaseEnemySpawnedAt: null,
+    finalWaveBossEnemySpawnedAt: null,
+    finalWaveFlyingEnemySpawnedAt: null,
+    finalWaveShootingEnemySpawnedAt: null,
+    firstWaveClearedAt: null,
     gameEndedAt: null,
     gameStartedAt: null,
     jumpedAt: null,

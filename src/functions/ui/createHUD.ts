@@ -7,7 +7,7 @@ import {
   getGameWidth,
 } from "pixel-pigeon";
 import { PowerLevel } from "../../types/PowerLevel";
-import { bossEnemyStartsAt, heartsAmount, powerLevels } from "../../constants";
+import { finalWaveStartsAt, heartsAmount, powerLevels } from "../../constants";
 import { getPowerLevelIndex } from "../getPowerLevelIndex";
 import { isGameOngoing } from "../isGameOngoing";
 import { isPowerPercentageReached } from "../isPowerPercentageReached";
@@ -165,7 +165,7 @@ export const createHUD = (): void => {
     if (state.values.enemiesStartedAt === null) {
       throw new Error("Enemies started at is null");
     }
-    const totalTime: number = bossEnemyStartsAt;
+    const totalTime: number = finalWaveStartsAt;
     const passedTime: number = getCurrentTime() - state.values.enemiesStartedAt;
     const remainingTime: number = totalTime - passedTime;
     return Math.ceil(remainingTime / 1000);
@@ -175,7 +175,6 @@ export const createHUD = (): void => {
     coordinates: {
       condition: (): boolean =>
         isGameOngoing() &&
-        state.values.bossSpawnedAt === null &&
         state.values.enemiesStartedAt !== null &&
         getSeconds() >= 0,
       x: Math.floor(getGameWidth() / 2),

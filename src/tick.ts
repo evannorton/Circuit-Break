@@ -11,6 +11,7 @@ import {
 } from "pixel-pigeon";
 import { createDestructible } from "./functions/createDestructible";
 import { createEnemies } from "./functions/createEnemies";
+import { createFinalWave } from "./functions/createFinalWave";
 import { doEnemiesBehavior } from "./functions/doEnemiesBehavior";
 import { executeEnemiesKicks } from "./functions/executeEnemiesKicks";
 import { executeEnemiesPummels } from "./functions/executeEnemiesPummels";
@@ -23,11 +24,12 @@ import { executePlayerHighKick } from "./functions/executePlayerHighKick";
 import { executePlayerKick } from "./functions/executePlayerKick";
 import { executePlayerPunch } from "./functions/executePlayerPunch";
 import {
+  finalWaveStartsAt,
   flyingEnemyHitboxWidth,
   levelID,
   titleFadeDuration,
 } from "./constants";
-import { getDefinables } from "definables";
+import { getDefinables, getDefinablesCount } from "definables";
 import { isGameOngoing } from "./functions/isGameOngoing";
 import { isPlayerHadoukening } from "./functions/isPlayerHadoukening";
 import { isPlayerHighKicking } from "./functions/isPlayerHighKicking";
@@ -51,8 +53,22 @@ export const tick = (): void => {
     if (state.values.playerEntityID === null) {
       throw new Error("Player entity ID is null.");
     }
+    // Update first wave cleared
+    if (
+      state.values.enemiesStartedAt !== null &&
+      state.values.firstWaveClearedAt === null
+    ) {
+      if (
+        currentTime - state.values.enemiesStartedAt >= finalWaveStartsAt &&
+        getDefinablesCount(Enemy) === 0
+      ) {
+        state.setValues({ firstWaveClearedAt: currentTime });
+      }
+    }
     // Create enemies
     createEnemies();
+    // Create final wave
+    createFinalWave();
     // Create destructible if we don't already have one
     if (state.values.destructible === null) {
       createDestructible();
