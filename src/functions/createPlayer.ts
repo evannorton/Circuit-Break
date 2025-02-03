@@ -1344,6 +1344,30 @@ export const createPlayer = (): void => {
               },
             ],
             imagePath: "player",
+            opacity: (): number => {
+              if (state.values.playerTookDamageAt !== null) {
+                const diff: number =
+                  getCurrentTime() - state.values.playerTookDamageAt;
+                const amount: number = 40;
+                if (diff < amount) {
+                  return 0;
+                }
+                if (diff < amount * 2) {
+                  return 1;
+                }
+                if (diff < amount * 3) {
+                  return 0;
+                }
+                if (diff < amount * 4) {
+                  return 1;
+                }
+                if (diff < amount * 5) {
+                  return 0;
+                }
+                return 1;
+              }
+              return 1;
+            },
           }),
           x: (): number => {
             switch (state.values.facingDirection) {

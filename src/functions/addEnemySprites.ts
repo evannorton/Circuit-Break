@@ -61,6 +61,29 @@ const getFlyingEnemyImagePath = (): string => {
 
 export const addEnemySprites = (enemyID: string): void => {
   const enemy: Enemy = getDefinable(Enemy, enemyID);
+  const opacity = (): number => {
+    if (enemy.hasTookDamageAt()) {
+      const diff: number = getCurrentTime() - enemy.tookDamageAt;
+      const amount: number = 40;
+      if (diff < amount) {
+        return 0;
+      }
+      if (diff < amount * 2) {
+        return 1;
+      }
+      if (diff < amount * 3) {
+        return 0;
+      }
+      if (diff < amount * 4) {
+        return 1;
+      }
+      if (diff < amount * 5) {
+        return 0;
+      }
+      return 1;
+    }
+    return 1;
+  };
   switch (enemy.type) {
     case EnemyType.Base:
       addEntitySprite(enemyID, {
@@ -705,6 +728,7 @@ export const addEnemySprites = (enemyID: string): void => {
             },
           ],
           imagePath: getBaseEnemyImagePath(),
+          opacity,
         }),
         x: (): number => {
           switch (enemy.facingDirection) {
@@ -1526,6 +1550,7 @@ export const addEnemySprites = (enemyID: string): void => {
             },
           ],
           imagePath: "enemies/boss-enemy",
+          opacity,
         }),
         x: (): number => {
           switch (enemy.facingDirection) {
@@ -2213,6 +2238,7 @@ export const addEnemySprites = (enemyID: string): void => {
             },
           ],
           imagePath: "enemies/shooting-enemy",
+          opacity,
         }),
         x: (): number => {
           switch (enemy.facingDirection) {
@@ -2319,6 +2345,7 @@ export const addEnemySprites = (enemyID: string): void => {
             },
           ],
           imagePath: getFlyingEnemyImagePath(),
+          opacity,
         }),
         y: (): number => {
           const flyingOffset: number =
