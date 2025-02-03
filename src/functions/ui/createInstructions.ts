@@ -35,7 +35,7 @@ export const createInstructions = (): void => {
     maxWidth: textMaxWidth,
     text: {
       value:
-        "Fend off the evil robots trying to harness your power. Destroy batteries to gain power and unlock new combos.",
+        "Fend off the evil robots trying to harness your power. Destroy batteries to gain new powers and restore HP.",
     },
   });
   createLabel({
