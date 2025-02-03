@@ -29,7 +29,7 @@ export const damageDestructible = (
       removeEntity(state.values.destructible.baseEntityID);
       state.setValues({
         destructible: null,
-        playerHP: Math.min(state.values.playerHP + 1, playerMaxHP),
+        playerHP: Math.min(state.values.playerHP + 2, playerMaxHP),
         power: state.values.power + 1,
       });
       if (state.values.enemiesStartedAt === null) {
