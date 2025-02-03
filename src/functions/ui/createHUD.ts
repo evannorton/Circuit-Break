@@ -1,12 +1,10 @@
+import { PowerLevel } from "../../types/PowerLevel";
 import {
-  CreateLabelOptionsText,
-  createLabel,
   createQuadrilateral,
   createSprite,
   getCurrentTime,
   getGameWidth,
 } from "pixel-pigeon";
-import { PowerLevel } from "../../types/PowerLevel";
 import { getPowerLevelIndex } from "../getPowerLevelIndex";
 import { heartsAmount, powerLevels } from "../../constants";
 import { isGameOngoing } from "../isGameOngoing";
@@ -95,12 +93,12 @@ export const createHUD = (): void => {
     });
   }
   // Unlock
-  const unlockWidth: number = 88;
-  const unlockHeight: number = 80;
+  const unlockWidth: number = 115;
+  const unlockHeight: number = 70;
   const unlockCondition = (): boolean =>
     isGameOngoing() &&
     state.values.unlockDisplayedAt !== null &&
-    getCurrentTime() - state.values.unlockDisplayedAt < 3000;
+    getCurrentTime() - state.values.unlockDisplayedAt < 5000;
   createSprite({
     animationID: "default",
     animations: [
@@ -135,36 +133,16 @@ export const createHUD = (): void => {
       }
       return powerLevel.unlockImagePath;
     },
-  });
-  createLabel({
-    color: "#ffffff",
-    coordinates: {
-      condition: unlockCondition,
-      x: Math.floor(getGameWidth() / 2),
-      y: 10,
-    },
-    horizontalAlignment: "center",
-    text: { value: "New combo:" },
-  });
-  createLabel({
-    color: "#ffffff",
-    coordinates: {
-      condition: unlockCondition,
-      x: Math.floor(getGameWidth() / 2),
-      y: 20,
-    },
-    horizontalAlignment: "center",
-    text: (): CreateLabelOptionsText => {
-      let powerLevelIndex: number | null = getPowerLevelIndex();
-      if (powerLevelIndex === null) {
-        powerLevelIndex = powerLevels.length;
+    opacity: (): number => {
+      if (state.values.unlockDisplayedAt === null) {
+        throw new Error("Unlock displayed at is null");
       }
-      const powerLevel: PowerLevel | undefined =
-        powerLevels[powerLevelIndex - 1];
-      if (typeof powerLevel === "undefined") {
-        throw new Error("No power level found");
+      const diff: number =
+        getCurrentTime() - state.values.unlockDisplayedAt - 4000;
+      if (diff >= 0 && diff <= 1000) {
+        return 1 - diff / 1000;
       }
-      return { value: powerLevel.unlockName };
+      return 1;
     },
   });
 };
