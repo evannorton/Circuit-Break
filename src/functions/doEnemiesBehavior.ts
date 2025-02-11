@@ -63,7 +63,7 @@ export const doEnemiesBehavior = (): void => {
       }
       const xVelocity: number | undefined =
         enemy.type === EnemyType.Flying && enemy.hasAttacked
-          ? enemy.spawnDirection === XDirection.Left
+          ? enemy.swoop.direction === XDirection.Left
             ? -(enemyMovementXSpeed * 3)
             : enemyMovementXSpeed * 3
           : isEnemyPunching(enemy.id) ||
@@ -184,6 +184,10 @@ export const doEnemiesBehavior = (): void => {
         case EnemyType.Flying:
           enemy.swoop = {
             createdAt: getCurrentTime(),
+            direction:
+              playerPosition.x > enemyPosition.x
+                ? XDirection.Right
+                : XDirection.Left,
             wasExecuted: false,
           };
           break;
