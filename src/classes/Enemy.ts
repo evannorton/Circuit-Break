@@ -29,6 +29,7 @@ export class Enemy extends Definable {
   private _hasAttacked: boolean = false;
   private _hp: number;
   private _facingDirection: XDirection = XDirection.Left;
+  private _isReadyingShot: boolean = false;
   private _kick: Kick | null = null;
   private _knockbackDuration: number | null = null;
   private _knockbackVelocity: number | null = null;
@@ -71,6 +72,10 @@ export class Enemy extends Definable {
 
   public get hp(): number {
     return this._hp;
+  }
+
+  public get isReadyingShot(): boolean {
+    return this._isReadyingShot;
   }
 
   public get kick(): Kick {
@@ -175,6 +180,10 @@ export class Enemy extends Definable {
 
   public set hp(hp: number) {
     this._hp = hp;
+  }
+
+  public set isReadyingShot(isReadyingShot: boolean) {
+    this._isReadyingShot = isReadyingShot;
   }
 
   public set kick(kick: Kick | null) {

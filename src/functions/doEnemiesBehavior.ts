@@ -51,6 +51,16 @@ export const doEnemiesBehavior = (): void => {
     if (isEnemyTakingKnockback(enemy.id)) {
       moveEntity(enemy.id, { xVelocity: enemy.knockbackVelocity });
     } else {
+      if (
+        isEnemyShooting(enemy.id) === false &&
+        enemy.type === EnemyType.Shooting &&
+        isLeftFarFromPlayer === false &&
+        isRightFarFromPlayer === false &&
+        isUpFarFromPlayer === false &&
+        isDownFarFromPlayer === false
+      ) {
+        enemy.isReadyingShot = true;
+      }
       const xVelocity: number | undefined =
         enemy.type === EnemyType.Flying && enemy.hasAttacked
           ? enemy.spawnDirection === XDirection.Left
@@ -61,7 +71,8 @@ export const doEnemiesBehavior = (): void => {
               isEnemySlamming(enemy.id) ||
               isEnemyKicking(enemy.id) ||
               isEnemyStunned(enemy.id) ||
-              isEnemyShooting(enemy.id)
+              isEnemyShooting(enemy.id) ||
+              enemy.isReadyingShot
             ? 0
             : isLeftFarFromPlayer
               ? -enemyMovementXSpeed
@@ -76,7 +87,8 @@ export const doEnemiesBehavior = (): void => {
               isEnemySlamming(enemy.id) ||
               isEnemyKicking(enemy.id) ||
               isEnemyStunned(enemy.id) ||
-              isEnemyShooting(enemy.id)
+              isEnemyShooting(enemy.id) ||
+              enemy.isReadyingShot
             ? 0
             : isUpFarFromPlayer
               ? -enemyMovementYSpeed
@@ -111,10 +123,11 @@ export const doEnemiesBehavior = (): void => {
       }
     }
     if (
-      isLeftFarFromPlayer === false &&
-      isRightFarFromPlayer === false &&
-      isUpFarFromPlayer === false &&
-      isDownFarFromPlayer === false &&
+      ((isLeftFarFromPlayer === false &&
+        isRightFarFromPlayer === false &&
+        isUpFarFromPlayer === false &&
+        isDownFarFromPlayer === false) ||
+        enemy.type === EnemyType.Shooting) &&
       isEnemyStunned(enemy.id) === false &&
       isEnemyTakingKnockback(enemy.id) === false &&
       isEnemyPunching(enemy.id) === false &&
@@ -183,6 +196,7 @@ export const doEnemiesBehavior = (): void => {
               createdAt: getCurrentTime(),
               wasExecuted: false,
             };
+            enemy.isReadyingShot = false;
           }
           break;
       }
