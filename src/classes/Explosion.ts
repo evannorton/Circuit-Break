@@ -16,13 +16,15 @@ import {
 
 export interface ExplosionOptions {
   position: EntityPosition;
+  x: number;
+  y: number;
 }
 export class Explosion extends Definable {
   public readonly createdAt: number = getCurrentTime();
   public constructor(options: ExplosionOptions) {
     const entityID: string = createEntity({
       height: 0,
-      layerID: "Explosions",
+      layerID: "Characters",
       levelID,
       position: options.position,
       sprites: [
@@ -91,6 +93,8 @@ export class Explosion extends Definable {
             ],
             imagePath: "explosion",
           }),
+          x: options.x,
+          y: options.y,
         },
       ],
       width: 0,

@@ -52,17 +52,9 @@ export const damagePlayer = (damage: number, stunDuration: number): void => {
         playerEntityID: null,
       });
       new Explosion({
-        position: {
-          x: Math.floor(
-            playerPosition.x + playerHitboxWidth / 2 - explosionSpriteWidth / 2,
-          ),
-          y:
-            Math.floor(
-              playerPosition.y +
-                entityHitboxHeight / 2 -
-                explosionSpriteHeight / 2,
-            ) - 22,
-        },
+        position: playerPosition,
+        x: Math.floor(playerHitboxWidth / 2 - explosionSpriteWidth / 2),
+        y: Math.floor(entityHitboxHeight / 2 - explosionSpriteHeight / 2) - 22,
       });
     }
   }

@@ -55,17 +55,11 @@ export const damageEnemy = (
       const enemyPosition: EntityPosition = getEntityPosition(enemy.id);
       const enemyHitboxWidth: number = getEnemyHitboxWidth(enemy.type);
       new Explosion({
-        position: {
-          x: Math.floor(
-            enemyPosition.x + enemyHitboxWidth / 2 - explosionSpriteWidth / 2,
-          ),
-          y:
-            Math.floor(
-              enemyPosition.y +
-                entityHitboxHeight / 2 -
-                explosionSpriteHeight / 2,
-            ) - (enemy.type === EnemyType.Flying ? 44 : 22),
-        },
+        position: enemyPosition,
+        x: Math.floor(enemyHitboxWidth / 2 - explosionSpriteWidth / 2),
+        y:
+          Math.floor(entityHitboxHeight / 2 - explosionSpriteHeight / 2) -
+          (enemy.type === EnemyType.Flying ? 44 : 22),
       });
       enemy.remove();
     }
