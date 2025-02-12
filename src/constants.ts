@@ -127,3 +127,7 @@ export const directionComboThreshold: number = 250;
 export const hadoukenHitboxWidth: number = 18;
 export const enemyShootDamage: number = 1;
 export const shootHitboxWidth: number = 5;
+export const explosionSpriteHeight: number = 64;
+export const explosionSpriteWidth: number = 80;
+export const explosionDuration: number = 600;
+export const explosionFramesCount: number = 6;

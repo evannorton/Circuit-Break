@@ -22,6 +22,7 @@ export interface StateSchema {
   enemiesStartedAt: number | null;
   gameEndedAt: number | null;
   gameStartedAt: number | null;
+  isPlayerKilled: boolean;
   jumpedAt: number | null;
   lastComboDirection: ComboDirection | null;
   lastEnemyDirection: XDirection | null;
@@ -56,6 +57,7 @@ export const state: State<StateSchema> = new State<StateSchema>({
   firstWaveClearedAt: null,
   gameEndedAt: null,
   gameStartedAt: null,
+  isPlayerKilled: false,
   jumpedAt: null,
   lastComboDirection: null,
   lastEnemyDirection: null,

@@ -1,10 +1,25 @@
-import { endGame } from "./endGame";
-import { getCurrentTime, moveEntity } from "pixel-pigeon";
+import {
+  EntityPosition,
+  getCurrentTime,
+  getEntityPosition,
+  moveEntity,
+  removeEntity,
+} from "pixel-pigeon";
+import { Explosion } from "../classes/Explosion";
+import {
+  entityHitboxHeight,
+  explosionSpriteHeight,
+  explosionSpriteWidth,
+  playerHitboxWidth,
+} from "../constants";
 import { isPlayerStunned } from "./isPlayerStunned";
 import { isPlayerTakingDamage } from "./isPlayerTakingDamage";
 import { state } from "../state";
 
 export const damagePlayer = (damage: number, stunDuration: number): void => {
+  if (state.values.isPlayerKilled) {
+    return;
+  }
   if (state.values.playerEntityID === null) {
     throw new Error("Player entity ID is null.");
   }
@@ -28,7 +43,27 @@ export const damagePlayer = (damage: number, stunDuration: number): void => {
       playerPunch: null,
     });
     if (state.values.playerHP <= 0) {
-      endGame(false);
+      const playerPosition: EntityPosition = getEntityPosition(
+        state.values.playerEntityID,
+      );
+      removeEntity(state.values.playerEntityID);
+      state.setValues({
+        isPlayerKilled: true,
+        playerEntityID: null,
+      });
+      new Explosion({
+        position: {
+          x: Math.floor(
+            playerPosition.x + playerHitboxWidth / 2 - explosionSpriteWidth / 2,
+          ),
+          y:
+            Math.floor(
+              playerPosition.y +
+                entityHitboxHeight / 2 -
+                explosionSpriteHeight / 2,
+            ) - 22,
+        },
+      });
     }
   }
 };

@@ -1,11 +1,23 @@
-import { Enemy } from "../classes/Enemy";
-import { endGame } from "./endGame";
-import { getCurrentTime, getEntityPosition } from "pixel-pigeon";
-import { getDefinable, getDefinablesCount } from "definables";
+import { Enemy, EnemyType } from "../classes/Enemy";
+import {
+  EntityPosition,
+  getCurrentTime,
+  getEntityPosition,
+} from "pixel-pigeon";
+import { Explosion } from "../classes/Explosion";
+import {
+  entityHitboxHeight,
+  explosionSpriteHeight,
+  explosionSpriteWidth,
+  knockbackVelocity,
+  swoopBeforeDuration,
+} from "../constants";
+import { getDefinable } from "definables";
+import { getEnemyHitboxWidth } from "./getEnemyHitboxWidth";
 import { isEnemyStunned } from "./isEnemyStunned";
+import { isEnemySwooping } from "./isEnemySwooping";
 import { isEnemyTakingDamage } from "./isEnemyTakingDamage";
 import { isEnemyTakingKnockback } from "./isEnemyTakingKnockback";
-import { knockbackVelocity } from "../constants";
 import { state } from "../state";
 
 export const damageEnemy = (
@@ -18,12 +30,14 @@ export const damageEnemy = (
   if (state.values.playerEntityID === null) {
     throw new Error("Player entity ID is null.");
   }
+  const currentTime: number = getCurrentTime();
+  const enemy: Enemy = getDefinable(Enemy, enemyID);
   if (
     isEnemyTakingDamage(enemyID) === false &&
-    isEnemyTakingKnockback(enemyID) === false
+    isEnemyTakingKnockback(enemyID) === false &&
+    (isEnemySwooping(enemyID) === false ||
+      currentTime - enemy.swoop.createdAt < swoopBeforeDuration)
   ) {
-    const enemy: Enemy = getDefinable(Enemy, enemyID);
-    const currentTime: number = getCurrentTime();
     enemy.hp -= damage;
     if (overrideStun || isEnemyStunned(enemyID) === false) {
       enemy.tookDamageAt = currentTime;
@@ -38,13 +52,22 @@ export const damageEnemy = (
     enemy.kick = null;
     enemy.punch = null;
     if (enemy.hp <= 0) {
+      const enemyPosition: EntityPosition = getEntityPosition(enemy.id);
+      const enemyHitboxWidth: number = getEnemyHitboxWidth(enemy.type);
+      new Explosion({
+        position: {
+          x: Math.floor(
+            enemyPosition.x + enemyHitboxWidth / 2 - explosionSpriteWidth / 2,
+          ),
+          y:
+            Math.floor(
+              enemyPosition.y +
+                entityHitboxHeight / 2 -
+                explosionSpriteHeight / 2,
+            ) - (enemy.type === EnemyType.Flying ? 44 : 22),
+        },
+      });
       enemy.remove();
-      if (
-        state.values.finalWaveBossEnemySpawnedAt !== null &&
-        getDefinablesCount(Enemy) === 0
-      ) {
-        endGame(true);
-      }
     }
   }
 };

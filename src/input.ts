@@ -128,6 +128,7 @@ export const movementYInputTickHandlerID: string =
 createInputPressHandler({
   condition: (): boolean =>
     isGameOngoing() &&
+    state.values.isPlayerKilled === false &&
     isPlayerJumping() === false &&
     isPlayerLanding() === false &&
     isPlayerPunching() === false &&
@@ -147,6 +148,7 @@ createInputPressHandler({
 createInputPressHandler({
   condition: (): boolean =>
     isGameOngoing() &&
+    state.values.isPlayerKilled === false &&
     isPlayerLanding() === false &&
     isPlayerPunching() === false &&
     isPlayerKicking() === false &&
@@ -212,6 +214,7 @@ createInputPressHandler({
 createInputPressHandler({
   condition: (): boolean =>
     isGameOngoing() &&
+    state.values.isPlayerKilled === false &&
     isPlayerLanding() === false &&
     isPlayerPunching() === false &&
     isPlayerKicking() === false &&

@@ -30,6 +30,7 @@ import {
   titleFadeDuration,
 } from "./constants";
 import { getDefinables, getDefinablesCount } from "definables";
+import { handleExplosions } from "./functions/handleExplosions";
 import { isGameOngoing } from "./functions/isGameOngoing";
 import { isPlayerHadoukening } from "./functions/isPlayerHadoukening";
 import { isPlayerHighKicking } from "./functions/isPlayerHighKicking";
@@ -49,9 +50,6 @@ export const tick = (): void => {
   if (isGameOngoing()) {
     if (state.values.gameStartedAt === null) {
       throw new Error("Game started at is null.");
-    }
-    if (state.values.playerEntityID === null) {
-      throw new Error("Player entity ID is null.");
     }
     // Update first wave cleared
     if (
@@ -73,45 +71,62 @@ export const tick = (): void => {
     if (state.values.destructible === null) {
       createDestructible();
     }
-    // Move player if not punching or kicking
-    if (
-      isPlayerPunching() === false &&
-      isPlayerKicking() === false &&
-      isPlayerHadoukening() === false &&
-      isPlayerHighKicking() === false &&
-      isPlayerLanding() === false &&
-      isPlayerStunned() === false
-    ) {
-      movePlayer();
+    if (state.values.isPlayerKilled === false) {
+      // Move player if not punching or kicking
+      if (
+        isPlayerPunching() === false &&
+        isPlayerKicking() === false &&
+        isPlayerHadoukening() === false &&
+        isPlayerHighKicking() === false &&
+        isPlayerLanding() === false &&
+        isPlayerStunned() === false
+      ) {
+        movePlayer();
+      }
+      // Stop player from moving if landing
+      if (isPlayerLanding()) {
+        if (state.values.playerEntityID === null) {
+          throw new Error("Player entity ID is null.");
+        }
+        moveEntity(state.values.playerEntityID, {});
+      }
+      // Execute player punch
+      executePlayerPunch();
+      // Execute player kick
+      executePlayerKick();
+      // Execute player hadouken
+      executePlayerHadouken();
+      // Execute player high kick
+      executePlayerHighKick();
     }
-    // Stop player from moving if landing
-    if (isPlayerLanding()) {
-      moveEntity(state.values.playerEntityID, {});
-    }
-    // Execute player punch
-    executePlayerPunch();
-    // Execute player kick
-    executePlayerKick();
-    // Execute player hadouken
-    executePlayerHadouken();
-    // Execute player high kick
-    executePlayerHighKick();
     // Execute enemies punches
-    executeEnemiesPunches();
+    if (state.values.isPlayerKilled === false) {
+      executeEnemiesPunches();
+    }
     // Execute enemies pummels
-    executeEnemiesPummels();
+    if (state.values.isPlayerKilled === false) {
+      executeEnemiesPummels();
+    }
     // Execute enemies slams
-    executeEnemiesSlams();
+    if (state.values.isPlayerKilled === false) {
+      executeEnemiesSlams();
+    }
     // Execute enemies kicks
-    executeEnemiesKicks();
+    if (state.values.isPlayerKilled === false) {
+      executeEnemiesKicks();
+    }
     // Execute enemies swoops
-    executeEnemiesSwoops();
+    if (state.values.isPlayerKilled === false) {
+      executeEnemiesSwoops();
+    }
     // Execute enemies shoots
-    executeEnemiesShoots();
+    if (state.values.isPlayerKilled === false) {
+      executeEnemiesShoots();
+    }
     // Enemies behavior
-    doEnemiesBehavior();
-    // Land hadoukens
-    landHadoukens();
+    if (state.values.isPlayerKilled === false) {
+      doEnemiesBehavior();
+    }
     // Land shoot projectiles
     landShootProjectiles();
     // Clear flying enemies
@@ -128,6 +143,10 @@ export const tick = (): void => {
         }
       }
     }
+    // Land hadoukens
+    landHadoukens();
+    // Handle explosions
+    handleExplosions();
     // Y-sort characters
     [
       ...getEntityIDs({
@@ -150,6 +169,7 @@ export const tick = (): void => {
         setEntityZIndex(entityID, entityIndex);
       });
   } else if (
+    state.values.isPlayerKilled === false &&
     state.values.gameEndedAt === null &&
     state.values.titleAdvancedAt !== null &&
     currentTime - state.values.titleAdvancedAt >= titleFadeDuration
