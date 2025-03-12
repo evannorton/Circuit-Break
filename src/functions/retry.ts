@@ -46,7 +46,7 @@ export const retry = (): void => {
   };
   state.setValues(initialValues);
   startGame();
-  applyAudioSourceVolume("music/main", { volume: 0.5 });
+  applyAudioSourceVolume("music/main", { volume: 1 });
   fadeOutAudioSourceVolume("music/chill", {
     duration: 1000,
   });

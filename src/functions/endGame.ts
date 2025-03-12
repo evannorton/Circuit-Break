@@ -15,7 +15,7 @@ export const endGame = (didWin: boolean): void => {
   fadeOutAudioSourceVolume("music/main", {
     duration: 1000,
   });
-  applyAudioSourceVolume("music/chill", { volume: 0.5 });
+  applyAudioSourceVolume("music/chill", { volume: 1 });
   fadeInAudioSourceVolume("music/chill", {
     duration: 1000,
   });

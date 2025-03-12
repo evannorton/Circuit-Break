@@ -25,7 +25,7 @@ export const run = (): void => {
     loopPoint: 70730,
     volumeChannelID: musicVolumeChannelID,
   });
-  applyAudioSourceVolume("music/main", { volume: 0.5 });
+  applyAudioSourceVolume("music/main", { volume: 1 });
   applyAudioSourceVolume("music/chill", { volume: 0 });
   state.setValues({
     titleStartedAt: getCurrentTime(),
