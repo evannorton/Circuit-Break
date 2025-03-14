@@ -73,7 +73,7 @@ export const createDefeatScreen = (): void => {
         state.values.gameEndedAt !== null &&
         state.values.defeatAdvancedAt === null,
       x: 151,
-      y: 136,
+      y: 134,
     },
     height: 41,
     onClick: (): void => {
