@@ -176,7 +176,7 @@ export const doEnemiesBehavior = (): void => {
               createdAt: getCurrentTime(),
               wasExecuted: false,
             };
-            playAudioSource("sfx/wind-up", {
+            playAudioSource("sfx/big-slam-charge", {
               volumeChannelID: sfxVolumeChannelID,
             });
           }

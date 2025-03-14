@@ -30,7 +30,7 @@ export const executeEnemiesSlams = (): void => {
         x: enemyPosition.x - 20,
         y: enemyPosition.y - 4,
       };
-      playAudioSource("sfx/pummel", {
+      playAudioSource("sfx/big-slam", {
         volumeChannelID: sfxVolumeChannelID,
       });
       enemy.slam.wasExecuted = true;
