@@ -120,7 +120,7 @@ export const powerLevels: PowerLevel[] = [
   },
 ];
 export const baseEnemiesStartAt: number = 0;
-export const shootingEnemiesStartAt: number = 10000;
+export const shootingEnemiesStartAt: number = 30000;
 export const flyingEnemiesStartAt: number = 60000;
 export const finalWaveStartsAt: number = 90000;
 export const directionComboThreshold: number = 250;
