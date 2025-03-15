@@ -23,11 +23,6 @@ import { isPlayerPunching } from "./functions/isPlayerPunching";
 import { sfxVolumeChannelID } from "./volumeChannels";
 import { state } from "./state";
 
-const screenshotInputCollectionID: string = createInputCollection({
-  keyboardButtons: [{ value: "KeyP" }],
-  name: "Screenshot",
-});
-
 export const startInputCollectionID: string = createInputCollection({
   gamepadButtons: [9],
   keyboardButtons: [{ value: "Space" }, { value: "Enter" }],
@@ -91,6 +86,10 @@ const kickInputCollectionID: string = createInputCollection({
   gamepadButtons: [3],
   keyboardButtons: [{ value: "KeyC" }],
   name: "Heavy attack",
+});
+const screenshotInputCollectionID: string = createInputCollection({
+  keyboardButtons: [{ value: "KeyP" }],
+  name: "Screenshot",
 });
 createInputPressHandler({
   inputCollectionID: screenshotInputCollectionID,
