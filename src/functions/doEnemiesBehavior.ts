@@ -99,7 +99,11 @@ export const doEnemiesBehavior = (): void => {
         xVelocity,
         yVelocity,
       });
-      if (enemy.type !== EnemyType.Flying || enemy.hasAttacked === false) {
+      if (
+        (enemy.type !== EnemyType.Flying || enemy.hasAttacked === false) &&
+        enemy.isReadyingShot === false &&
+        isEnemyShooting(enemy.id) === false
+      ) {
         if (playerPosition.x > enemyPosition.x) {
           enemy.facingDirection = XDirection.Right;
           enemy.movingXDirection = XDirection.Right;
