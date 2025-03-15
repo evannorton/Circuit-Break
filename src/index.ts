@@ -1,3 +1,4 @@
+import "./achievements";
 import "./input";
 import "./volumeChannels";
 import { initialize, onRun, onTick } from "pixel-pigeon";
