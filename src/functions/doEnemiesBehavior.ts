@@ -52,6 +52,20 @@ export const doEnemiesBehavior = (): void => {
       moveEntity(enemy.id, { xVelocity: enemy.knockbackVelocity });
     } else {
       if (
+        (enemy.type !== EnemyType.Flying || enemy.hasAttacked === false) &&
+        enemy.isReadyingShot === false &&
+        isEnemyShooting(enemy.id) === false
+      ) {
+        if (playerPosition.x > enemyPosition.x) {
+          enemy.facingDirection = XDirection.Right;
+          enemy.movingXDirection = XDirection.Right;
+        }
+        if (playerPosition.x < enemyPosition.x) {
+          enemy.facingDirection = XDirection.Left;
+          enemy.movingXDirection = XDirection.Left;
+        }
+      }
+      if (
         isEnemyShooting(enemy.id) === false &&
         enemy.type === EnemyType.Shooting &&
         isLeftFarFromPlayer === false &&
@@ -99,20 +113,6 @@ export const doEnemiesBehavior = (): void => {
         xVelocity,
         yVelocity,
       });
-      if (
-        (enemy.type !== EnemyType.Flying || enemy.hasAttacked === false) &&
-        enemy.isReadyingShot === false &&
-        isEnemyShooting(enemy.id) === false
-      ) {
-        if (playerPosition.x > enemyPosition.x) {
-          enemy.facingDirection = XDirection.Right;
-          enemy.movingXDirection = XDirection.Right;
-        }
-        if (playerPosition.x < enemyPosition.x) {
-          enemy.facingDirection = XDirection.Left;
-          enemy.movingXDirection = XDirection.Left;
-        }
-      }
       if (xVelocity === 0) {
         enemy.movingXDirection = null;
       }
