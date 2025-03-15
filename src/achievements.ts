@@ -22,23 +22,21 @@ export const engagePowerXWaveAchievementID: string = createAchievement({
   newgroundsMedalID: 83396,
 });
 export const systemsSecuredAchievementID: string = createAchievement({
-  description: "Survive to the end and fend off all intruders.",
+  description: "Survive the final wave.",
   id: "systems-secured",
   imagePath: "achievements/systems-secured",
   name: "Systems Secured",
   newgroundsMedalID: 83394,
 });
 export const batterySaverModeAchievementID: string = createAchievement({
-  description:
-    "Survive to the end and fend off all intruders with the minimum power level.",
+  description: "Survive the final wave with the minimum power level.",
   id: "battery-saver-mode",
   imagePath: "achievements/battery-saver-mode",
   name: "Battery Saver Mode",
   newgroundsMedalID: 83393,
 });
 export const safeModeAchievementID: string = createAchievement({
-  description:
-    "Survive to the end and fend off all intruders without taking any damage.",
+  description: "Survive the final wave without taking any damage.",
   id: "safe-mode",
   imagePath: "achievements/safe-mode",
   name: "Safe Mode",

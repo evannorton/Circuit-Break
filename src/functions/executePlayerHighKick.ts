@@ -5,6 +5,7 @@ import {
   getEntityPosition,
   getRectangleCollisionData,
   playAudioSource,
+  unlockAchievement,
 } from "pixel-pigeon";
 import { XDirection } from "../types/Direction";
 import { damageDestructible } from "./damageDestructible";
@@ -18,6 +19,7 @@ import {
   playerHighKickDamage,
   playerHitboxWidth,
 } from "../constants";
+import { engagePowerHighKickAchievementID } from "../achievements";
 import { sfxVolumeChannelID } from "../volumeChannels";
 import { state } from "../state";
 
@@ -96,6 +98,7 @@ export const executePlayerHighKick = (): void => {
               true,
               highKickKnockbackDuration,
             );
+            unlockAchievement(engagePowerHighKickAchievementID);
             break;
           }
         }

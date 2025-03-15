@@ -1,5 +1,6 @@
 import { PowerLevel, PowerLevelType } from "../types/PowerLevel";
-import { getCurrentTime, removeEntity } from "pixel-pigeon";
+import { allPoweredUpAchievementID } from "../achievements";
+import { getCurrentTime, removeEntity, unlockAchievement } from "pixel-pigeon";
 import { getPowerLevelIndex } from "./getPowerLevelIndex";
 import { isDestructibleRising } from "./isDestructibleRising";
 import { isDestructibleTakingDamage } from "./isDestructibleTakingDamage";
@@ -39,6 +40,9 @@ export const damageDestructible = (
       }
       const newPowerLevelIndex: number | null = getPowerLevelIndex();
       if (newPowerLevelIndex !== powerLevelIndex) {
+        if (newPowerLevelIndex === null) {
+          unlockAchievement(allPoweredUpAchievementID);
+        }
         state.setValues({
           unlockDisplayedAt: currentTime,
         });

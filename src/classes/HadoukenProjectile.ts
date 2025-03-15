@@ -7,6 +7,7 @@ import {
   createQuadrilateral,
   createSprite,
   removeEntity,
+  unlockAchievement,
 } from "pixel-pigeon";
 import { XDirection } from "../types/Direction";
 import { damageDestructible } from "../functions/damageDestructible";
@@ -19,6 +20,7 @@ import {
   playerHadoukenDamage,
   renderHitboxes,
 } from "../constants";
+import { engagePowerXWaveAchievementID } from "../achievements";
 
 export interface HadoukenProjectileOptions {
   position: EntityPosition;
@@ -55,6 +57,7 @@ export class HadoukenProjectile extends Definable {
                 true,
                 0,
               );
+              unlockAchievement(engagePowerXWaveAchievementID);
               break;
             case "enemy-boss":
               damageEnemy(
@@ -64,6 +67,7 @@ export class HadoukenProjectile extends Definable {
                 true,
                 0,
               );
+              unlockAchievement(engagePowerXWaveAchievementID);
               break;
             case "enemy-shooting":
               damageEnemy(
@@ -73,6 +77,7 @@ export class HadoukenProjectile extends Definable {
                 true,
                 0,
               );
+              unlockAchievement(engagePowerXWaveAchievementID);
               break;
           }
           this.remove();
