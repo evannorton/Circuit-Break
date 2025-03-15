@@ -36,7 +36,7 @@ export const batterySaverModeAchievementID: string = createAchievement({
   newgroundsMedalID: 83393,
 });
 export const safeModeAchievementID: string = createAchievement({
-  description: "Survive the final wave without taking any damage.",
+  description: "Survive the final wave without having taken any damage.",
   id: "safe-mode",
   imagePath: "achievements/safe-mode",
   name: "Safe Mode",
