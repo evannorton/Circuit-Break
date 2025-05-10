@@ -31,6 +31,7 @@ export const startInputCollectionID: string = createInputCollection({
 const moveLeftInputCollectionID: string = createInputCollection({
   gamepadButtons: [14],
   keyboardButtons: [
+    { value: "KeyA" },
     { value: "ArrowLeft" },
     {
       numLock: NumLock.Without,
@@ -42,6 +43,7 @@ const moveLeftInputCollectionID: string = createInputCollection({
 const moveRightInputCollectionID: string = createInputCollection({
   gamepadButtons: [15],
   keyboardButtons: [
+    { value: "KeyD" },
     { value: "ArrowRight" },
     {
       numLock: NumLock.Without,
@@ -53,6 +55,7 @@ const moveRightInputCollectionID: string = createInputCollection({
 const moveUpInputCollectionID: string = createInputCollection({
   gamepadButtons: [12],
   keyboardButtons: [
+    { value: "KeyW" },
     { value: "ArrowUp" },
     {
       numLock: NumLock.Without,
@@ -64,6 +67,7 @@ const moveUpInputCollectionID: string = createInputCollection({
 const moveDownInputCollectionID: string = createInputCollection({
   gamepadButtons: [13],
   keyboardButtons: [
+    { value: "KeyS" },
     { value: "ArrowDown" },
     {
       numLock: NumLock.Without,
@@ -74,17 +78,19 @@ const moveDownInputCollectionID: string = createInputCollection({
 });
 const jumpInputCollectionID: string = createInputCollection({
   gamepadButtons: [0],
-  keyboardButtons: [{ value: "KeyZ" }],
+  keyboardButtons: [{ value: "Space" }, { value: "KeyZ" }],
   name: "Jump",
 });
 const punchInputCollectionID: string = createInputCollection({
   gamepadButtons: [2],
   keyboardButtons: [{ value: "KeyX" }],
+  mouseButtons: [0],
   name: "Light attack",
 });
 const kickInputCollectionID: string = createInputCollection({
   gamepadButtons: [3],
   keyboardButtons: [{ value: "KeyC" }],
+  mouseButtons: [2],
   name: "Heavy attack",
 });
 const screenshotInputCollectionID: string = createInputCollection({
